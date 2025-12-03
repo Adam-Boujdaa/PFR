@@ -3,12 +3,12 @@
 
 int main()
 {
-	int ligne, colonne;
+	int ligne, colonne, canaux;
 
-	printf("Saisir dimensions (lignes colonnes) : ");
-	scanf("%d %d", &ligne, &colonne);
+	printf("Saisir dimensions (lignes colonnes canaux) : ");
+	scanf("%d %d %d", &ligne, &colonne, &canaux);
 
-    lire_image(ligne, colonne);
+    lire_image(ligne, colonne, canaux);
 
 	/* Test 1: image_miroir */
 	printf("\n========== Test 1: image_miroir ==========\n");

@@ -3,16 +3,11 @@
 #include <math.h>
 #include "module_image.h"
 
-
-int IMAGE[NB_MAX][NB_MAX];
-
-void test_prog(void)
-{
-	printf("TEST DU MODULE : MODULE_IMAGE\n");
-}
+Pixel IMAGE[NB_MAX][NB_MAX];
 
 int niv_gris_valide(int niv_gris)
 {
+	printf("niv_gris: %d\n", niv_gris);
 	if (niv_gris < 1 || niv_gris > 255)
 		return -1;
 	else if (niv_gris != (1 << (int)log2(niv_gris)))
@@ -23,21 +18,22 @@ int niv_gris_valide(int niv_gris)
 
 int afficher_image_codee(int niv_gris)
 {
-	int hauteur, largeur, seuil, pixel;
+	int hauteur, largeur, seuil, canaux;
+	int r, g, b;
 
 	int valide = niv_gris_valide(niv_gris);
 	if (valide == 1)
 	{
-		scanf("%d %d", &hauteur, &largeur);
+		scanf("%d %d %d", &hauteur, &largeur, &canaux);
 		seuil = 256 / niv_gris;
-		printf("%d %d\n", hauteur, largeur);
+		printf("%d %d %d\n", hauteur, largeur, canaux);
 
 		for (int i = 0; i < hauteur; i++)
 		{
 			for (int j = 0; j < largeur; j++)
 			{
-				scanf("%d", &pixel);
-				printf("%d ", pixel / seuil);
+				scanf("%d %d %d", &r, &g, &b);
+				printf("%d %d %d ", r / seuil, g / seuil, b / seuil);
 			}
 			printf("\n");
 		}
@@ -45,7 +41,7 @@ int afficher_image_codee(int niv_gris)
 	return valide;
 }
 
-int afficher_image_codee_bis(int ligne, int colonne, int niv_gris)
+int quantisation(int ligne, int colonne, int niv_gris)
 {
 	int seuil;
 	int valide = niv_gris_valide(niv_gris);
@@ -58,7 +54,7 @@ int afficher_image_codee_bis(int ligne, int colonne, int niv_gris)
 		{
 			for (int j = 0; j < colonne; j++)
 			{
-				printf("%d ", IMAGE[i][j] / seuil);
+				printf("%d %d %d ", IMAGE[i][j].r / seuil, IMAGE[i][j].g / seuil, IMAGE[i][j].b / seuil);
 			}
 			printf("\n");
 		}
@@ -66,13 +62,25 @@ int afficher_image_codee_bis(int ligne, int colonne, int niv_gris)
 	return valide;
 }
 
-int lire_image(int ligne, int colonne)
+int lire_image(int ligne, int colonne, int canaux)
 {
 	for (int i = 0; i < ligne; i++)
 	{
 		for (int j = 0; j < colonne; j++)
 		{
-			if (scanf("%d", &IMAGE[i][j]) != 1)
+			if (canaux == 3)
+			{
+				scanf("%d %d %d", &IMAGE[i][j].r, &IMAGE[i][j].g, &IMAGE[i][j].b);
+			}
+			else if (canaux == 1)
+			{
+				int gris;
+				scanf("%d", &gris);
+				IMAGE[i][j].r = gris;
+				IMAGE[i][j].g = gris;
+				IMAGE[i][j].b = gris;
+			}
+			else
 			{
 				return 0;
 			}
@@ -89,7 +97,7 @@ int image_miroir(int ligne, int colonne)
 	{
 		for (int j = colonne - 1; j >= 0; j--)
 		{
-			printf("%d ", IMAGE[i][j]);
+			printf("%d %d %d ", IMAGE[i][j].r, IMAGE[i][j].g, IMAGE[i][j].b);
 		}
 		printf("\n");
 	}
@@ -111,7 +119,7 @@ int rotation_image(int ligne, int colonne, int angle)
 		{
 			for (int i = ligne - 1; i >= 0; i--)
 			{
-				printf("%d ", IMAGE[i][j]);
+				printf("%d %d %d ", IMAGE[i][j].r, IMAGE[i][j].g, IMAGE[i][j].b);
 			}
 			printf("\n");
 		}
@@ -123,7 +131,7 @@ int rotation_image(int ligne, int colonne, int angle)
 		{
 			for (int j = colonne - 1; j >= 0; j--)
 			{
-				printf("%d ", IMAGE[i][j]);
+				printf("%d %d %d ", IMAGE[i][j].r, IMAGE[i][j].g, IMAGE[i][j].b);
 			}
 			printf("\n");
 		}
@@ -133,24 +141,48 @@ int rotation_image(int ligne, int colonne, int angle)
 
 int histogramme(int ligne, int colonne)
 {
-	int freq[256] = {0};
+	int freq_r[256] = {0};
+	int freq_g[256] = {0};
+	int freq_b[256] = {0};
 	int total = ligne * colonne;
 
 	for (int i = 0; i < ligne; i++)
 	{
 		for (int j = 0; j < colonne; j++)
 		{
-			freq[IMAGE[i][j]]++;
+			freq_r[IMAGE[i][j].r]++;
+			freq_g[IMAGE[i][j].g]++;
+			freq_b[IMAGE[i][j].b]++;
 		}
 	}
 
-	printf("Histogramme (niveau de gris - fréquence - pourcentage):\n");
+	printf("Histogramme Rouge (niveau - fréquence - pourcentage):\n");
 	for (int k = 0; k < 256; k++)
 	{
-		if (freq[k] > 0)
+		if (freq_r[k] > 0)
 		{
-			double pourcentage = (freq[k] * 100.0) / total;
-			printf("Niveau %3d : %5d pixels (%6.2f%%)\n", k, freq[k], pourcentage);
+			double pourcentage = (freq_r[k] * 100.0) / total;
+			printf("Niveau %3d : %5d pixels (%6.2f%%)\n", k, freq_r[k], pourcentage);
+		}
+	}
+
+	printf("\nHistogramme Vert (niveau - fréquence - pourcentage):\n");
+	for (int k = 0; k < 256; k++)
+	{
+		if (freq_g[k] > 0)
+		{
+			double pourcentage = (freq_g[k] * 100.0) / total;
+			printf("Niveau %3d : %5d pixels (%6.2f%%)\n", k, freq_g[k], pourcentage);
+		}
+	}
+
+	printf("\nHistogramme Bleu (niveau - fréquence - pourcentage):\n");
+	for (int k = 0; k < 256; k++)
+	{
+		if (freq_b[k] > 0)
+		{
+			double pourcentage = (freq_b[k] * 100.0) / total;
+			printf("Niveau %3d : %5d pixels (%6.2f%%)\n", k, freq_b[k], pourcentage);
 		}
 	}
 	return 1;

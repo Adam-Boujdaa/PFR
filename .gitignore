@@ -5,6 +5,7 @@
 *.lib
 *.so
 
+*.exe
 *.out
 *.app
 *.elf
@@ -33,3 +34,4 @@ cscope.*
 *.swp
 .project
 .cproject
+*.txt

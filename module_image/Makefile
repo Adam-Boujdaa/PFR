@@ -7,6 +7,9 @@ module_image.o: module_image.c
 main.o: main.c module_image.h
 	gcc -c main.c -o main.o -W -Wall -ansi -pedantic
 
+main: main.o module_image.o
+	gcc -o main.out main.o module_image.o -lm
+
 test_image.o: test_image.c module_image.h
 	gcc -c test_image.c -o test_image.o -W -Wall -ansi -pedantic -std=c99
 
