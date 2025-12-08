@@ -46,7 +46,7 @@ int synonyme_dans_avancer(mot){
     }
 }
 
-//IDEM POUR SYNONYME DANS RECULER, TOURNER, et whatever autres actions primitives 
+//IDEM POUR SYNONYME DANS RECULER, TOURNER, et toutes autres actions primitives 
 
 char *get_prefixes(instruction) {
     while (pas_parcouru_entièrement()){  
