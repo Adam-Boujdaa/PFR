@@ -16,47 +16,36 @@ int niv_gris_valide(int niv_gris)
 		return 1;
 }
 
-int afficher_image_codee(int niv_gris)
+int afficher_image(int hauteur, int largeur, int canaux)
 {
-	int hauteur, largeur, seuil, canaux;
-	int r, g, b;
-
-	int valide = niv_gris_valide(niv_gris);
-	if (valide == 1)
+	printf("%d %d %d\n", hauteur, largeur, canaux);
+	for (int i = 0; i < hauteur; i++)
 	{
-		scanf("%d %d %d", &hauteur, &largeur, &canaux);
-		seuil = 256 / niv_gris;
-		printf("%d %d %d\n", hauteur, largeur, canaux);
-
-		for (int i = 0; i < hauteur; i++)
+		for (int j = 0; j < largeur; j++)
 		{
-			for (int j = 0; j < largeur; j++)
-			{
-				scanf("%d %d %d", &r, &g, &b);
-				printf("%d %d %d ", r / seuil, g / seuil, b / seuil);
-			}
-			printf("\n");
+			printf("%d %d %d ", IMAGE[i][j].r, IMAGE[i][j].g, IMAGE[i][j].b);
 		}
+		printf("\n");
 	}
-	return valide;
+	return 1;
 }
 
-int quantisation(int ligne, int colonne, int niv_gris)
+int quantification(int ligne, int colonne, int niv_gris)
 {
 	int seuil;
 	int valide = niv_gris_valide(niv_gris);
 	if (valide == 1)
 	{
 		seuil = 256 / niv_gris;
-		printf("%d %d\n", ligne, colonne);
 
 		for (int i = 0; i < ligne; i++)
 		{
 			for (int j = 0; j < colonne; j++)
 			{
-				printf("%d %d %d ", IMAGE[i][j].r / seuil, IMAGE[i][j].g / seuil, IMAGE[i][j].b / seuil);
+				IMAGE[i][j].r /= seuil;
+				IMAGE[i][j].g /= seuil;
+				IMAGE[i][j].b /= seuil;
 			}
-			printf("\n");
 		}
 	}
 	return valide;
@@ -100,6 +89,21 @@ int image_miroir(int ligne, int colonne)
 			printf("%d %d %d ", IMAGE[i][j].r, IMAGE[i][j].g, IMAGE[i][j].b);
 		}
 		printf("\n");
+	}
+	return 1;
+}
+
+int binarisation(int ligne, int colonne)
+{
+	for (int i = 0; i < ligne; i++)
+	{
+		for (int j = 0; j < colonne; j++)
+		{
+			int bin = ((IMAGE[i][j].r + IMAGE[i][j].g + IMAGE[i][j].b) / 3 >= 128) ? 255 : 0;
+			IMAGE[i][j].r = bin;
+			IMAGE[i][j].g = bin;
+			IMAGE[i][j].b = bin;
+		}
 	}
 	return 1;
 }

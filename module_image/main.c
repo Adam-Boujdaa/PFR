@@ -23,7 +23,7 @@ int main()
 		return 1;
 	}
 
-	int res = quantisation(ligne, colonne, 64);
+	int res = quantification(ligne, colonne, 64);
 	if (res == -1)
 	{
 		fprintf(stderr, "Erreur : niv_gris hors intervalle [1..255]\n");
