@@ -1,7 +1,7 @@
 #ifndef MODULE_IMAGE_H_INCLUS
 #define MODULE_IMAGE_H_INCLUS
 
-#define NB_MAX 300
+#define MAX 300
 
 typedef struct
 {
@@ -10,16 +10,21 @@ typedef struct
 	int b;
 } Pixel;
 
-extern Pixel IMAGE[NB_MAX][NB_MAX];
+typedef struct {
+	int hauteur, largeur, canaux;
+	Pixel data[MAX][MAX];
+} s_Image;
 
-void test_prog(void);
-int niv_gris_valide(int niv_gris);
-int afficher_image_codee(int);
-int quantification(int ligne, int colonne, int niv_gris);
-int lire_image(int ligne, int colonne, int canaux);
+typedef s_Image* Image;
 
-int image_miroir(int ligne, int colonne);
-int rotation_image(int ligne, int colonne, int angle);
-int histogramme(int ligne, int colonne);
+Image image_init(int hauteur, int largeur, int canaux);
+int image_niv_gris_valide(int niv_gris);
+int image_enregistrer(FILE *f, Image img);
+int quantification(Image img, int q);
+Image image_lire(FILE *f, int ligne, int colonne, int canaux);
+Image image_miroir(Image img);
+Image image_binarisation(Image img);
+Image image_masque_objets(Image img, int seuil);
+
 
 #endif
