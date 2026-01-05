@@ -1,6 +1,9 @@
 from PIL import Image
+import os
+import sys
 
-def c(i="mask.txt", o="masked.png"):
+
+def c(i="out.txt", o="result.png"):
     with open(i, 'r') as f:
         l = f.readlines()
     
@@ -50,4 +53,23 @@ def c(i="mask.txt", o="masked.png"):
     # Unsupported channel count
     raise ValueError(f"Unsupported channel count: {ch}. Expected 1 or 3.")
 
-c()
+if __name__ == '__main__':
+    # Usage: python3 creer_image.py <input.txt> [output.png]
+    if len(sys.argv) < 2:
+        print("Usage: python3 creer_image.py <input.txt> [output.png]", file=sys.stderr)
+        sys.exit(2)
+
+    input_file = sys.argv[1]
+    if len(sys.argv) >= 3:
+        out_file = sys.argv[2]
+    else:
+        # Build output filename: same basename, .png extension, same directory as input
+        base = os.path.splitext(os.path.basename(input_file))[0] + '.png'
+        dirn = os.path.dirname(input_file)
+        out_file = os.path.join(dirn, base) if dirn else base
+
+    try:
+        c(input_file, out_file)
+    except Exception as e:
+        print(f"Error: {e}", file=sys.stderr)
+        sys.exit(1)
