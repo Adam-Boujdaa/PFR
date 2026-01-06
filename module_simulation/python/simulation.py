@@ -5,97 +5,141 @@ Module de simulation - Python Turtle
 
 import turtle as tl
 
-class RobotSimulation:
+class SimulationRobot:
     
-    # explication self : # (https://www.geeksforgeeks.org/python/self-in-python-class/)
+    # explication self : (https://www.geeksforgeeks.org/python/self-in-python-class/)
     # lecture fichier config (https://zestedesavoir.com/tutoriels/2514/un-zeste-de-python/6-entrees-sorties/2-lecture-fichier/)
-    def load_config(self, fichier_conf):
+    
+    def charger_config(self, fichier_conf):
+        """Charge la configuration depuis un fichier texte"""
         config = {}
         try:
-            with open(fichier_conf, 'r') as file: # 'r' = mode read
-                for line in file:
-                    line = line.strip()
-                    if line and not line.startswith('#'):
-                        if '=' in line:
-                            key, value = line.split('=',1)
-                            config[key.strip()] = value.strip()
-            print("Fichier de configuration chargé")
+            with open(fichier_conf, 'r') as fichier:  # 'r' = mode lecture
+                for ligne in fichier:
+                    ligne = ligne.strip()
+                    if ligne and not ligne.startswith('#'):
+                        if '=' in ligne:
+                            cle, valeur = ligne.split('=', 1)
+                            config[cle.strip()] = valeur.strip()
+            print("Fichier de configuration charge")
         except FileNotFoundError:
-            print("Fichier de configuration ", fichier_conf, "introuvable.")
+            print("Fichier de configuration", fichier_conf, "introuvable.")
         return config
-    def __init__(self, fichier_conf="config/simulation.txt"):
+    
+    def __init__(self, fichier_conf="../config/simulation.txt"):
+        """Initialise la simulation"""
         print("Lancement de la simulation")
         
-        # chargement config
-        self.config = self.load_config(fichier_conf)
+        # Chargement configuration
+        self.config = self.charger_config(fichier_conf)
 
-        # récupération paramètres
+        # Recuperation des parametres
 
-        # fenêtre
-        f_width = int(self.config.get('WINDOW_WIDTH', 800))
-        f_height = int(self.config.get('WINDOW_HEIGHT', 600))
-        f_title = self.config.get('WINDOW_TITLE', 'Simulation Robot')
-        bg_color = self.config.get('BACKGROUND_COLOR', 'white')
+        # Fenetre
+        largeur_fenetre = int(self.config.get('WINDOW_WIDTH', 800))
+        hauteur_fenetre = int(self.config.get('WINDOW_HEIGHT', 600))
+        titre_fenetre = self.config.get('WINDOW_TITLE', 'Simulation Robot')
+        couleur_fond = self.config.get('BACKGROUND_COLOR', 'white')
         
-        # échelle
-        self.scale = int(self.config.get('SCALE', 100))
+        # Echelle (metres -> pixels)
+        self.echelle = int(self.config.get('SCALE', 100))
 
-        # robot
-        r_shape = self.config.get('ROBOT_SHAPE', 'triangle')
-        r_color = self.config.get('ROBOT_COLOR', 'blue')
-        r_size = float(self.config.get('ROBOT_SIZE', 1.5))
+        # Robot
+        forme_robot = self.config.get('ROBOT_SHAPE', 'triangle')
+        couleur_robot = self.config.get('ROBOT_COLOR', 'blue')
+        taille_robot = float(self.config.get('ROBOT_SIZE', 1.5))
 
-        # création fenêtre
-        self.screen = tl.Screen()
-        self.screen.setup(width=f_width, height=f_height)
-        self.screen.title(f_title)
-        self.screen.bgcolor(bg_color)
+        # Creation fenetre
+        self.ecran = tl.Screen()
+        self.ecran.setup(width=largeur_fenetre, height=hauteur_fenetre)
+        self.ecran.title(titre_fenetre)
+        self.ecran.bgcolor(couleur_fond)
 
-        # création orbot
+        # Creation robot
         self.robot = tl.Turtle()
-        self.robot.shape(r_shape)
-        self.robot.color(r_color)
-        self.robot.shapesize(r_size, r_size)
+        self.robot.shape(forme_robot)
+        self.robot.color(couleur_robot)
+        self.robot.shapesize(taille_robot, taille_robot)
 
-        # position robot
-        self.x = 0.0
-        self.y = 0.0
-        self.alpha = 0.0
+        # Position robot (en metres)
+        self.pos_x = 0.0
+        self.pos_y = 0.0
+        self.orientation = 0.0  # en degres
 
-        print("Simulation initialisée")
+        print("Simulation initialisee")
 
-    # fonctions de base
-    def forward(self, distance):
-        pixels = distance * self.scale
+    # Fonctions de deplacement de base
+    def avancer(self, distance):
+        """Fait avancer le robot de 'distance' metres"""
+        pixels = distance * self.echelle
         self.robot.forward(pixels)
-        self.x += distance
-        print("Le robot a avancé de ", distance,"m - Position X : ", self.x)
+        self.pos_x += distance
+        print("Le robot a avance de", distance, "m - Position X :", self.pos_x, "m")
 
-    def backward(self, distance):
-        pixels = distance * self.scale
+    def reculer(self, distance):
+        """Fait reculer le robot de 'distance' metres"""
+        pixels = distance * self.echelle
         self.robot.backward(pixels)
-        self.x -= distance
-        print("Le robot a reculer de ", distance, "m - Position X : ", self.x,"m")
+        self.pos_x -= distance
+        print("Le robot a recule de", distance, "m - Position X :", self.pos_x, "m")
 
-    def turn_left(self, angle):
+    def tourner_gauche(self, angle):
+        """Fait tourner le robot a gauche de 'angle' degres"""
         self.robot.left(angle)
-        self.alpha += angle
-        print ("Le robot a tourner à gauche de ", angle, "° - Orientation : ", self.alpha,"°")
+        self.orientation += angle
+        print("Le robot a tourne a gauche de", angle, "degres - Orientation :", self.orientation, "degres")
 
-    def turn_right(self, angle):
+    def tourner_droite(self, angle):
+        """Fait tourner le robot a droite de 'angle' degres"""
         self.robot.right(angle)
-        self.alpha -= angle
-        print ("Le robot a tourner à droite de ", angle, "° - Orientation : ", self.alpha,"°")
+        self.orientation -= angle
+        print("Le robot a tourne a droite de", angle, "degres - Orientation :", self.orientation, "degres")
     
-# test
+    # Lecture et execution des commandes
+    def analyser_commande(self, ligne_commande):
+        """Analyse et execute une ligne de commande"""
+        
+        # Nettoyage (enleve \n)
+        commande = ligne_commande.strip()
+
+        # Separation fonction et parametre
+        nom_fonction = commande.split('(')[0]
+        chaine_param = commande.split('(')[1].split(')')[0]
+
+        # Convertir parametre en nombre
+        parametre = float(chaine_param)
+
+        # Execution de la commande
+        if nom_fonction == "forward":
+            self.avancer(parametre)
+        elif nom_fonction == "backward":
+            self.reculer(parametre)
+        elif nom_fonction == "turn_left":
+            self.tourner_gauche(parametre)
+        elif nom_fonction == "turn_right":
+            self.tourner_droite(parametre)
+        else:
+            print("Commande inconnue :", nom_fonction)
+            return False
+        return True
+    
+    def executer_fichier_commandes(self, fichier_commandes):
+        """Lit et execute toutes les commandes d'un fichier"""
+        with open(fichier_commandes, 'r') as fichier:
+            commandes = fichier.readlines()
+
+        print("Execution de", len(commandes), "commande(s)")
+
+        for i, commande in enumerate(commandes, 1):
+            print(i,"-", commande.strip())
+            self.analyser_commande(commande)
+            print()
+
+        print("Toutes les commandes ont ete executees")
+
+
+# Test
 if __name__ == "__main__":
-    sim = RobotSimulation()
-
-    # test mouvements
-    sim.forward(2)
-    sim.turn_right(90)
-    sim.forward(1.5)
-    sim.turn_left(45)
-    sim.backward(1)
-
-    input("Appuyez sur Entrée pour fermer")
+    sim = SimulationRobot()
+    sim.executer_fichier_commandes("../scripts/commands_test.txt")
+    input("Appuyez sur Entree pour fermer")
