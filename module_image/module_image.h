@@ -28,7 +28,7 @@ Image image_lire(FILE *f, int ligne, int colonne, int canaux);
 Image image_miroir(Image img);
 Image image_binarisation(Image img);
 Image image_masque_objets(Image img, int seuil);
-int image_trouver_objets(Image img, Objet *objets, int aire_min);
+int image_trouver_objets(Image img, Objets tab_objets, int aire_min);
 Pixel image_trouver_couleur(Image img, Image mask, Objet obj);
 Image image_dessiner_boite_englobante(Image img, Objet *obj, Pixel couleur_bordure);
 Image image_segmenter_objet(Image img, Objet obj);

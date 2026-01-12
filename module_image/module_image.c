@@ -270,39 +270,41 @@ Image image_segmenter_objet(Image img, Objet obj) {
 }
 
 const char* image_pixel_to_nom(Pixel coul) {
+    typedef struct {
+        const char* nom;
+        int r;
+        int g;
+        int b;
+    } CouleurNom;
 
-    const Pixel COULEURS[] = {
-    {"Rouge",    255, 0,   0},
-    {"Vert",  0,   255, 0},
-    {"Bleu",   0,   0,   255},
-    {"Jaune", 255, 255, 0},
-    {"Orange", 255, 165, 0},
-    {"Blanc",  255, 255, 255}
-    };
+    const CouleurNom COULEURS[] = {
+        {"Rouge", 255, 0, 0},
+        {"Vert", 0, 255, 0},
+        {"Bleu", 0, 0, 255},
+        {"Jaune", 255, 255, 0},
+        {"Orange", 255, 165, 0},
+        {"Blanc", 255, 255, 255}};
 
-
-    int n_couleurs = 6;
+    int n_couleurs = sizeof(COULEURS) / sizeof(CouleurNom);
 
     const char* nom_couleur = "Inconnu";
-    int dist_min = 1000;
+    int dist_min = 1500;
 
     for (int i = 0; i < n_couleurs; i++) {
-        Pixel cour = COULEURS[i];
+        CouleurNom cour = COULEURS[i];
 
-        
-        int d_r = r - cour.r;
-        int d_g = g - cour.g;
-        int d_b = b - cour.b;
-        
+        int d_r = coul.r - cour.r;
+        int d_g = coul.g - cour.g;
+        int d_b = coul.b - cour.b;
+
         int dist = (d_r * d_r) + (d_g * d_g) + (d_b * d_b);
 
         // If this is the closest color so far, save it
         if (dist < dist_min) {
             dist_min = dist;
-            nom_couleur = cour;
+            nom_couleur = cour.nom;
         }
     }
-    
-    return nom_couleur;
 
+    return nom_couleur;
 }
