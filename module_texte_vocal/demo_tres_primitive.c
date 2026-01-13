@@ -1,7 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h> // pr strlen() et strcmp
+#include <string.h> // pr strlen() et strcmp ON A LE DROIT 
 #include <ctype.h> // obligé pour isdigit()
+ 
+
+//longueur max physique pr avoir la mémoire allouée dès le début pr éviter d'avoir de pb de segmentation fault,bien alloué les mémoires 
+
+//pas réinventer la lecture bas niveau => utiliser la lecture haut niveau %s ou %99s, vérifier si on depasse pas le contenu de la zone associé, ça ça sert à ça %150
+
+//for next time : d'abord un truc primitif qui marche, ensuite y greffer le tts, ensuite qd ça marche on bascule sur la suite
+//avoir une petite démo à montrer pr la prochaine fois 
 
 
 #define CHEMIN_VERBES "./verbes/"    //chemin des fichiers de synonymes
@@ -16,8 +24,7 @@ int idx_act = 0; //index de l'action courante
 
 //vérifie si un mot est un verbe (se termine en ez,er,é) => c'est simplifié pour la 
 // démo pour voir si le client est d'accord avec cette façon de faire dans la globalité
-int est_verbe(char *mot) 
-{
+int est_verbe(char *mot) {
     int lg_mot = strlen(mot);
     
     if (lg_mot < 2) {return 0;} //un mot de 2 charactères est forcément pas un verbe (en français en tout cas) + pr voir si on peut tester la terminaison du mot
@@ -34,7 +41,6 @@ int est_verbe(char *mot)
     else {
     return 0;
     }
-
 }
 
 int synonyme_dans_avancer(mot){
@@ -60,3 +66,7 @@ char *get_prefixes(instruction) {
 
 // A VOIR SI ON METS AUSSI LA QUANTIFICATION (EX 5 MÈTRES POUR AVANCER) 
 // DANS LA FONCTION GET PREFIXES OU BIEN SI ON APPEND CETTE VALEUR JUSTE APRÈS AVEC UNE AUTRE FONCTION
+
+
+//ajouter nos propres images ds le module image, env aux profs en .txt 
+//

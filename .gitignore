@@ -34,4 +34,9 @@ cscope.*
 *.swp
 .project
 .cproject
-*.txt
+#*.txt
+
+#enlevez pas svp
+venv_pour_tts/
+__pycache__/
+*.pyc
