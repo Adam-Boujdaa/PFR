@@ -1,0 +1,11 @@
+exemple d'instructions issues de la partie traitement de texte :
+
+avant d'éxecuter le instructions, interpréter et voir si c'est possible en fonction de la position dans la pièce
+
+A,-,16 Avancer de 16 mètres
+
+A,D,16 Avancer de 1- mètres à droite => tourner à droite de 90° (valeur défaut) puis avancer  
+
+T,G,270 Tourner à gauche (sens trigo)
+
+
