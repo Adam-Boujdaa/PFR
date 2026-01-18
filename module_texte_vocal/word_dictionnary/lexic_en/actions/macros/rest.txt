@@ -1,0 +1,49 @@
+reset
+re-set
+reset now
+reset to zero
+go to zero
+back to zero
+return to start
+back to start
+go home
+return home
+origin
+go to origin
+set zero
+reinitialize
+re-initialize
+r-e-s-e-t
+r e s e t
+restart
+re-start
+starting point
+original point
+zero out
+zero it
+home base
+reset position
+reset-s
+reset-z
+reset-h
+reset-y
+reset-eh
+reset-uh
+go-home
+go-start
+go-zero
+re-set-s
+re-set-z
+re-set-h
+re-set-y
+re-set-eh
+re-set-uh
+resetting
+resetted
+set-to-zero
+back-to-origin
+return-to-origin
+reset-command
+reset-macro
+reset-button
+reset-now
