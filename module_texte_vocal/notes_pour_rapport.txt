@@ -1,7 +1,70 @@
-!!!!
+Raisonnement module tts : 
+    Il est en python comme décrit dans le cahier des charges et le dossier de specs qui en résulte
+    Simple, il y avait déjà la majorité dans le notebook, j'ai testé pr voir comment ça transcris, ça marche très bien quand on parle clairement, mais en marmonnant avec des bruits parasites dans le fond (clavier par ex),
+    ça transcripte mal, donc j'ai décidé d'ajouter des transcriptions erronnées, en plus des misstypings de base, dans les txt du folder word_dictionnary, 
+    j'ai donc donné des exemples de mauvaises transcriptions à gpt et demandé de donner des listes exhaustives de transcriptions erronées, et augmenté la nombre max de synonymes en cas d'update.
+    except (exception network et unknown value dans le cas où le module tts ne comprend pas)
+    commandes exit et help
 
-PRENDRE DES NOTES AU FUR ET À MESURE DE CE QU'ON FAIT POUR FAIRE LE RAPPORT PLUS VITE (et pour se souvenir surtout xD)
 
-including : les étapes, le raisonnement à chaque étape, les avantages/désavantages de chaque version etc...
+Justifications pr la logique du parseur :
+    
+    - Le choix le plus logique était de faire une recherche de mot clé et essayer d'établir un lien ou un sens d'ordre entre eux,
+    forcément dans le temps donné recoder un NLP en partant de 0 aurait été trop compliqué, programme scanne pour des mots clés, si il n'y a pas de valeurs ajoutées, 
+    il va mettre une valeur par défaut (déjà pré definie, exemple : translations = 1 mètre, rotations = angle droit), l'avantage est que tous les mots parasites sont ignorés, si quelq'un d'autre parle en meme temps c'est ignoré, 
+    dans la mesure où il ne dit pas un numbre pile en meme temps que l'utilisateur lorsqu'il décrit une action, j'ai testé avec des mots random comme pingouin ou lasagne au milieu de ma phrase ça l'ignore comme l'algo ne sait pas le traiter, de meme que toutes les liaisons, 
+    ça pose un désavantage pour les cas où le user dirait quelque chose comme : "avance mais juste avant tourne à droite de 3mètres" mais le user sera prévenu avant l'utilisation de bien donner les instructions dans l'ordre
+    - Instructions: composées d'actions élémentaires, avec l'action en elle meme, la direction, la quantité, et l'unité, 
+    et en plus il faut forcément les traiter dans l'ordre, une liste aurait fait le taff mais comme on risque d'avoir énormément d'instructions élémentaires avec les macros(ex un carré = 8 instructions), 
+    il faudrait avoir une liste énorme et donc allouer énormément de cases mémoire pour les instructions dès le début, alors qu'elles seront pas forcément toutes utilisées
+    une solution dynamique est plus adaptée, donc une structure de file chainée est plus adaptée avec des nodes  
+    - Choix entre module texte et vocal dans le fichier config, ici on a négocié avec le client pr ne pas avoir besoin à faire une configuration via le menu principal,
+    principalement car on est 4 et par contrainte de temps, 
+    - Gestion des fichiers : 
+    dans word_dictionnary/ il y a des dossiers avec des transcriptions possibles et des fautes de frappe / d'orthographe possibles (générés par IAG) pour que le parseur comprenne, il y a un fichier pour chaque instruction élémentaire, 
+    (avancer reculer tourner droite et gauche), et un dossier contentant des macros, comme faire un carré un zigzag etc..., et aussi un dossier avec tous les nombres de 1 à 20 car la pièce fait moins de 10mètres dans la simulation,
+    et aussi un dossier avec des unités, centimètres décimètre, feet, degrés etc.. 
+    mais j'en ai généré plus au cas où la simulation changerait, pour ce qui est des angles, la transcription marchait mieux je ne sais pas pourquoi donc pas eu besoin de générer autant de chiffres de 1 à 360, comme ça ça évitera de charger trop de dictionnaires, 
+    d'allouer trop de mémoire et d'avoir un programme trop lourd / mal opti pour la carte embarquée qui contiendra le pfr2
+    le gros avantage de ces fichiers est de ne pas avoir à recomplier le programme pour pouvoir ajouter des synonymes, on change juste les .txt et c'est directement intégré quand on relance le programme. 
+
+   
 
 
+    - fonctionnement de la fonction de traitement de commandes : 
+    1. init la file dans laquelle il y aura le résultat des commandes, les actions à faire.
+    2. on nettoie la phrase=> on mets tout en minuscule pour traiter facilement (grace string.h inclus)
+    3. grace à string.h on découpe les mots du string, 
+    
+    ensuite tant qu'il reste des mots : 
+    on prend le 1er mot de la phrase et on cherche si il est dans les dicos, si il ne l'est pas on l'ignore
+    sinon on le garde et on cherche une valeur qui le suit puis une unité => sinon fallback sur les valeurs par défaut, si une actione st découverte avant un chiffre ou quoi => fallback aussi sur les default valeurs
+    ces valeurs sont donc stockés dans des variables temporaires (action_actuelle, direction, valeur, unité)
+    
+
+
+
+
+Script shell : 
+    Sur mon pc j'ai pas pu installer les extensions nécéssaires car pip install ne marchait pas correctement, donc j'ai eu besoin d'un venv
+    Puisque j’ai été obligé par git de mettre l'environnement virtuel dans le gitignore, j'ai aussi fais un script shell pour automatiser l’installation et l'activation du 
+    venv avec les pip install nécessaires et la compilation de ma partie (à finaliser plus tard avec le makefile commun final).
+    Je me suis dit qu'il est pratique d'avoir aussi le reste de la configuration et du setup dans le setup.sh pour chaque partie, d'avoir des arguments plus tard comme -full ou autre 
+
+
+COmmunication avec les autres modules : 
+    - Simulation : Les commandes sont envoyées vers commandes.txt, et l'historique est actualisé au fur et à mesure dans le fichier 
+    - Image : à implémenter
+
+
+!!!!!!!! TO DO :
+ 
+ - AJOUTER MACROS ANGLE DROIT===> PROBABLE D'ETRE USED
+
+    -confirmation pour les commandes longues, ça re répète à voix haute, à implémenter la lecture de commande dans le sens inverse pour module_tts.py
+
+comment actualiser si une liste de commandes a été finie ? => statut updated envoyé via le main ou bien supprimer la ligne directement dans le file de commandes et une fois que c vide il print : 
+                                                                    pret à écouter ou lire : (while file not empty idk how to do it if there is a space or smth to look into)
+
+les macros sont codés en dur pour l'instant mais pour de la modularité : quand on interprète une commande , on cherche si le mot est dans le fichier sauf la première phrase dans le texte 
+(donc dans dictionnaire il faudra charger tout sauf la première phrase du fichier, peut etre faire -tail n ou head ou commande du style )
