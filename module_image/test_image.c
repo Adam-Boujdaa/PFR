@@ -49,6 +49,7 @@ int main(int argc, char *argv[])
 			   objets[i].aire);
 		Pixel coul = image_trouver_couleur(img, mask, objets[i]);
 		printf("  Couleur moyenne : R=%d, G=%d, B=%d\n", coul.r, coul.g, coul.b);
+		printf("  Couleur nommee : %s\n", image_pixel_to_nom(coul));
 
 		for (int y = 0; y < ligne; y++)
 		{

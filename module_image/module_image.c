@@ -155,10 +155,10 @@ Image image_masque_objets(Image img, int seuil) {
     return mask;
 }
 
-int image_trouver_objets(Image img, Objets tab_objets, int aire_min) {
+int image_trouver_objets(Image img, Objet* tab_objets, int aire_min) {
     Image labels = image_init(img->hauteur, img->largeur, 1);
     int object_courant = 1;
-    tab_objets.n_objets = 0;
+    int n_objets = 0;
 
     // voisins
     int dx[8] = {-1, 0, 1, -1, 1, -1, 0, 1};
@@ -204,15 +204,15 @@ int image_trouver_objets(Image img, Objets tab_objets, int aire_min) {
                 }
 
                 if (obj.aire >= aire_min) {
-                    tab_objets.objets[object_courant - 1] = obj;
-                    tab_objets.n_objets++;
+                    tab_objets[n_objets] = obj;
+                    n_objets++;
                     object_courant++;
                 }
             }
         }
     }
 
-    return tab_objets.n_objets;
+    return n_objets;
 }
 
 Pixel image_trouver_couleur(Image img, Image mask, Objet obj) {
@@ -282,15 +282,16 @@ const char* image_pixel_to_nom(Pixel coul) {
         {"Vert", 0, 255, 0},
         {"Bleu", 0, 0, 255},
         {"Jaune", 255, 255, 0},
-        {"Orange", 255, 165, 0},
+        {"Orange", 255, 65, 0},
         {"Blanc", 255, 255, 255}};
 
     int n_couleurs = sizeof(COULEURS) / sizeof(CouleurNom);
 
-    const char* nom_couleur = "Inconnu";
-    int dist_min = 1500;
+    char* nom_couleur = "Inconnu";
+    int dist_min = 25000;
 
     for (int i = 0; i < n_couleurs; i++) {
+        //printf("Comparing with %s\n", COULEURS[i].nom);
         CouleurNom cour = COULEURS[i];
 
         int d_r = coul.r - cour.r;
@@ -298,8 +299,8 @@ const char* image_pixel_to_nom(Pixel coul) {
         int d_b = coul.b - cour.b;
 
         int dist = (d_r * d_r) + (d_g * d_g) + (d_b * d_b);
+        //printf("Distance: %d\n", dist);
 
-        // If this is the closest color so far, save it
         if (dist < dist_min) {
             dist_min = dist;
             nom_couleur = cour.nom;
