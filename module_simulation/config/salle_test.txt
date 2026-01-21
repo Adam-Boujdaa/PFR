@@ -1,0 +1,4 @@
+LONGUEUR=8
+LARGEUR=6
+OBSTACLE=rectangle,1,0,0.5,0.5
+OBSTACLE=cercle,5,2,0.8
