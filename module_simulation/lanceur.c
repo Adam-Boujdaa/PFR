@@ -31,10 +31,10 @@ int main(int argc, char* argv[]) {
     int resultat = system(commande);
     
     if (resultat == 0) {
-        printf("\n✓ Simulation terminée avec succès\n");
+        printf("\n Simulation terminée avec succès\n");
         return 0;
     } else {
-        printf("\n✗ Erreur lors de l'exécution\n");
+        printf("\n Erreur lors de l'exécution\n");
         return 1;
     }
 }
