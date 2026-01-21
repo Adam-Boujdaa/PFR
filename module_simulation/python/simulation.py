@@ -483,13 +483,11 @@ def fermer_log():
         fichier_log.close()
 
 def main():
-    print("\n" + "="*60)
     print("  SIMULATION ROBOT PFR1")
-    print("="*60 + "\n")
     
-    fichier_config = "C:\\Users\\jeand\\Desktop\\UPSSITECH\\Projet\\PFR_at_home\\module_simulation\\config\\simulation.txt"
-    fichier_salle = "C:\\Users\\jeand\\Desktop\\UPSSITECH\\Projet\\PFR_at_home\\module_simulation\\config\\salle_test.txt"
-    fichier_commandes = "C:\\Users\\jeand\\Desktop\\UPSSITECH\\Projet\\PFR_at_home\\module_simulation\\scripts\\commandes_tests.txt"
+    fichier_config = "../config/simulation.txt"
+    fichier_salle = "../config/salle_test.txt"
+    fichier_commandes = "../scripts/commandes_tests.txt"
     
     initialiser_log("simulation_log.txt")
     
@@ -502,10 +500,10 @@ def main():
 
     afficher_obstacles()
 
-    print("\nDémarrage de l'exécution des commandes...\n")
+    print("\n Démarrage de l'exécution des commandes...\n")
     executer_fichier_commandes(fichier_commandes)
 
-    print(f"\nPosition finale : ({robot_state['x']:.2f}, {robot_state['y']:.2f})")
+    print(f"\n Position finale : ({robot_state['x']:.2f}, {robot_state['y']:.2f})")
     print(f"Orientation finale : {robot_state['orientation']:.1f}°")
 
     fermer_log()
