@@ -1,0 +1,10 @@
+Req 1 | 2026-01-18 18:51:26 | Mode: Utilisateur | Action: Texte
+Req 2 | 2026-01-18 18:51:29 | Mode: Utilisateur | Action: Simulation
+Req 3 | 2026-01-18 18:51:30 | Mode: Utilisateur | Action: Image
+Req 4 | 2026-01-18 18:51:34 | Mode: Administrateur | Action: Voir logs
+Req 1 | 2026-01-21 20:45:07 | Mode: Utilisateur | Action: Texte
+Req 2 | 2026-01-21 20:45:11 | Mode: Utilisateur | Action: Texte
+Req 3 | 2026-01-21 20:45:13 | Mode: Utilisateur | Action: Simulation
+Req 4 | 2026-01-21 20:45:15 | Mode: Utilisateur | Action: Image
+Req 5 | 2026-01-21 20:45:19 | Mode: Administrateur | Action: Voir logs
+Utilisateur : commande textuelle
