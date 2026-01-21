@@ -1,5 +1,6 @@
-forward(2)
-turn_right(90)
-forward(1.5)
-turn_left(45)
-backward(1)
+A,-,2
+T,D,90
+A,-,1.5
+A,G,1
+T,G,45
+R,-,0.5
