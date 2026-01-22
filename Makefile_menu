@@ -1,6 +1,6 @@
 # nom de l'exécutable final
 menu.out: main.o menu.o utils.o lang.o log.o
-	gcc -o menu.out main.o menu.o utils.o lang.o log.o
+	gcc -o menu.out main.o menu.o utils.o lang.o log.o module_image.o pile.o -lm
 
 # compilation de main.c
 main.o: main.c menu.h

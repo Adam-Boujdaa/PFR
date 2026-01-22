@@ -34,7 +34,10 @@ cscope.*
 *.swp
 .project
 .cproject
+.clang-format
+*.fish
 #*.txt
+image_processing_test.ipynb
 
 #enlevez pas svp
 venv_pour_tts/

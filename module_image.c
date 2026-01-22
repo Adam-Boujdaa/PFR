@@ -1,6 +1,7 @@
 #include "module_image.h"
 
 #include <math.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -97,11 +98,11 @@ Image image_lire(FILE* f, int ligne, int colonne, int canaux) {
         for (int i = 0; i < ligne; i++) {
             for (int j = 0; j < colonne; j++) {
                 if (c == 0) {
-                    fscanf(f, "%d ", &img->data[i][j].r);
+                    fscanf(f, "%hhu ", &img->data[i][j].r);
                 } else if (c == 1) {
-                    fscanf(f, "%d ", &img->data[i][j].g);
+                    fscanf(f, "%hhu ", &img->data[i][j].g);
                 } else {
-                    fscanf(f, "%d ", &img->data[i][j].b);
+                    fscanf(f, "%hhu ", &img->data[i][j].b);
                 }
             }
         }
@@ -272,9 +273,9 @@ Image image_segmenter_objet(Image img, Objet obj) {
 const char* image_pixel_to_nom(Pixel coul) {
     typedef struct {
         const char* nom;
-        int r;
-        int g;
-        int b;
+        uint8_t r;
+        uint8_t g;
+        uint8_t b;
     } CouleurNom;
 
     const CouleurNom COULEURS[] = {
@@ -287,11 +288,10 @@ const char* image_pixel_to_nom(Pixel coul) {
 
     int n_couleurs = sizeof(COULEURS) / sizeof(CouleurNom);
 
-    char* nom_couleur = "Inconnu";
-    int dist_min = 25000;
+    const char* nom_couleur = "Inconnu";
+    int dist_min = 26000;
 
     for (int i = 0; i < n_couleurs; i++) {
-        //printf("Comparing with %s\n", COULEURS[i].nom);
         CouleurNom cour = COULEURS[i];
 
         int d_r = coul.r - cour.r;
@@ -299,7 +299,6 @@ const char* image_pixel_to_nom(Pixel coul) {
         int d_b = coul.b - cour.b;
 
         int dist = (d_r * d_r) + (d_g * d_g) + (d_b * d_b);
-        //printf("Distance: %d\n", dist);
 
         if (dist < dist_min) {
             dist_min = dist;
@@ -308,4 +307,11 @@ const char* image_pixel_to_nom(Pixel coul) {
     }
 
     return nom_couleur;
+}
+
+Point objet_trouver_centre(Objet obj) {
+    Point centre;
+    centre.x = (obj.min_x + obj.max_x) / 2;
+    centre.y = (obj.min_y + obj.max_y) / 2;
+    return centre;
 }

@@ -1,5 +1,5 @@
 #Auteur : Adam BOUJDAA
-#Date : Décembre 2024
+#Date : Décembre 2025
 # Description : Ce module permet de transcrire en français (ou anglais) les commandes vocales pour les renvoyer à la partie traitement de texte
 
 import speech_recognition as sr

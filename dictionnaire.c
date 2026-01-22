@@ -11,7 +11,7 @@ pour ensuit l'envoyer au module de simulation*/  // A IMPLÉMENTER !
 #include <stdlib.h> 
 #include <string.h> 
 #include <ctype.h> 
-#include "../include/dictionnaire.h" 
+#include "dictionnaire.h" 
 
 
 //-------------------------------- DICTIONNAIRE ET OUTILS POUR : 

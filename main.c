@@ -1,4 +1,6 @@
 #include "menu.h"
+#include "module_image.h"
+
 
 /* fonction principale */
 int main(void)

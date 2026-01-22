@@ -110,3 +110,33 @@ void menu_admin(void)
     }
 }
 
+void menu_image(void)
+{
+    int choix = -1;
+
+    while (choix != 0)
+    {
+        printf("\n=== %s ===\n", lang("IMAGE_MENU"));
+        printf("1 - %s\n", lang("LOAD_IMAGE"));
+        printf("2 - %s\n", lang("PROCESS_IMAGE"));
+        printf("0 - %s\n", lang("BACK"));
+        printf("%s ", lang("CHOICE"));
+
+        choix = read_int();
+
+        if (choix == 1)
+        {
+            printf("Chargement d'image choisi\n");
+            log_msg("Utilisateur : chargement d'image");
+        }
+        else if (choix == 2)
+        {
+            printf("Traitement d'image choisi\n");
+            log_msg("Utilisateur : traitement d'image");
+        }
+        else if (choix == 0)
+            printf("Retour menu utilisateur\n");
+        else
+            printf("%s\n", lang("INVALID"));
+    }
+}

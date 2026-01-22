@@ -2,13 +2,14 @@
 #define MODULE_IMAGE_H_INCLUS
 
 #include <stdio.h>
+#include <stdint.h>
 #include "objet.h"
 #define MAX 300
 
 typedef struct {
-	int r;
-	int g;
-	int b;
+	uint8_t r;
+	uint8_t g;
+	uint8_t b;
 } Pixel;
 
 typedef struct

@@ -1,5 +1,5 @@
-module_image.out: module_image.o main.o
-	gcc -o module_image.out module_image.o main.o -lm
+module_image.out: module_image.o main.o pile.o
+	gcc -o module_image.out module_image.o main.o pile.o -lm
 
 module_image.o: module_image.c 
 	gcc -c module_image.c -o module_image.o -W -Wall -ansi -pedantic -std=c99
