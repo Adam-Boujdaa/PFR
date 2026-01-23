@@ -2,6 +2,7 @@
 #define MENU_H
 
 /* fonctions des menus */
+int verifier_mdp();
 void choisir_langue();
 void menu_principal();
 void menu_utilisateur();

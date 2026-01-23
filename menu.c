@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 
 #include "lang.h"
@@ -10,14 +11,57 @@
 #include "utils.h"
 
 #define MAX_OBJETS 10
+#define FICHIER_MDP ".mdp_admin"
+#define MAX_MDP 256
 
 #define NETTOYER() printf("\033[2J\033[H")
 
+/* vérifier le mot de passe administrateur */
+int verifier_mdp() {
+    char mdp[MAX_MDP];
+    char mdp_saisi[MAX_MDP];
+    FILE* fichier_mdp = fopen(FICHIER_MDP, "r");
+
+    if (!fichier_mdp) {
+        fprintf(stderr, "Erreur: fichier de mot de passe admin introuvable (%s)\n", FICHIER_MDP);
+        log_msg("Erreur: fichier de mot de passe admin introuvable");
+        return 0;
+    }
+
+    if (fgets(mdp, MAX_MDP, fichier_mdp) == NULL) {
+        fprintf(stderr, "Erreur: impossible de lire le mot de passe\n");
+        log_msg("Erreur: impossible de lire le mot de passe");
+        fclose(fichier_mdp);
+        return 0;
+    }
+
+    fclose(fichier_mdp);
+
+    size_t len = strlen(mdp);
+    if (len > 0 && mdp[len - 1] == '\n') {
+        mdp[len - 1] = '\0';
+    }
+
+    printf("Entrez le mot de passe administrateur > ");
+    scanf("%255s", mdp_saisi);
+
+    if (strcmp(mdp, mdp_saisi) == 0) {
+        printf("Mot de passe correct\n");
+        log_msg("Administrateur: accès réussi (mot de passe correct)");
+        return 1;
+    } else {
+        printf("Mot de passe incorrect\n");
+        log_msg("Administrateur: accès refusé (mot de passe incorrect)");
+        return 0;
+    }
+}
+
 /* choix de la langue au démarrage */
-void choisir_langue(void) {
+void choisir_langue() {
     int choix = -1;
 
     while (choix != 0 && choix != 1) {
+        printf("\n=== CHOISIR LANGUE ===\n");
         printf("0 - Français\n");
         printf("1 - English\n");
         printf("Choix : ");
@@ -31,7 +75,7 @@ void choisir_langue(void) {
 }
 
 /* menu principal */
-void menu_principal(void) {
+void menu_principal() {
     NETTOYER();
 
     int choix = -1;
@@ -50,7 +94,13 @@ void menu_principal(void) {
                 menu_utilisateur();
                 break;
             case 2:
-                menu_admin();
+                if (verifier_mdp()) {
+                    menu_admin();
+                } else {
+                    printf("%s\n", lang("ACCESS_DENIED"));
+                    sleep(2);
+                    NETTOYER();
+                }
                 break;
             case 0:
                 printf("%s\n", lang("EXIT"));
@@ -78,20 +128,20 @@ void menu_utilisateur() {
 
         switch (choix) {
             case 1:
-                printf("Commande textuelle choisie\n");
+                printf("%s\n", lang("TEXT_CMD_CHOSEN"));
                 log_msg("Utilisateur : commande textuelle");
                 break;
             case 2:
-                printf("Simulation choisie\n");
+                printf("%s\n", lang("SIMULATION_CHOSEN"));
                 log_msg("Utilisateur : simulation");
                 break;
             case 3:
-                printf("Traitement image choisi\n");
+                printf("%s\n", lang("IMAGE_CHOSEN"));
                 log_msg("Utilisateur : image");
                 menu_image();
                 break;
             case 0:
-                printf("Retour menu principal\n");
+                printf("%s\n", lang("BACK_CHOSEN"));
                 break;
             default:
                 printf("%s\n", lang("INVALID"));
@@ -114,13 +164,13 @@ void menu_admin() {
 
         switch (choix) {
             case 1:
-                printf("Affichage des logs choisi\n");
+                printf("%s\n", lang("LOG_CHOSEN"));
                 log_msg("Administrateur : affichage des logs");
                 show_logs();
                 break;
 
             case 0:
-                printf("Retour menu principal\n");
+                printf("%s\n", lang("BACK_CHOSEN"));
                 break;
 
             default:

@@ -147,3 +147,19 @@ Utilisateur : image
 Utilisateur : chargement d'image
 Utilisateur : détection d'objets
 Utilisateur : sauvegarde d'image
+Administrateur : affichage des logs
+Administrateur : affichage des logs
+Utilisateur : commande textuelle
+Utilisateur : image
+Utilisateur : chargement d'image
+Utilisateur : détection d'objets
+Utilisateur : sauvegarde d'image
+Administrateur: accès refusé (mot de passe incorrect)
+Administrateur: accès refusé (mot de passe incorrect)
+Administrateur: accès refusé (mot de passe incorrect)
+Administrateur: accès réussi (mot de passe correct)
+Administrateur: accès refusé (mot de passe incorrect)
+Administrateur: accès réussi (mot de passe correct)
+Administrateur: accès refusé (mot de passe incorrect)
+Utilisateur : commande textuelle
+Utilisateur : commande textuelle

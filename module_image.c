@@ -284,11 +284,11 @@ const char* image_pixel_to_nom(Pixel coul) {
     } CouleurNom;
 
     const CouleurNom COULEURS[] = {
-        {"Rouge", 255, 0, 0},
-        {"Vert", 0, 255, 0},
-        {"Bleu", 0, 0, 255},
-        {"Jaune", 255, 255, 0},
-        {"Orange", 255, 65, 0},
+        {"\x1B[31mRouge\x1B[0m", 255, 0, 0},
+        {"\x1B[32mVert\x1B[0m", 0, 255, 0},
+        {"\x1B[34mBleu\x1B[0m", 0, 0, 255},
+        {"\x1B[33mJaune\x1B[0m", 255, 255, 0},
+        {"\x1B[38;5;208mOrange\x1B[0m", 255, 65, 0},
         {"Blanc", 255, 255, 255}};
 
     int n_couleurs = sizeof(COULEURS) / sizeof(CouleurNom);
