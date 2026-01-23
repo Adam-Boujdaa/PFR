@@ -1,15 +1,15 @@
 # Édition de lien et création des exécutables .out
 # ###############################################
-Parseur.out : main.o dictionnaire.o
-	gcc -o Parseur.out main.o dictionnaire.o
+Parseur.out : vocal.o dictionnaire.o
+	gcc -o Parseur.out vocal.o dictionnaire.o
 
 TestDico.out : test_dictionnaire.o dictionnaire.o
 	gcc -o TestDico.out test_dictionnaire.o dictionnaire.o
 
 # Création des fichiers objet .o
 # ###############################
-main.o : main.c dictionnaire.h
-	gcc -c main.c
+vocal.o : vocal.c dictionnaire.h
+	gcc -c vocal.c
 
 test_dictionnaire.o : test_dictionnaire.c dictionnaire.h
 	gcc -c test_dictionnaire.c

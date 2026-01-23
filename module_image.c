@@ -8,6 +8,8 @@
 #include "objet.h"
 #include "pile.h"
 
+
+
 static int max3(int a, int b, int c) {
     int max = a;
 
@@ -44,7 +46,6 @@ Image image_init(int hauteur, int largeur, int canaux) {
 }
 
 int image_niv_gris_valide(int niv_gris) {
-    printf("niv_gris: %d\n", niv_gris);
 
     if (niv_gris < 1 || niv_gris > 255)
         return -1;
@@ -91,7 +92,13 @@ Image image_quantification(Image img, int q) {
     return quant;
 }
 
-Image image_lire(FILE* f, int ligne, int colonne, int canaux) {
+Image image_lire(FILE* f) {
+    int ligne, colonne, canaux;
+
+    fscanf(f, "%d %d %d", &ligne, &colonne, &canaux);
+
+    printf("[DEBUG] ligne: %d, colonne: %d, canaux: %d\n", ligne, colonne, canaux);
+
     Image img = image_init(ligne, colonne, canaux);
 
     for (int c = 0; c < canaux; c++) {
@@ -240,18 +247,16 @@ Pixel image_trouver_couleur(Image img, Image mask, Objet obj) {
     return coul_moyenne;
 }
 
-Image image_dessiner_boite_englobante(Image img, Objet* obj, Pixel couleur_bordure) {
-    Image boite_eng = image_init(img->hauteur, img->largeur, img->canaux);
+void image_dessiner_boite_englobante(Image img, Objet obj, Pixel couleur_bordure) {
 
     for (int y = 0; y < img->hauteur; y++) {
         for (int x = 0; x < img->largeur; x++) {
-            if (((x == obj->min_x || x == obj->max_x) && y >= obj->min_y && y <= obj->max_y) ||
-                ((y == obj->min_y || y == obj->max_y) && x >= obj->min_x && x <= obj->max_x)) {
-                boite_eng->data[y][x] = couleur_bordure;
+            if (((x == obj.min_x || x == obj.max_x) && y >= obj.min_y && y <= obj.max_y) ||
+                ((y == obj.min_y || y == obj.max_y) && x >= obj.min_x && x <= obj.max_x)) {
+                img->data[y][x] = couleur_bordure;
             }
         }
     }
-    return boite_eng;
 }
 
 Image image_segmenter_objet(Image img, Objet obj) {

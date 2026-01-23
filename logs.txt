@@ -1,1 +1,149 @@
 Utilisateur : image
+Utilisateur : image
+Utilisateur : image
+Utilisateur : image
+Utilisateur : chargement d'image
+Utilisateur : détection d'objets
+Utilisateur : retournement horizontal
+Utilisateur : sauvegarde d'image
+Utilisateur : image
+Utilisateur : chargement d'image
+Utilisateur : image
+Utilisateur : chargement d'image
+Utilisateur : image
+Utilisateur : chargement d'image
+Utilisateur : détection d'objets
+Utilisateur : image
+Utilisateur : chargement d'image
+Utilisateur : détection d'objets
+Utilisateur : image
+Utilisateur : chargement d'image
+Utilisateur : chargement d'image
+Utilisateur : détection d'objets
+Utilisateur : détection d'objets
+Utilisateur : image
+Utilisateur : chargement d'image
+Utilisateur : détection d'objets
+Utilisateur : image
+Utilisateur : chargement d'image
+Utilisateur : détection d'objets
+Utilisateur : conversion en niveaux de gris
+Utilisateur : sauvegarde d'image
+Utilisateur : image
+Utilisateur : chargement d'image
+Utilisateur : retournement horizontal
+Utilisateur : sauvegarde d'image
+Utilisateur : image
+Utilisateur : chargement d'image
+Utilisateur : sauvegarde d'image
+Utilisateur : image
+Utilisateur : chargement d'image
+Utilisateur : image
+Utilisateur : chargement d'image
+Utilisateur : détection d'objets
+Utilisateur : retournement horizontal
+Utilisateur : sauvegarde d'image
+Utilisateur : quantification
+Utilisateur : sauvegarde d'image
+Utilisateur : image
+Utilisateur : chargement d'image
+Utilisateur : image
+Utilisateur : chargement d'image
+Utilisateur : image
+Utilisateur : chargement d'image
+Utilisateur : détection d'objets
+Utilisateur : image
+Utilisateur : chargement d'image
+Utilisateur : détection d'objets
+Utilisateur : image
+Utilisateur : chargement d'image
+Utilisateur : détection d'objets
+Utilisateur : retournement horizontal
+Utilisateur : sauvegarde d'image
+Utilisateur : image
+Utilisateur : chargement d'image
+Utilisateur : détection d'objets
+Utilisateur : sauvegarde d'image
+Utilisateur : image
+Utilisateur : chargement d'image
+Utilisateur : détection d'objets
+Utilisateur : sauvegarde d'image
+Utilisateur : image
+Utilisateur : chargement d'image
+Utilisateur : détection d'objets
+Utilisateur : image
+Utilisateur : chargement d'image
+Utilisateur : détection d'objets
+Utilisateur : sauvegarde d'image
+Utilisateur : détection d'objets
+Utilisateur : détection d'objets
+Utilisateur : image
+Utilisateur : chargement d'image
+Utilisateur : détection d'objets
+Utilisateur : sauvegarde d'image
+Utilisateur : image
+Utilisateur : chargement d'image
+Utilisateur : retournement horizontal
+Utilisateur : sauvegarde d'image
+Utilisateur : image
+Utilisateur : chargement d'image
+Utilisateur : image
+Utilisateur : chargement d'image
+Utilisateur : sauvegarde d'image
+Utilisateur : image
+Utilisateur : chargement d'image
+Utilisateur : image
+Utilisateur : chargement d'image
+Utilisateur : sauvegarde d'image
+Utilisateur : image
+Utilisateur : chargement d'image
+Utilisateur : sauvegarde d'image
+Utilisateur : image
+Utilisateur : chargement d'image
+Utilisateur : détection d'objets
+Utilisateur : sauvegarde d'image
+Utilisateur : image
+Utilisateur : chargement d'image
+Utilisateur : détection d'objets
+Utilisateur : image
+Utilisateur : chargement d'image
+Utilisateur : détection d'objets
+Utilisateur : image
+Utilisateur : chargement d'image
+Utilisateur : détection d'objets
+Utilisateur : sauvegarde d'image
+Utilisateur : image
+Utilisateur : chargement d'image
+Utilisateur : image
+Utilisateur : chargement d'image
+Utilisateur : détection d'objets
+Utilisateur : conversion en niveaux de gris
+Utilisateur : sauvegarde d'image
+Utilisateur : quantification
+Utilisateur : sauvegarde d'image
+Utilisateur : image
+Utilisateur : chargement d'image
+Utilisateur : détection d'objets
+Utilisateur : retournement horizontal
+Utilisateur : sauvegarde d'image
+Utilisateur : image
+Utilisateur : chargement d'image
+Utilisateur : retournement horizontal
+Utilisateur : sauvegarde d'image
+Utilisateur : image
+Utilisateur : chargement d'image
+Utilisateur : retournement horizontal
+Utilisateur : sauvegarde d'image
+Utilisateur : image
+Utilisateur : chargement d'image
+Utilisateur : image
+Utilisateur : chargement d'image
+Utilisateur : détection d'objets
+Utilisateur : sauvegarde d'image
+Utilisateur : image
+Utilisateur : chargement d'image
+Erreur ouverture fichier image
+Utilisateur : image
+Utilisateur : chargement d'image
+Utilisateur : détection d'objets
+Utilisateur : sauvegarde d'image
