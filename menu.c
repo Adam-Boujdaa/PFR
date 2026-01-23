@@ -16,6 +16,19 @@
 
 #define NETTOYER() printf("\033[2J\033[H")
 
+/* lecture simple d'un entier */
+int read_int()
+{
+    int n;
+
+    if (scanf("%d", &n) == 1)
+        return n;
+
+    /* vide le buffer en cas d'erreur */
+    while (getchar() != '\n');
+    return -1;
+}
+
 /* vérifier le mot de passe administrateur */
 int verifier_mdp() {
     char mdp[MAX_MDP];
@@ -232,7 +245,7 @@ void menu_image() {
                     break;
             }
         } else {
-            /* Menu after image is loaded */
+            // Menu image une fois l'image chargée
             printf("\n=== %s ===\n", chemin_img);
             printf("1 - %s\n", lang("FIND_OBJECTS"));
             printf("2 - %s\n", lang("CONVERT_GRAYSCALE"));
