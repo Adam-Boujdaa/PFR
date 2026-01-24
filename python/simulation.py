@@ -1,8 +1,6 @@
 """
 PFR1 - Module de simulation robot
-Programme complet avec architecture structurée
 """
-
 import turtle as tl
 import math
 from datetime import datetime
@@ -11,7 +9,7 @@ from datetime import datetime
 config = {}
 
 # État du robot
-robot_state = {
+etat_robot = {
     'x': 0.0,
     'y': 0.0,
     'orientation': 0.0  # en degrés
@@ -26,7 +24,7 @@ environnement = {
 }
 
 # Objets Turtle
-ecran = None
+fenetre = None
 robot = None
 
 # Fichier de log
@@ -57,14 +55,14 @@ def charger_configuration(fichier_conf):
         return False
 
 def initialiser_environnement(fichier_conf):
-    global ecran, robot, environnement
+    global fenetre, robot, environnement
     
     # Charge la configuration
     if not charger_configuration(fichier_conf):
         print("Utilisation des paramètres par défaut")
     
-    # Récupération des paramètres (avec valeurs par défaut)
-    largeur_fenetre = int(config.get('WINDOW_WIDTH', 800))
+    # Récupération des paramètres 
+    largeur_fenetre = int(config.get('WINDOW_WIDTH', 800)) # valeurs par défaut
     hauteur_fenetre = int(config.get('WINDOW_HEIGHT', 600))
     titre = config.get('WINDOW_TITLE', 'Simulation Robot PFR1')
     couleur_fond = config.get('BACKGROUND_COLOR', 'white')
@@ -74,22 +72,23 @@ def initialiser_environnement(fichier_conf):
     forme_robot = config.get('ROBOT_SHAPE', 'triangle')
     couleur_robot = config.get('ROBOT_COLOR', 'blue')
     taille_robot = float(config.get('ROBOT_SIZE', 1.5))
+    vitesse_robot = int(config.get('ROBOT_SPEED', 6))
     
     # Création de la fenêtre
-    ecran = tl.Screen()
-    ecran.setup(width=largeur_fenetre, height=hauteur_fenetre)
-    ecran.title(titre)
-    ecran.bgcolor(couleur_fond)
-    ecran.tracer(0)  # Désactive l'animation automatique pour plus de contrôle
+    fenetre = tl.Screen()
+    fenetre.setup(width=largeur_fenetre, height=hauteur_fenetre)
+    fenetre.title(titre)
+    fenetre.bgcolor(couleur_fond)
+    fenetre.tracer(0)  # pour afficher tout d'un coup
     
     # Création du robot
     robot = tl.Turtle()
     robot.shape(forme_robot)
     robot.color(couleur_robot)
     robot.shapesize(taille_robot, taille_robot)
-    robot.speed(0)
+    robot.speed(vitesse_robot)
     
-    ecran.update()
+    fenetre.update()
     log_message("Environnement graphique initialisé")
     print("Environnement initialisé")
 
@@ -137,7 +136,7 @@ def afficher_obstacles():
     for i, obstacle in enumerate(environnement['obstacles']):
         dessinateur = tl.Turtle()
         dessinateur.hideturtle()
-        dessinateur.speed(0)
+        dessinateur.speed(6)
         dessinateur.penup()
         
         if obstacle['type'] == 'rectangle':
@@ -181,7 +180,7 @@ def afficher_obstacles():
             dessinateur.circle(rayon * echelle)
             dessinateur.end_fill()
     
-    ecran.update()
+    fenetre.update()
     log_message(f"{len(environnement['obstacles'])} obstacle(s) affiché(s)")
     print(f" {len(environnement['obstacles'])} obstacle(s) affiché(s)")
 
@@ -208,14 +207,14 @@ def verifier_collision(x, y):
     return None
 
 def calculer_position_future(distance, recule=False):
-    rad = math.radians(robot_state['orientation'])
+    rad = math.radians(etat_robot['orientation'])
     
     if recule:
-        futur_x = robot_state['x'] - distance * math.cos(rad)
-        futur_y = robot_state['y'] - distance * math.sin(rad)
+        futur_x = etat_robot['x'] - distance * math.cos(rad)
+        futur_y = etat_robot['y'] - distance * math.sin(rad)
     else:
-        futur_x = robot_state['x'] + distance * math.cos(rad)
-        futur_y = robot_state['y'] + distance * math.sin(rad)
+        futur_x = etat_robot['x'] + distance * math.cos(rad)
+        futur_y = etat_robot['y'] + distance * math.sin(rad)
     
     return futur_x, futur_y
 
@@ -253,51 +252,51 @@ def contourner_obstacle(obstacle, distance_voulue):
         return False
 
 def avancer_direct(distance):
-    global robot_state
+    global etat_robot
     
     pixels = distance * environnement['echelle']
     robot.forward(pixels)
     
     # Mise à jour de la position
-    rad = math.radians(robot_state['orientation'])
-    robot_state['x'] += distance * math.cos(rad)
-    robot_state['y'] += distance * math.sin(rad)
+    rad = math.radians(etat_robot['orientation'])
+    etat_robot['x'] += distance * math.cos(rad)
+    etat_robot['y'] += distance * math.sin(rad)
     
-    ecran.update()
+    fenetre.update()
 
 
 def reculer_direct(distance):
-    global robot_state
+    global etat_robot
     
     pixels = distance * environnement['echelle']
     robot.backward(pixels)
     
     # Mise à jour de la position
-    rad = math.radians(robot_state['orientation'])
-    robot_state['x'] -= distance * math.cos(rad)
-    robot_state['y'] -= distance * math.sin(rad)
+    rad = math.radians(etat_robot['orientation'])
+    etat_robot['x'] -= distance * math.cos(rad)
+    etat_robot['y'] -= distance * math.sin(rad)
     
-    ecran.update()
+    fenetre.update()
 
 
 def tourner_gauche(angle):
-    global robot_state
+    global etat_robot
     
     robot.left(angle)
-    robot_state['orientation'] = (robot_state['orientation'] + angle) % 360
+    etat_robot['orientation'] = (etat_robot['orientation'] + angle) % 360
     
-    ecran.update()
-    log_message(f"Rotation gauche : {angle}° | Orientation : {robot_state['orientation']:.1f}°")
+    fenetre.update()
+    log_message(f"Rotation gauche : {angle}° | Orientation : {etat_robot['orientation']:.1f}°")
 
 
 def tourner_droite(angle):
-    global robot_state
+    global etat_robot
     
     robot.right(angle)
-    robot_state['orientation'] = (robot_state['orientation'] - angle) % 360
+    etat_robot['orientation'] = (etat_robot['orientation'] - angle) % 360
     
-    ecran.update()
-    log_message(f"Rotation droite : {angle}° | Orientation : {robot_state['orientation']:.1f}°")
+    fenetre.update()
+    log_message(f"Rotation droite : {angle}° | Orientation : {etat_robot['orientation']:.1f}°")
 
 def avancer(distance):
     valide, obstacle, (futur_x, futur_y) = valider_deplacement(distance)
@@ -324,8 +323,8 @@ def avancer(distance):
             return False
     
     avancer_direct(distance)
-    print(f"Avance {distance}m → Position ({robot_state['x']:.2f}, {robot_state['y']:.2f})")
-    log_message(f"Avance {distance}m → ({robot_state['x']:.2f}, {robot_state['y']:.2f})")
+    print(f"Avance {distance}m → Position ({etat_robot['x']:.2f}, {etat_robot['y']:.2f})")
+    log_message(f"Avance {distance}m → ({etat_robot['x']:.2f}, {etat_robot['y']:.2f})")
     return True
 
 
@@ -341,8 +340,8 @@ def reculer(distance):
     
     # Pas d'obstacle, déplacement normal
     reculer_direct(distance)
-    print(f"Recule {distance}m → Position ({robot_state['x']:.2f}, {robot_state['y']:.2f})")
-    log_message(f"Recule {distance}m → ({robot_state['x']:.2f}, {robot_state['y']:.2f})")
+    print(f"Recule {distance}m → Position ({etat_robot['x']:.2f}, {etat_robot['y']:.2f})")
+    log_message(f"Recule {distance}m → ({etat_robot['x']:.2f}, {etat_robot['y']:.2f})")
     return True
 
 def analyser_commande(ligne_commande):
@@ -370,11 +369,11 @@ def analyser_commande(ligne_commande):
             return avancer(valeur)
         elif direction == "D":
             tourner_droite(90)
-            print(f"Tourne droite 90° → Orientation {robot_state['orientation']:.1f}°")
+            print(f"Tourne droite 90° → Orientation {etat_robot['orientation']:.1f}°")
             return avancer(valeur)
         elif direction == "G":
             tourner_gauche(90)
-            print(f"Tourne gauche 90° → Orientation {robot_state['orientation']:.1f}°")
+            print(f"Tourne gauche 90° → Orientation {etat_robot['orientation']:.1f}°")
             return avancer(valeur)
         else:
             print(f"Direction inconnue : {direction}")
@@ -385,11 +384,11 @@ def analyser_commande(ligne_commande):
             return reculer(valeur)
         elif direction == "D":
             tourner_droite(90)
-            print(f"Tourne droite 90° : Orientation {robot_state['orientation']:.1f}°")
+            print(f"Tourne droite 90° : Orientation {etat_robot['orientation']:.1f}°")
             return reculer(valeur)
         elif direction == "G":
             tourner_gauche(90)
-            print(f"Tourne gauche 90° : Orientation {robot_state['orientation']:.1f}°")
+            print(f"Tourne gauche 90° : Orientation {etat_robot['orientation']:.1f}°")
             return reculer(valeur)
         else:
             print(f"Direction inconnue : {direction}")
@@ -398,11 +397,11 @@ def analyser_commande(ligne_commande):
     elif action == "T":  # Tourner
         if direction == "G":
             tourner_gauche(valeur)
-            print(f"Tourne gauche {valeur}° → Orientation {robot_state['orientation']:.1f}°")
+            print(f"Tourne gauche {valeur}° → Orientation {etat_robot['orientation']:.1f}°")
             return True
         elif direction == "D":
             tourner_droite(valeur)
-            print(f"Tourne droite {valeur}° → Orientation {robot_state['orientation']:.1f}°")
+            print(f"Tourne droite {valeur}° → Orientation {etat_robot['orientation']:.1f}°")
             return True
         else:
             print(f"Direction de rotation invalide : {direction}")
@@ -483,11 +482,11 @@ def fermer_log():
         fichier_log.close()
 
 def main():
-    print("  SIMULATION ROBOT PFR1")
+    print("SIMULATION ROBOT PFR1")
     
-    fichier_config = "../config/simulation.txt"
-    fichier_salle = "../config/salle_test.txt"
-    fichier_commandes = "../scripts/commandes_tests.txt"
+    fichier_config = "/home/ash/Documents/PFR/config/simulation.conf"
+    fichier_salle = "/home/ash/Documents/PFR/config/salle_test.conf"
+    fichier_commandes = "/home/ash/Documents/PFR/scripts/commands_test.txt"
     
     initialiser_log("simulation_log.txt")
     
@@ -500,17 +499,19 @@ def main():
 
     afficher_obstacles()
 
+    fenetre.tracer(1)  # Activer le tracé du robot
+
     print("\n Démarrage de l'exécution des commandes...\n")
     executer_fichier_commandes(fichier_commandes)
 
-    print(f"\n Position finale : ({robot_state['x']:.2f}, {robot_state['y']:.2f})")
-    print(f"Orientation finale : {robot_state['orientation']:.1f}°")
+    print(f"\n Position finale : ({etat_robot['x']:.2f}, {etat_robot['y']:.2f})")
+    print(f"Orientation finale : {etat_robot['orientation']:.1f}°")
 
     fermer_log()
     
     print("\n" + "="*60)
     input("Appuyez sur Entrée pour fermer la fenêtre...")
-    ecran.bye()
+    fenetre.bye()
 
 if __name__ == "__main__":
     main()
