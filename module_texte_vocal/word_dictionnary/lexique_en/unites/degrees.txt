@@ -1,0 +1,7 @@
+degree
+degrees
+deg
+angle
+angles
+azimuth
+heading

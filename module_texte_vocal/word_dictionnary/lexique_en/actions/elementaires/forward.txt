@@ -1,0 +1,13 @@
+advance
+move
+walk
+go
+forward
+forwards
+straight
+ahead
+front
+march
+run
+proceed
+progress

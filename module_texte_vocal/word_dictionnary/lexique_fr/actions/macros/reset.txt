@@ -1,47 +1,18 @@
 reset
-réinitialiser
-reinitialiser
-re-initialiser
-réinitialise
-reinitialise
-réinitialisez
-reinitialisez
-remise à zéro
-remise a zero
 raz
-r.a.z.
-retour au début
-retour au debut
-retour origine
-retourne à l'origine
-zéro
-zero
-reviens au début
-reviens au debut
-reviens au point de départ
-reviens au point de depart
-point de départ
-point de depart
-point d'origine
-revenir au début
-revenir au debut
-revenir à l'origine
-revenir a l'origine
-r-é-i-n-i-t-i-a-l-i-s-e-r
+r.a.z
 r-a-z
-remise-à-zéro-maintenant
-retour-départ
-retour-debut
-réinitialisation
-reinitialisation
-re-init
-reinit
-remettre à zéro
-remettre a zero
-remets à zéro
-remets a zero
-remettez à zéro
-remettez a zero
-reset-français
-reset-francais
-raz-maintenant
+zero
+zéro
+origine
+debut
+début
+depart
+départ
+reinitialise
+réinitialise
+reinitialiser
+réinitialiser
+recommence
+restart
+init

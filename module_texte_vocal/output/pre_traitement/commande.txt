@@ -1,0 +1,1 @@
+fais un carré vas à droite avance de 8 m puis fait demi-tour pour reset puis va à gauche puissance zigzag puis avance puis recule de 3 m puis va à gauche de 15 degrés

@@ -68,3 +68,20 @@ comment actualiser si une liste de commandes a été finie ? => statut updated e
 
 les macros sont codés en dur pour l'instant mais pour de la modularité : quand on interprète une commande , on cherche si le mot est dans le fichier sauf la première phrase dans le texte 
 (donc dans dictionnaire il faudra charger tout sauf la première phrase du fichier, peut etre faire -tail n ou head ou commande du style )
+
+
+
+finalement tableau de commandes, en statique, avec un nb max de commandes élémentaires, comme ça on saturera pas la mémoire, mais surtout pour pouvoir gérer le cas : va vers y en passant par x il va avoir les indices et pouvoir décaler facilement sans faire plein de malloc pour déclaer et tout, on utilisera la dernière case si il y a de place, pr simplifier l'algo,
+
+trouve la balle bleue => dans main partagé car des appels de ma partie et celle de aziz donc pr simplifier l'organisation on fait dans main
+
+si pas de nombre fallback sur la valeur par défaut, entre -180 et 180 pour les rotations (TD ou TG), entre LONG_PIECE et LARG_PIECE pour les translations
+
+
+fichier python diff pour la confirmation vocale, lparseur.c  écrit dans un fichier : 
+        est ce que vous voulez bien + liste commandes (concaténation avec commandes.txt) [lance un programme python tts comme lautre module, mais en argument le fichier confirmation.txt dans lequel parseur à écrit]
+        ensuite en fct de la réponse il dit ok
+        enum pour les unités + pour convertir : relou donc on repasse sur char c'est plus simple
+
+
+faire fonction inversement entre 2 commadnes : si : va à y en pasant par x il va inverser x et y en utilisant des variables temporaires de commandes

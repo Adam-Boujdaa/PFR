@@ -1,48 +1,7 @@
 zigzag
 zig-zag
-zig zag
-fais un zigzag
-fait un zigzag
-faire un zigzag
-dessine un zigzag
-macro zigzag
-pattern zigzag
-z-i-g-z-a-g
-z i g z a g
-zigzag-maintenant
-zigzag-ici
-zigzag-là
-zigzag-vite
-zigzag-rapide
-zigzag-s
-zigzag-z
-zigzag-eh
-zigzag-uh
-zigzag-y
-zigzag-i
-zig-zagu-e
-zig-zagu-es
-zig-zagu-er
-zig-zagu-ez
-zig-zague
-zig-zagues
-zig-zaguez
-zig-zaguer
-zig-zagué
-zig-zague-maintenant
-zig-zague-ici
-zig-zague-là
-zig-zague-vite
-zig-zague-rapide
-zig-zague-go
-zig-zague-top
-zig-zague-début
-zig-zague-boucle
-zig-zague-répète
-zig-zague-dessine
-zig-zague-fais
-zig-zague-fait
-zig-zague-marche
-zig-zague-joue
-zig-zague-exécute
-zig-zague-tour
+zig
+zag
+slalom
+vagues
+sinusoide

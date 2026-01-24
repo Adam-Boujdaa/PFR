@@ -1,50 +1,11 @@
+degres
+degre
 degrés
 degré
 deg
-degrée
-degrées
-degré-s
-deu-gré
-d'gré
-de-gré
-d-e-g-r-é-s
-d e g r é s
-de gré
-deux grés
-deux gré
-des grès
-des traits
-de vrai
-de prêt
-de près
-deux traits
-des-prés
-des-prêts
-des-près
-de-grés-eh
-de-grés-uh
-de-gré-y
-de-gré-i
-d'gré-s
-d'gré-z
-de-gré-z
-de-gré-s
-deg-re
-deg-res
-d-e-g-r-e
-d-e-g-r-e-s
-deg-ré
-deg-rés
-deu-grés
-deu-gré-s
-deu-gré-z
-de-gréuh
-de-grés-e
-de-grés-eh
-de-gré-y
-de-gré-i
-de-gré-z
-de-gré-s
-le degré
-les degrés
-dix degrés
+dég
+angle
+angles
+azimut
+degres-celsius
+degre-celsius
