@@ -19,7 +19,7 @@ int main(int argc, char* argv[]) {
     printf("Configuration : %s\n", fichier_config);
     printf("Salle         : %s\n", fichier_salle);
     printf("Commandes     : %s\n", fichier_commandes);
-    printf("\nLancement de la simulation...\n\n");
+    printf("\n Lancement de la simulation\n\n");
     
     // Construction de la commande
     char commande[1024];
