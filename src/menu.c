@@ -1,19 +1,17 @@
-#include "menu.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
+#include "menu.h"
 #include "lang.h"
 #include "log.h"
 #include "module_image.h"
 #include "utils.h"
 
 #define MAX_OBJETS 10
-#define FICHIER_MDP ".mdp_admin"
 #define MAX_MDP 256
-
+#define FICHIER_MDP "config/.mdp_admin"
 #define NETTOYER() printf("\033[2J\033[H")
 
 /* lecture simple d'un entier */
@@ -82,9 +80,9 @@ void choisir_langue() {
     }
 
     if (choix == 0)
-        lang_load("lang_fr.conf");
+        lang_load("config/lang_fr.conf");
     else
-        lang_load("lang_en.conf");
+        lang_load("config/lang_en.conf");
 }
 
 /* menu principal */
@@ -150,11 +148,13 @@ void menu_utilisateur() {
                 break;
             case 3:
                 printf("%s\n", lang("IMAGE_CHOSEN"));
-                log_msg("Utilisateur : image");
+                log_msg("Utilisateur : menu image choisi");
                 menu_image();
                 break;
             case 0:
                 printf("%s\n", lang("BACK_CHOSEN"));
+                sleep(2);
+                NETTOYER();
                 break;
             default:
                 printf("%s\n", lang("INVALID"));
@@ -184,6 +184,8 @@ void menu_admin() {
 
             case 0:
                 printf("%s\n", lang("BACK_CHOSEN"));
+                sleep(2);
+                NETTOYER();
                 break;
 
             default:
@@ -197,7 +199,7 @@ void menu_image() {
     NETTOYER();
     int choix = -1;
     int image_chargee = 0;
-    const char chemin_img[256];
+    char chemin_img[200];
     Image img;
 
     while (choix != 0) {
@@ -213,14 +215,14 @@ void menu_image() {
             switch (choix) {
                 case 1:
                     printf("Chargement d'image choisi\n");
-                    log_msg("Utilisateur : chargement d'image");
-
                     choix = -1;
 
                     printf("Entrez le chemin du fichier image à charger : ");
                     scanf("%s", chemin_img);
 
-                    printf("Chemin de l'image : %s\n", chemin_img);
+                    char log_msg_image[256];
+                    sprintf(log_msg_image, "Utilisateur : chargement d'image : %s", chemin_img);
+                    log_msg(log_msg_image);
 
                     FILE* in = fopen(chemin_img, "r");
                     if (!in) {
@@ -237,7 +239,9 @@ void menu_image() {
 
                     break;
                 case 0:
-                    printf("Retour menu utilisateur\n");
+                    printf("%s\n", lang("BACK_CHOSEN"));
+                    sleep(2);
+                    NETTOYER();
                     break;
 
                 default:
@@ -280,6 +284,8 @@ void menu_image() {
                                image_pixel_to_nom(coul));
                     }
 
+                    free(mask);
+
                     break;
 
                 case 2: // CONVERSION NIVEAUX DE GRIS
@@ -317,9 +323,9 @@ void menu_image() {
                     break;
 
                 case 5:  // SAUVEGARDE IMAGE
-                    char chemin_sauve[250];
-                    char chemin_txt[256];
-                    char chemin_jpg[256];
+                    char chemin_sauve[200];
+                    char chemin_txt[236];
+                    char chemin_jpg[236];
                     char commande_creer[512];
                     char commande_ouvrir[512];
 
@@ -349,18 +355,20 @@ void menu_image() {
                     fclose(out);
 
                     system(commande_creer);
-                    system(commande_ouvrir);
+                    if (system(commande_ouvrir) == 0) {
+                        printf("%s\n", lang("IMAGE_SAVE_SUCCESS"));
+                    } else {
+                        printf("%s\n", lang("IMAGE_SAVE_FAIL"));
+                    }
 
-                    printf("Image sauvegardée avec succès\n");
                     break;
 
                 case 0:
-                    printf("Retour menu utilisateur\n");
-
+                    printf("%s\n", lang("BACK_CHOSEN"));
+                    sleep(2);
                     image_chargee = 0;
                     free(img);
-                    if (mask != NULL) free(mask);
-
+                    NETTOYER();
                     break;
 
                 default:

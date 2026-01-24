@@ -5,7 +5,7 @@
 void log_msg(const char *msg);
 
 /* affiche les logs */
-void show_logs(void);
+void show_logs();
 
 #endif
 

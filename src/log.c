@@ -1,5 +1,7 @@
-#include "log.h"
 #include <stdio.h>
+#include <time.h>
+#include "log.h"
+
 
 /* ajoute une ligne dans logs.txt */
 void log_msg(const char *msg)
@@ -9,15 +11,19 @@ void log_msg(const char *msg)
     if (!f)
         return;
 
-    fprintf(f, "%s\n", msg);
+    time_t t = time(NULL); // Récupère le temps actuel
+    char * t_str = ctime(&t); // Convertit le temps en chaîne de caractères
+    t_str[24] = '\0'; // Enleve le retour à la ligne
+
+    fprintf(f, "[%s] %s\n", t_str, msg);
     fclose(f);
 }
 
 /* affiche le contenu du fichier de log */
-void show_logs(void)
+void show_logs()
 {
     FILE *f = fopen("logs.txt", "r");
-    char line[256];
+    char ligne[256];
 
     if (!f)
     {
@@ -25,8 +31,8 @@ void show_logs(void)
         return;
     }
 
-    while (fgets(line, sizeof(line), f))
-        printf("%s", line);
+    while (fgets(ligne, sizeof(ligne), f))
+        printf("%s", ligne);
 
     fclose(f);
 }

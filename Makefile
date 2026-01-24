@@ -1,63 +1,61 @@
-menu.out: main.o menu.o utils.o lang.o log.o module_image.o pile.o
-	gcc -o menu.out main.o menu.o utils.o lang.o log.o module_image.o pile.o -lm
+CC = gcc
+CFLAGS = -Wall -Wextra -Iinclude
 
-module_image.o: module_image.c pile.o
-	gcc -c module_image.c -o module_image.o -W -Wall -ansi -pedantic -std=c99
+# Directories
+SRC = src
+INC = include
+OBJ = obj
 
-pile.o: pile.c pile.h
-	gcc -c pile.c -o pile.o -W -Wall -ansi -pedantic -std=c99
 
-main: main.o module_image.o
-	gcc -o main.out main.o module_image.o -lm
+main.out: $(OBJ)/main.o $(OBJ)/module_image.o $(OBJ)/menu.o
+	$(CC) $(CFLAGS) -o main.out $(OBJ)/main.o $(OBJ)/menu.o $(OBJ)/module_image.o -lm
 
-test_image.o: test_image.c module_image.h
-	gcc -c test_image.c -o test_image.o -W -Wall -ansi -pedantic -std=c99
-
-test_image: test_image.o module_image.o pile.o
-	gcc -o test_image.out test_image.o module_image.o pile.o -lm
-
-# compilation de main.c
-main.o: main.c menu.h
-	gcc -c main.c
-
-# compilation de menu.c
-menu.o: menu.c menu.h utils.h lang.h log.h
-	gcc -c menu.c
-
-# compilation de utils.c
-utils.o: utils.c utils.h
-	gcc -c utils.c
-
-# compilation de lang.c
-lang.o: lang.c lang.h
-	gcc -c lang.c
-
-# compilation de log.c
-log.o: log.c log.h
-	gcc -c log.c
+menu.out: $(OBJ)/main.o $(OBJ)/menu.o $(OBJ)/lang.o $(OBJ)/log.o $(OBJ)/module_image.o $(OBJ)/pile.o
+	$(CC) $(CFLAGS) -o menu.out $(OBJ)/main.o $(OBJ)/menu.o $(OBJ)/lang.o $(OBJ)/log.o $(OBJ)/module_image.o $(OBJ)/pile.o -lm
 
 lanceur.out : lanceur.c
-	gcc -o lanceur.out lanceur.c
+	$(CC) $(CFLAGS) -o lanceur.out $(SRC)/lanceur.c
 
-# Édition de lien et création des exécutables .out
-# ###############################################
-Parseur.out : vocal.o dictionnaire.o
-	gcc -o Parseur.out vocal.o dictionnaire.o
+Parseur.out : $(OBJ)/vocal.o $(OBJ)/dictionnaire.o
+	$(CC) $(CFLAGS) -o Parseur.out $(OBJ)/vocal.o $(OBJ)/dictionnaire.o
 
-TestDico.out : test_dictionnaire.o dictionnaire.o
-	gcc -o TestDico.out test_dictionnaire.o dictionnaire.o
+TestDico.out : $(OBJ)/test_dictionnaire.o $(OBJ)/dictionnaire.o
+	$(CC) $(CFLAGS) -o TestDico.out $(OBJ)/test_dictionnaire.o $(OBJ)/dictionnaire.o
 
-# Création des fichiers objet .o
-# ###############################
-vocal.o : vocal.c dictionnaire.h
-	gcc -c vocal.c
+test_image.out: $(OBJ)/test_image.o $(OBJ)/module_image.o $(OBJ)/pile.o
+	$(CC) $(CFLAGS) -o test_image.out $(OBJ)/test_image.o $(OBJ)/module_image.o $(OBJ)/pile.o -lm
 
-test_dictionnaire.o : test_dictionnaire.c dictionnaire.h
-	gcc -c test_dictionnaire.c
 
-dictionnaire.o : dictionnaire.c dictionnaire.h
-	gcc -c dictionnaire.c
+$(OBJ)/module_image.o: $(SRC)/module_image.c
+	$(CC) $(CFLAGS) -c $(SRC)/module_image.c -o $(OBJ)/module_image.o
+
+$(OBJ)/pile.o: $(SRC)/pile.c $(INC)/pile.h
+	$(CC) $(CFLAGS) -c $(SRC)/pile.c -o $(OBJ)/pile.o
+
+$(OBJ)/test_image.o: $(SRC)/test_image.c $(INC)/module_image.h
+	$(CC) $(CFLAGS) -c $(SRC)/test_image.c -o $(OBJ)/test_image.o
+
+$(OBJ)/main.o: $(SRC)/main.c $(INC)/menu.h
+	$(CC) $(CFLAGS) -c $(SRC)/main.c -o $(OBJ)/main.o
+
+$(OBJ)/menu.o: $(SRC)/menu.c $(INC)/menu.h $(INC)/lang.h $(INC)/log.h
+	$(CC) $(CFLAGS) -c $(SRC)/menu.c -o $(OBJ)/menu.o
+
+$(OBJ)/lang.o: $(SRC)/lang.c $(INC)/lang.h
+	$(CC) $(CFLAGS) -c $(SRC)/lang.c -o $(OBJ)/lang.o
+
+$(OBJ)/log.o: $(SRC)/log.c $(INC)/log.h
+	$(CC) $(CFLAGS) -c $(SRC)/log.c -o $(OBJ)/log.o
+
+$(OBJ)/vocal.o : $(SRC)/vocal.c $(INC)/dictionnaire.h
+	$(CC) $(CFLAGS) -c $(SRC)/vocal.c -o $(OBJ)/vocal.o
+
+$(OBJ)/test_dictionnaire.o : $(SRC)/test_dictionnaire.c $(INC)/dictionnaire.h
+	$(CC) $(CFLAGS) -c $(SRC)/test_dictionnaire.c -o $(OBJ)/test_dictionnaire.o
+
+$(OBJ)/dictionnaire.o : $(SRC)/dictionnaire.c $(INC)/dictionnaire.h
+	$(CC) $(CFLAGS) -c $(SRC)/dictionnaire.c -o $(OBJ)/dictionnaire.o
 
 
 clean:
-	rm -rf *.o *.out
+	rm -rf $(OBJ)/*.o *.out

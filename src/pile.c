@@ -12,7 +12,7 @@ int PILE_estVide(PILE p) {
 }
 
 PILE emPILE(PILE p, Point o) {
-    PILE nouvelle_cellule = (PILE)malloc(sizeof(PILE));
+    PILE nouvelle_cellule = (PILE)malloc(sizeof(*nouvelle_cellule));
     nouvelle_cellule->elem = o;
     if (p == NULL) {
         p = nouvelle_cellule;
