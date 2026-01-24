@@ -1,10 +1,9 @@
-#include "menu.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
+#include "menu.h"
 #include "lang.h"
 #include "log.h"
 #include "module_image.h"
@@ -16,7 +15,8 @@
 #define NETTOYER() printf("\033[2J\033[H")
 
 /* lecture simple d'un entier */
-int read_int() {
+int read_int()
+{
     int n;
 
     if (scanf("%d", &n) == 1)
@@ -269,13 +269,26 @@ void menu_image() {
                     Objet objets[MAX_OBJETS];
                     Image mask = image_masque_objets(img, 70);
                     int nb_objets = image_trouver_objets(mask, objets, 300);
-                    image_afficher_objets(img, mask, objets, nb_objets);
+
+                    printf("Nombre d'objets trouves: %d\n", nb_objets);
+
+                    for (int i = 0; i < nb_objets; i++) {
+                        Point centre = objet_trouver_centre(objets[i]);
+                        Pixel coul = image_trouver_couleur(img, mask, objets[i]);
+                        image_dessiner_boite_englobante(img, objets[i], coul);
+                        printf("Objet %d : Centre X=%d, Centre Y=%d, aire=%d Couleur=%s \n",
+                               i + 1,
+                               centre.x,
+                               centre.y,
+                               objets[i].aire,
+                               image_pixel_to_nom(coul));
+                    }
 
                     free(mask);
 
                     break;
 
-                case 2:  // CONVERSION NIVEAUX DE GRIS
+                case 2: // CONVERSION NIVEAUX DE GRIS
                     printf("Binarisation en cours...\n");
                     log_msg("Utilisateur : binarisation");
 
@@ -285,7 +298,7 @@ void menu_image() {
 
                     break;
 
-                case 3:  // RETOURNEMENT VERTICAL
+                case 3: // RETOURNEMENT VERTICAL
                     printf("Retournement vertical en cours...\n");
                     log_msg("Utilisateur : retournement vertical");
 
