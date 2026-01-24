@@ -1,17 +1,14 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -Iinclude
 
-# Directories
+# Répertoires
 SRC = src
 INC = include
 OBJ = obj
 TEST = test
 
-main.out: $(OBJ)/main.o $(OBJ)/module_image.o $(OBJ)/menu.o
-	$(CC) $(CFLAGS) -o main.out $(OBJ)/main.o $(OBJ)/menu.o $(OBJ)/module_image.o -lm
-
-menu.out: $(OBJ)/main.o $(OBJ)/menu.o $(OBJ)/lang.o $(OBJ)/log.o $(OBJ)/module_image.o $(OBJ)/pile.o
-	$(CC) $(CFLAGS) -o menu.out $(OBJ)/main.o $(OBJ)/menu.o $(OBJ)/lang.o $(OBJ)/log.o $(OBJ)/module_image.o $(OBJ)/pile.o -lm
+main.out: $(OBJ)/main.o $(OBJ)/menu.o $(OBJ)/lang.o $(OBJ)/log.o $(OBJ)/module_image.o $(OBJ)/pile.o
+	$(CC) $(CFLAGS) -o main.out $(OBJ)/main.o $(OBJ)/menu.o $(OBJ)/lang.o $(OBJ)/log.o $(OBJ)/module_image.o $(OBJ)/pile.o -lm
 
 lanceur.out : lanceur.c
 	$(CC) $(CFLAGS) -o lanceur.out $(SRC)/lanceur.c
@@ -56,6 +53,7 @@ $(OBJ)/test_dictionnaire.o : $(TEST)/test_dictionnaire.c $(INC)/dictionnaire.h
 $(OBJ)/dictionnaire.o : $(SRC)/dictionnaire.c $(INC)/dictionnaire.h
 	$(CC) $(CFLAGS) -c $(SRC)/dictionnaire.c -o $(OBJ)/dictionnaire.o
 
+# Création de l'environnement virtuel Python et installation des dépendances
 env:
 	mkdir -p $(OBJ)
 	python3 -m venv .venv
