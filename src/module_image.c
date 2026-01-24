@@ -8,8 +8,6 @@
 #include "objet.h"
 #include "pile.h"
 
-
-
 static int max3(int a, int b, int c) {
     int max = a;
 
@@ -46,7 +44,6 @@ Image image_init(int hauteur, int largeur, int canaux) {
 }
 
 int image_niv_gris_valide(int niv_gris) {
-
     if (niv_gris < 1 || niv_gris > 255)
         return -1;
     else if (niv_gris != (1 << (int)log2(niv_gris)))
@@ -96,8 +93,6 @@ Image image_lire(FILE* f) {
     int ligne, colonne, canaux;
 
     fscanf(f, "%d %d %d", &ligne, &colonne, &canaux);
-
-    printf("[DEBUG] ligne: %d, colonne: %d, canaux: %d\n", ligne, colonne, canaux);
 
     Image img = image_init(ligne, colonne, canaux);
 
@@ -212,6 +207,7 @@ int image_trouver_objets(Image img, Objet* tab_objets, int aire_min) {
                 }
 
                 if (obj.aire >= aire_min) {
+                    obj.centre = (Point){(obj.min_x + obj.max_x) / 2, (obj.min_y + obj.max_y) / 2};
                     tab_objets[n_objets] = obj;
                     n_objets++;
                     object_courant++;
@@ -248,7 +244,6 @@ Pixel image_trouver_couleur(Image img, Image mask, Objet obj) {
 }
 
 void image_dessiner_boite_englobante(Image img, Objet obj, Pixel couleur_bordure) {
-
     for (int y = 0; y < img->hauteur; y++) {
         for (int x = 0; x < img->largeur; x++) {
             if (((x == obj.min_x || x == obj.max_x) && y >= obj.min_y && y <= obj.max_y) ||
@@ -314,9 +309,17 @@ const char* image_pixel_to_nom(Pixel coul) {
     return nom_couleur;
 }
 
-Point objet_trouver_centre(Objet obj) {
-    Point centre;
-    centre.x = (obj.min_x + obj.max_x) / 2;
-    centre.y = (obj.min_y + obj.max_y) / 2;
-    return centre;
+void image_afficher_objets(Image img, Image mask, Objet* tab_objets, int n_objets) {
+    printf("Nombre d'objets trouves: %d\n", n_objets);
+
+    for (int i = 0; i < n_objets; i++) {
+        Pixel coul = image_trouver_couleur(img, mask, tab_objets[i]);
+        image_dessiner_boite_englobante(img, tab_objets[i], coul);
+        printf("Objet %d : Centre : X=%d Y=%d, aire=%d Couleur=%s \n",
+               i + 1,
+               tab_objets[i].centre.x,
+               tab_objets[i].centre.y,
+               tab_objets[i].aire,
+               image_pixel_to_nom(coul));
+    }
 }

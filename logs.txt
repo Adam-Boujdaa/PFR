@@ -1,0 +1,4 @@
+[Sat Jan 24 12:45:16 2026] Utilisateur : menu image choisi
+[Sat Jan 24 12:45:33 2026] Utilisateur : chargement d'image : images/IMG_5404.txt
+[Sat Jan 24 12:45:35 2026] Utilisateur : détection d'objets
+[Sat Jan 24 12:46:40 2026] Utilisateur : sauvegarde d'image

@@ -5,7 +5,7 @@ CFLAGS = -Wall -Wextra -Iinclude
 SRC = src
 INC = include
 OBJ = obj
-
+TEST = test
 
 main.out: $(OBJ)/main.o $(OBJ)/module_image.o $(OBJ)/menu.o
 	$(CC) $(CFLAGS) -o main.out $(OBJ)/main.o $(OBJ)/menu.o $(OBJ)/module_image.o -lm
@@ -32,8 +32,8 @@ $(OBJ)/module_image.o: $(SRC)/module_image.c
 $(OBJ)/pile.o: $(SRC)/pile.c $(INC)/pile.h
 	$(CC) $(CFLAGS) -c $(SRC)/pile.c -o $(OBJ)/pile.o
 
-$(OBJ)/test_image.o: $(SRC)/test_image.c $(INC)/module_image.h
-	$(CC) $(CFLAGS) -c $(SRC)/test_image.c -o $(OBJ)/test_image.o
+$(OBJ)/test_image.o: $(TEST)/test_image.c $(INC)/module_image.h
+	$(CC) $(CFLAGS) -c $(TEST)/test_image.c -o $(OBJ)/test_image.o
 
 $(OBJ)/main.o: $(SRC)/main.c $(INC)/menu.h
 	$(CC) $(CFLAGS) -c $(SRC)/main.c -o $(OBJ)/main.o
@@ -50,11 +50,18 @@ $(OBJ)/log.o: $(SRC)/log.c $(INC)/log.h
 $(OBJ)/vocal.o : $(SRC)/vocal.c $(INC)/dictionnaire.h
 	$(CC) $(CFLAGS) -c $(SRC)/vocal.c -o $(OBJ)/vocal.o
 
-$(OBJ)/test_dictionnaire.o : $(SRC)/test_dictionnaire.c $(INC)/dictionnaire.h
-	$(CC) $(CFLAGS) -c $(SRC)/test_dictionnaire.c -o $(OBJ)/test_dictionnaire.o
+$(OBJ)/test_dictionnaire.o : $(TEST)/test_dictionnaire.c $(INC)/dictionnaire.h
+	$(CC) $(CFLAGS) -c $(TEST)/test_dictionnaire.c -o $(OBJ)/test_dictionnaire.o
 
 $(OBJ)/dictionnaire.o : $(SRC)/dictionnaire.c $(INC)/dictionnaire.h
 	$(CC) $(CFLAGS) -c $(SRC)/dictionnaire.c -o $(OBJ)/dictionnaire.o
+
+env:
+	mkdir -p $(OBJ)
+	python3 -m venv .venv
+	source .venv/bin/activate
+	pip install SpeechRecognition PyAudio gTTS
+
 
 
 clean:
