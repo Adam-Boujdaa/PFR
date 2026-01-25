@@ -37,6 +37,7 @@ fichier_log = None
 # Fichiers de synchronisation (module traitement texte)
 FICHIER_CONFIRMATION = "config/confirmation.txt"
 FICHIER_RESULTAT = "config/resultat.txt"
+FICHIER_COMMANDES = "config/commande_actuelle.txt"
 
 # FICHIER CONFIRMATION
 
@@ -90,13 +91,13 @@ def convertir_distance(valeur, unite):
     
     if unite == "m" or unite == "-":
         return valeur
-    elif unite == "cm":
+    elif unite == "c":
         return valeur / 100.0
-    elif unite == "mm":
-        return valeur / 1000.0
-    elif unite == "feet" or unite == "ft":
+    elif unite == "l":
+        return valeur / 10.0
+    elif unite == "f":
         return valeur * 0.3048
-    elif unite == "inches" or unite == "in":
+    elif unite == "i":
         return valeur * 0.0254
     else:
         print(f"Unité inconnue : {unite}, utilisation du mètre par défaut")
@@ -149,7 +150,7 @@ def initialiser_environnement(fichier_conf):
     
     largeur_fenetre = int(config.get('WINDOW_WIDTH', 800))
     hauteur_fenetre = int(config.get('WINDOW_HEIGHT', 600))
-    titre = config.get('WINDOW_TITLE', 'Simulation Robot PFR1')
+    titre = config.get('WINDOW_TITLE', 'Simulation Robot PFR1 - Mode Continu')
     couleur_fond = config.get('BACKGROUND_COLOR', 'white')
     
     environnement['echelle'] = int(config.get('SCALE', 100))
@@ -319,19 +320,39 @@ def valider_deplacement(distance, recule=False):
 # CONTOURNEMENT D'OBSTACLE
 
 def contourner_obstacle(obstacle, distance_voulue):
+    """
+    Tente de contourner un obstacle par la gauche
+    La distance de décalage est adaptée selon la taille de l'obstacle
+    """
     log_message("Tentative de contournement")
     print("\nContournement en cours...")
+    
+    # Calcul de la distance de décalage selon le type et la taille de l'obstacle
+    if obstacle['type'] == 'rectangle':
+        # Largeur du rectangle + marge de sécurité de 0.5m
+        decalage = obstacle['param1'] + 0.5
+    elif obstacle['type'] == 'cercle':
+        # Diamètre du cercle + marge de sécurité de 0.5m
+        decalage = (obstacle['param1'] * 2) + 0.5
+    else:
+        # Fallback si type inconnu
+        decalage = 1.5
+    
+    print(f"Décalage calculé : {decalage:.2f}m pour obstacle de type {obstacle['type']}")
+    log_message(f"Décalage de contournement : {decalage:.2f}m")
 
     tourner_gauche(45)
     
-    if not valider_deplacement(1.5)[0]:
+    # Vérifie si on peut se décaler latéralement
+    if not valider_deplacement(decalage)[0]:
         print("Contournement impossible (obstacle sur la gauche)")
-        tourner_droite(45)
+        tourner_droite(45)  # Revenir à l'orientation initiale
         return False
     
-    avancer_direct(1.5)
+    avancer_direct(decalage)
     tourner_droite(45)
 
+    # Vérifie si on peut continuer la trajectoire voulue
     if valider_deplacement(distance_voulue)[0]:
         avancer_direct(distance_voulue)
         print("Contournement réussi")
@@ -388,7 +409,7 @@ def tourner_droite(angle):
 # DÉPLACEMENTS AVEC VALIDATION
 
 def avancer(distance):
-    valide, obstacle, (futur_x, futur_y) = valider_deplacement(distance)
+    _, obstacle, (futur_x, futur_y) = valider_deplacement(distance)
     
     if obstacle:
         msg = f"OBSTACLE DÉTECTÉ à ({futur_x:.2f}, {futur_y:.2f}) - Type : {obstacle['type']}"
@@ -403,7 +424,7 @@ def avancer(distance):
     return True, ""
 
 def reculer(distance):
-    valide, obstacle, (futur_x, futur_y) = valider_deplacement(distance, recule=True)
+    _, obstacle, (futur_x, futur_y) = valider_deplacement(distance, recule=True)
     
     if obstacle:
         msg = f"OBSTACLE DÉTECTÉ à ({futur_x:.2f}, {futur_y:.2f}) - Impossible de reculer"
@@ -412,7 +433,7 @@ def reculer(distance):
         return False, msg
     
     reculer_direct(distance)
-    msg = f"Recule {distance}m -> Position ({etat_robot['x']:.2f}, {etat_robot['y']:.2f})"
+    msg = f"Recule {distance}m → Position ({etat_robot['x']:.2f}, {etat_robot['y']:.2f})"
     print(msg)
     log_message(msg)
     return True, ""
@@ -420,7 +441,9 @@ def reculer(distance):
 # ANALYSE DES COMMANDES
 
 def analyser_commande(ligne_commande):
-
+    """
+    Analyse et exécute une commande au format : ACTION,DIRECTION,VALEUR,UNITE
+    """
     commande = ligne_commande.strip()
     if not commande:
         return True, ""
@@ -445,10 +468,10 @@ def analyser_commande(ligne_commande):
     # Conversion de l'unité
     if action in ["A", "R"]:
         valeur = convertir_distance(valeur_brute, unite)
-        print(f"Conversion : {valeur_brute} {unite} -> {valeur:.3f} m")
+        print(f"Conversion : {valeur_brute} {unite} → {valeur:.3f} m")
     elif action == "T":
         valeur = convertir_angle(valeur_brute, unite)
-        print(f"Conversion : {valeur_brute} {unite} -> {valeur:.3f} deg")
+        print(f"Conversion : {valeur_brute} {unite} → {valeur:.3f} deg")
     else:
         valeur = valeur_brute
     
@@ -457,13 +480,33 @@ def analyser_commande(ligne_commande):
         if direction == "-":
             return avancer(valeur)
         elif direction == "D":
+            # Sauvegarde l'orientation au cas où ça échoue
+            orientation_initiale = etat_robot['orientation']
             tourner_droite(90)
             print(f"Tourne droite 90° → Orientation {etat_robot['orientation']:.1f}°")
-            return avancer(valeur)
+            success, msg = avancer(valeur)
+            if not success:
+                # Annule la rotation si l'avancement a échoué
+                etat_robot['orientation'] = orientation_initiale
+                robot.setheading(orientation_initiale)
+                fenetre.update()
+                print(f"Rotation annulée, retour à {orientation_initiale:.1f}°")
+                log_message(f"Rotation annulée, retour à {orientation_initiale:.1f}°")
+            return success, msg
         elif direction == "G":
+            # Sauvegarde l'orientation au cas où ça échoue
+            orientation_initiale = etat_robot['orientation']
             tourner_gauche(90)
             print(f"Tourne gauche 90° → Orientation {etat_robot['orientation']:.1f}°")
-            return avancer(valeur)
+            success, msg = avancer(valeur)
+            if not success:
+                # Annule la rotation si l'avancement a échoué
+                etat_robot['orientation'] = orientation_initiale
+                robot.setheading(orientation_initiale)
+                fenetre.update()
+                print(f"Rotation annulée, retour à {orientation_initiale:.1f}°")
+                log_message(f"Rotation annulée, retour à {orientation_initiale:.1f}°")
+            return success, msg
         else:
             msg = f"Direction inconnue : {direction}"
             print(msg)
@@ -473,13 +516,33 @@ def analyser_commande(ligne_commande):
         if direction == "-":
             return reculer(valeur)
         elif direction == "D":
+            # Sauvegarde l'orientation au cas où ça échoue
+            orientation_initiale = etat_robot['orientation']
             tourner_droite(90)
             print(f"Tourne droite 90°")
-            return reculer(valeur)
+            success, msg = reculer(valeur)
+            if not success:
+                # Annule la rotation si le recul a échoué
+                etat_robot['orientation'] = orientation_initiale
+                robot.setheading(orientation_initiale)
+                fenetre.update()
+                print(f"Rotation annulée, retour à {orientation_initiale:.1f}°")
+                log_message(f"Rotation annulée, retour à {orientation_initiale:.1f}°")
+            return success, msg
         elif direction == "G":
+            # Sauvegarde l'orientation au cas où ça échoue
+            orientation_initiale = etat_robot['orientation']
             tourner_gauche(90)
             print(f"Tourne gauche 90°")
-            return reculer(valeur)
+            success, msg = reculer(valeur)
+            if not success:
+                # Annule la rotation si le recul a échoué
+                etat_robot['orientation'] = orientation_initiale
+                robot.setheading(orientation_initiale)
+                fenetre.update()
+                print(f"Rotation annulée, retour à {orientation_initiale:.1f}°")
+                log_message(f"Rotation annulée, retour à {orientation_initiale:.1f}°")
+            return success, msg
         else:
             msg = f"Direction inconnue : {direction}"
             print(msg)
@@ -504,46 +567,68 @@ def analyser_commande(ligne_commande):
         print(msg)
         return False, msg
 
-# EXÉCUTION FICHIER DE COMMANDES
+# MODE CONTINU
 
-def executer_fichier_commandes(fichier_commandes):
-    try:
-        with open(fichier_commandes, 'r', encoding='utf-8') as f:
-            commandes = [ligne.strip() for ligne in f if ligne.strip() and not ligne.strip().startswith('#')]
-        
-        print("\n" + "="*60)
-        print(f"  EXÉCUTION DE {len(commandes)} COMMANDE(S)")
-        print("="*60 + "\n")
-        
-        log_message(f"Début exécution : {len(commandes)} commande(s)")
-        
-        for i, commande in enumerate(commandes, 1):
-            print(f"[{i}/{len(commandes)}] {commande}")
-            
-            success, msg = analyser_commande(commande)
-            
-            if not success:
-                print(f"\nErreur à la commande {i}, arrêt de l'exécution\n")
-                log_message(f"Arrêt à la commande {i}/{len(commandes)}")
-                return False, msg
-            
-            print()
-        
-        print("="*60)
-        print("  FIN DE L'EXÉCUTION")
-        print("="*60)
-        
-        log_message("Exécution terminée avec succès")
-        return True, ""
+def mode_continu():
+    """
+    Permet de rester en mode continu, en attente de commandes
+    """
+    print("\n=== MODE CONTINU ACTIVÉ ===")
+    print("En attente de commandes du module C")
+    print("États possibles : EXECUTE, QUIT")
+    log_message("Mode continu démarré")
     
-    except FileNotFoundError:
-        msg = f"Fichier {fichier_commandes} introuvable"
-        print(msg)
-        return False, msg
-    except Exception as e:
-        msg = f"Erreur lors de l'exécution : {e}"
-        print(msg)
-        return False, msg
+    fenetre.tracer(1)  # Active l'animation
+    
+    while True:
+        # Lit l'état du fichier confirmation
+        etat = lire_confirmation()
+        
+        if etat == "EXECUTE":
+            print("\n-> Nouvelle commande détectée")
+            log_message("Nouvelle commande détectée")
+            
+            # Lit la commande depuis le fichier
+            try:
+                with open(FICHIER_COMMANDES, 'r', encoding='utf-8') as f:
+                    commande = f.read().strip()
+                
+                print(f"Commande : {commande}")
+                
+                # Exécute la commande
+                success, msg = analyser_commande(commande)
+                
+                # Écrit le résultat
+                ecrire_resultat(success, msg)
+                
+                # Affiche la position actuelle
+                print(f"Position actuelle : ({etat_robot['x']:.2f}, {etat_robot['y']:.2f})")
+                print(f"Orientation : {etat_robot['orientation']:.1f}°")
+                
+                # Signal au module C que c'est terminé
+                ecrire_confirmation("0")
+                print("→ Commande terminée, en attente...")
+                
+            except FileNotFoundError:
+                msg = f"Fichier {FICHIER_COMMANDES} introuvable"
+                print(f"Erreur : {msg}")
+                ecrire_resultat(False, msg)
+                ecrire_confirmation("0")
+            except Exception as e:
+                msg = f"Erreur : {e}"
+                print(msg)
+                ecrire_resultat(False, msg)
+                ecrire_confirmation("0")
+        
+        elif etat == "QUIT":
+            print("\n→ Commande d'arrêt reçue")
+            log_message("Arrêt du mode continu")
+            break
+        
+        # Pause avant la prochaine vérification
+        time.sleep(0.2)
+    
+    print("\n=== FIN DU MODE CONTINU ===")
 
 # SYSTÈME DE LOGGING
 
@@ -580,20 +665,19 @@ def fermer_log():
 
 def main():
     print("\n" + "="*60)
-    print("  SIMULATION ROBOT PFR1")
+    print("  SIMULATION ROBOT PFR1 - MODE CONTINU")
     print("="*60 + "\n")
     
     # Vérification des arguments
-    if len(sys.argv) != 4:
-        print("Usage: python3 simulation.py <config> <salle> <commandes>")
+    if len(sys.argv) != 3:
+        print("Usage: python3 simulation_continue.py <config> <salle>")
         print("\nExemple:")
-        print("  python3 simulation.py config/simulation.txt config/salle_test.txt scripts/commandes.txt")
+        print("  python3 simulation_continue.py config/simulation.txt config/salle_test.txt")
         return 1
     
     # Récupération des arguments
     fichier_config = sys.argv[1]
     fichier_salle = sys.argv[2]
-    fichier_commandes = sys.argv[3]
     
     # Initialisation du log
     initialiser_log("logs/simulation_log.txt")
@@ -613,28 +697,24 @@ def main():
     
     # Afficher les obstacles
     afficher_obstacles()
-    fenetre.tracer(1)
 
-    # Exécuter les commandes
-    print("\nDémarrage de l'exécution des commandes...\n")
-    success, msg = executer_fichier_commandes(fichier_commandes)
+    # LANCER LE MODE CONTINU
+    # La fenêtre reste ouverte, attend les commandes
+    mode_continu()
 
     # Afficher l'état final
     print(f"\nPosition finale : ({etat_robot['x']:.2f}, {etat_robot['y']:.2f})")
     print(f"Orientation finale : {etat_robot['orientation']:.1f}°")
-
-    # Écrire le résultat
-    ecrire_resultat(success, msg)
     
     # Fermer le log
     fermer_log()
     
-    # Attendre avant de fermer
+    # Fermer la fenêtre
     print("\n" + "="*60)
-    input("Appuyez sur Entrée pour fermer la fenêtre...")
+    print("Fermeture de la simulation...")
     fenetre.bye()
     
-    return 0 if success else 1
+    return 0
 
 if __name__ == "__main__":
     sys.exit(main())
