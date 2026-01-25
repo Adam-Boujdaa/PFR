@@ -1,0 +1,19 @@
+# ========================================
+# TEST 02 - AVANCE AVEC DIRECTIONS
+# Démo des commandes A,D et A,G
+# ========================================
+
+# Avance droit
+A,-,2,m
+
+# Avance à droite (tourne puis avance)
+A,D,2,m
+
+# Avance à gauche
+A,G,2,m
+
+# Avance droit
+A,-,2,m
+
+# Reset pour recommencer
+O,-,-,-
