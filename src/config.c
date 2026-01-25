@@ -1,4 +1,5 @@
-#include "lang.h"
+#include "config.h"
+
 #include <stdio.h>
 #include <string.h>
 
@@ -11,19 +12,15 @@ static char values[MAX][200];
 static int count = 0;
 
 /* charge un fichier de langue */
-void lang_load(const char *file)
-{
-    FILE *f = fopen(file, "r");
+void charger_config(const char* file) {
+    FILE* f = fopen(file, "r");
     char line[256];
-    char *eq;
+    char* eq;
 
     if (!f)
         return;
 
-    count = 0;
-
-    while (fgets(line, sizeof(line), f))
-    {
+    while (fgets(line, sizeof(line), f)) {
         eq = strchr(line, '=');
         if (!eq)
             continue;
@@ -42,16 +39,13 @@ void lang_load(const char *file)
 }
 
 /* cherche une clé et retourne la traduction */
-const char *lang(const char *key)
-{
+const char* config(const char* key) {
     int i;
 
-    for (i = 0; i < count; i++)
-    {
+    for (i = 0; i < count; i++) {
         if (strcmp(keys[i], key) == 0)
             return values[i];
     }
 
     return key;
 }
-

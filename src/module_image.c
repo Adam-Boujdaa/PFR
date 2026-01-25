@@ -8,8 +8,6 @@
 #include "objet.h"
 #include "pile.h"
 
-
-
 static int max3(int a, int b, int c) {
     int max = a;
 
@@ -46,7 +44,6 @@ Image image_init(int hauteur, int largeur, int canaux) {
 }
 
 int image_niv_gris_valide(int niv_gris) {
-
     if (niv_gris < 1 || niv_gris > 255)
         return -1;
     else if (niv_gris != (1 << (int)log2(niv_gris)))
@@ -96,8 +93,6 @@ Image image_lire(FILE* f) {
     int ligne, colonne, canaux;
 
     fscanf(f, "%d %d %d", &ligne, &colonne, &canaux);
-
-    printf("[DEBUG] ligne: %d, colonne: %d, canaux: %d\n", ligne, colonne, canaux);
 
     Image img = image_init(ligne, colonne, canaux);
 
@@ -212,6 +207,8 @@ int image_trouver_objets(Image img, Objet* tab_objets, int aire_min) {
                 }
 
                 if (obj.aire >= aire_min) {
+                    obj.rayon = (obj.max_x - obj.min_x + 1) / 2;
+                    obj.centre = (Point){(obj.min_x + obj.max_x) / 2, (obj.min_y + obj.max_y) / 2};
                     tab_objets[n_objets] = obj;
                     n_objets++;
                     object_courant++;
@@ -248,7 +245,6 @@ Pixel image_trouver_couleur(Image img, Image mask, Objet obj) {
 }
 
 void image_dessiner_boite_englobante(Image img, Objet obj, Pixel couleur_bordure) {
-
     for (int y = 0; y < img->hauteur; y++) {
         for (int x = 0; x < img->largeur; x++) {
             if (((x == obj.min_x || x == obj.max_x) && y >= obj.min_y && y <= obj.max_y) ||
@@ -314,9 +310,29 @@ const char* image_pixel_to_nom(Pixel coul) {
     return nom_couleur;
 }
 
-Point objet_trouver_centre(Objet obj) {
-    Point centre;
-    centre.x = (obj.min_x + obj.max_x) / 2;
-    centre.y = (obj.min_y + obj.max_y) / 2;
-    return centre;
+void objet_afficher(Image img, Image mask, Objet* objets, int nb_objets) {
+    for (int i = 0; i < nb_objets; i++) {
+        Pixel coul = image_trouver_couleur(img, mask, objets[i]);
+        char *est_balle = objet_est_balle(objets[i]) ? "Oui" : "Non";
+        image_dessiner_boite_englobante(img, objets[i], coul);
+        printf("\033[1;4mObjet %d :\033[0m\n\tCentre : X=%d Y=%d, rayon=%d, aire=%d, Couleur=%s, Balle?=%s\n",
+               i + 1,
+               objets[i].centre.x,
+               objets[i].centre.y,
+               objets[i].rayon,
+               objets[i].aire,
+               image_pixel_to_nom(coul),
+               est_balle);
+    }
+}
+
+int objet_est_balle(Objet obj) {
+    int aire_boite_eng = (obj.max_x - obj.min_x + 1) * (obj.max_y - obj.min_y + 1);
+    float rapport = (float)obj.aire / (float)aire_boite_eng ;
+    //printf("[DEBUG] Rapport aire boite englobante / aire objet : %.3f\n", rapport);
+    if (fabs(rapport - 0.785) < 0.02) {
+        return 1;
+    } else {
+        return 0;
+    }
 }

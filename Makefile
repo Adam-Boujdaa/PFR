@@ -7,8 +7,8 @@ INC = include
 OBJ = obj
 TEST = test
 
-main.out: $(OBJ)/main.o $(OBJ)/menu.o $(OBJ)/lang.o $(OBJ)/log.o $(OBJ)/module_image.o $(OBJ)/pile.o
-	$(CC) $(CFLAGS) -o main.out $(OBJ)/main.o $(OBJ)/menu.o $(OBJ)/lang.o $(OBJ)/log.o $(OBJ)/module_image.o $(OBJ)/pile.o -lm
+main.out: $(OBJ)/main.o $(OBJ)/menu.o $(OBJ)/config.o $(OBJ)/log.o $(OBJ)/module_image.o $(OBJ)/pile.o
+	$(CC) $(CFLAGS) -o main.out $(OBJ)/main.o $(OBJ)/menu.o $(OBJ)/config.o $(OBJ)/log.o $(OBJ)/module_image.o $(OBJ)/pile.o -lm
 
 lanceur.out : lanceur.c
 	$(CC) $(CFLAGS) -o lanceur.out $(SRC)/lanceur.c
@@ -29,17 +29,17 @@ $(OBJ)/module_image.o: $(SRC)/module_image.c
 $(OBJ)/pile.o: $(SRC)/pile.c $(INC)/pile.h
 	$(CC) $(CFLAGS) -c $(SRC)/pile.c -o $(OBJ)/pile.o
 
-$(OBJ)/test_image.o: $(SRC)/test_image.c $(INC)/module_image.h
-	$(CC) $(CFLAGS) -c $(SRC)/test_image.c -o $(OBJ)/test_image.o
+$(OBJ)/test_image.o: $(TEST)/test_image.c $(INC)/module_image.h
+	$(CC) $(CFLAGS) -c $(TEST)/test_image.c -o $(OBJ)/test_image.o
 
 $(OBJ)/main.o: $(SRC)/main.c $(INC)/menu.h
 	$(CC) $(CFLAGS) -c $(SRC)/main.c -o $(OBJ)/main.o
 
-$(OBJ)/menu.o: $(SRC)/menu.c $(INC)/menu.h $(INC)/lang.h $(INC)/log.h
+$(OBJ)/menu.o: $(SRC)/menu.c $(INC)/menu.h $(INC)/config.h $(INC)/log.h
 	$(CC) $(CFLAGS) -c $(SRC)/menu.c -o $(OBJ)/menu.o
 
-$(OBJ)/lang.o: $(SRC)/lang.c $(INC)/lang.h
-	$(CC) $(CFLAGS) -c $(SRC)/lang.c -o $(OBJ)/lang.o
+$(OBJ)/config.o: $(SRC)/config.c $(INC)/config.h
+	$(CC) $(CFLAGS) -c $(SRC)/config.c -o $(OBJ)/config.o
 
 $(OBJ)/log.o: $(SRC)/log.c $(INC)/log.h
 	$(CC) $(CFLAGS) -c $(SRC)/log.c -o $(OBJ)/log.o
@@ -47,8 +47,8 @@ $(OBJ)/log.o: $(SRC)/log.c $(INC)/log.h
 $(OBJ)/vocal.o : $(SRC)/vocal.c $(INC)/dictionnaire.h
 	$(CC) $(CFLAGS) -c $(SRC)/vocal.c -o $(OBJ)/vocal.o
 
-$(OBJ)/test_dictionnaire.o : $(SRC)/test_dictionnaire.c $(INC)/dictionnaire.h
-	$(CC) $(CFLAGS) -c $(SRC)/test_dictionnaire.c -o $(OBJ)/test_dictionnaire.o
+$(OBJ)/test_dictionnaire.o : $(TEST)/test_dictionnaire.c $(INC)/dictionnaire.h
+	$(CC) $(CFLAGS) -c $(TEST)/test_dictionnaire.c -o $(OBJ)/test_dictionnaire.o
 
 $(OBJ)/dictionnaire.o : $(SRC)/dictionnaire.c $(INC)/dictionnaire.h
 	$(CC) $(CFLAGS) -c $(SRC)/dictionnaire.c -o $(OBJ)/dictionnaire.o

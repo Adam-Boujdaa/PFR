@@ -4,10 +4,9 @@
 #include <unistd.h>
 
 #include "menu.h"
-#include "lang.h"
+#include "config.h"
 #include "log.h"
 #include "module_image.h"
-#include "utils.h"
 
 #define MAX_OBJETS 10
 #define MAX_MDP 256
@@ -80,9 +79,9 @@ void choisir_langue() {
     }
 
     if (choix == 0)
-        lang_load("config/lang_fr.conf");
+        charger_config("config/lang_fr.conf");
     else
-        lang_load("config/lang_en.conf");
+        charger_config("config/lang_en.conf");
 }
 
 /* menu principal */
@@ -92,11 +91,11 @@ void menu_principal() {
     int choix = -1;
 
     while (choix != 0) {
-        printf("\n=== %s ===\n", lang("MAIN_MENU"));
-        printf("1 - %s\n", lang("USER_MODE"));
-        printf("2 - %s\n", lang("ADMIN_MODE"));
-        printf("0 - %s\n", lang("QUIT"));
-        printf("%s ", lang("CHOICE"));
+        printf("\n=== %s ===\n", config("MAIN_MENU"));
+        printf("1 - %s\n", config("USER_MODE"));
+        printf("2 - %s\n", config("ADMIN_MODE"));
+        printf("0 - %s\n", config("QUIT"));
+        printf("%s ", config("CHOICE"));
 
         choix = read_int();
 
@@ -108,16 +107,16 @@ void menu_principal() {
                 if (verifier_mdp()) {
                     menu_admin();
                 } else {
-                    printf("%s\n", lang("ACCESS_DENIED"));
+                    printf("%s\n", config("ACCESS_DENIED"));
                     sleep(2);
                     NETTOYER();
                 }
                 break;
             case 0:
-                printf("%s\n", lang("EXIT"));
+                printf("%s\n", config("EXIT"));
                 break;
             default:
-                printf("%s\n", lang("INVALID"));
+                printf("%s\n", config("INVALID"));
         }
     }
 }
@@ -128,36 +127,36 @@ void menu_utilisateur() {
     int choix = -1;
 
     while (choix != 0) {
-        printf("\n=== %s ===\n", lang("USER_MENU"));
-        printf("1 - %s\n", lang("TEXT_CMD"));
-        printf("2 - %s\n", lang("SIMULATION"));
-        printf("3 - %s\n", lang("IMAGE"));
-        printf("0 - %s\n", lang("BACK"));
-        printf("%s ", lang("CHOICE"));
+        printf("\n=== %s ===\n", config("USER_MENU"));
+        printf("1 - %s\n", config("TEXT_CMD"));
+        printf("2 - %s\n", config("SIMULATION"));
+        printf("3 - %s\n", config("IMAGE"));
+        printf("0 - %s\n", config("BACK"));
+        printf("%s ", config("CHOICE"));
 
         choix = read_int();
 
         switch (choix) {
             case 1:
-                printf("%s\n", lang("TEXT_CMD_CHOSEN"));
+                printf("%s\n", config("TEXT_CMD_CHOSEN"));
                 log_msg("Utilisateur : commande textuelle");
                 break;
             case 2:
-                printf("%s\n", lang("SIMULATION_CHOSEN"));
+                printf("%s\n", config("SIMULATION_CHOSEN"));
                 log_msg("Utilisateur : simulation");
                 break;
             case 3:
-                printf("%s\n", lang("IMAGE_CHOSEN"));
+                printf("%s\n", config("IMAGE_CHOSEN"));
                 log_msg("Utilisateur : menu image choisi");
                 menu_image();
                 break;
             case 0:
-                printf("%s\n", lang("BACK_CHOSEN"));
+                printf("%s\n", config("BACK_CHOSEN"));
                 sleep(2);
                 NETTOYER();
                 break;
             default:
-                printf("%s\n", lang("INVALID"));
+                printf("%s\n", config("INVALID"));
         }
     }
 }
@@ -168,34 +167,35 @@ void menu_admin() {
     int choix = -1;
 
     while (choix != 0) {
-        printf("\n=== %s ===\n", lang("ADMIN_MENU"));
-        printf("1 - %s\n", lang("VIEW_LOGS"));
-        printf("0 - %s\n", lang("BACK"));
-        printf("%s ", lang("CHOICE"));
+        printf("\n=== %s ===\n", config("ADMIN_MENU"));
+        printf("1 - %s\n", config("VIEW_LOGS"));
+        printf("0 - %s\n", config("BACK"));
+        printf("%s ", config("CHOICE"));
 
         choix = read_int();
 
         switch (choix) {
             case 1:
-                printf("%s\n", lang("LOG_CHOSEN"));
+                printf("%s\n", config("LOG_CHOSEN"));
                 log_msg("Administrateur : affichage des logs");
                 show_logs();
                 break;
 
             case 0:
-                printf("%s\n", lang("BACK_CHOSEN"));
+                printf("%s\n", config("BACK_CHOSEN"));
                 sleep(2);
                 NETTOYER();
                 break;
 
             default:
-                printf("%s\n", lang("INVALID"));
+                printf("%s\n", config("INVALID"));
                 break;
         }
     }
 }
 
 void menu_image() {
+    charger_config("config/image.conf");
     NETTOYER();
     int choix = -1;
     int image_chargee = 0;
@@ -203,12 +203,12 @@ void menu_image() {
     Image img;
 
     while (choix != 0) {
-        printf("\n=== %s ===\n", lang("IMAGE_MENU"));
+        printf("\n=== %s ===\n", config("IMAGE_MENU"));
 
         if (!image_chargee) {
-            printf("1 - %s\n", lang("LOAD_IMAGE"));
-            printf("0 - %s\n", lang("BACK"));
-            printf("%s ", lang("CHOICE"));
+            printf("1 - %s\n", config("LOAD_IMAGE"));
+            printf("0 - %s\n", config("BACK"));
+            printf("%s ", config("CHOICE"));
 
             choix = read_int();
 
@@ -239,50 +239,44 @@ void menu_image() {
 
                     break;
                 case 0:
-                    printf("%s\n", lang("BACK_CHOSEN"));
+                    printf("%s\n", config("BACK_CHOSEN"));
                     sleep(2);
                     NETTOYER();
                     break;
 
                 default:
-                    printf("%s\n", lang("INVALID"));
+                    printf("%s\n", config("INVALID"));
                     break;
             }
         } else {
             // Menu image une fois l'image chargée
             printf("\n=== %s ===\n", chemin_img);
-            printf("1 - %s\n", lang("FIND_OBJECTS"));
-            printf("2 - %s\n", lang("CONVERT_GRAYSCALE"));
-            printf("3 - %s\n", lang("FLIP_VERTICAL"));
-            printf("4 - %s\n", lang("QUANT"));
-            printf("5 - %s\n", lang("SAVE_IMAGE"));
-            printf("0 - %s\n", lang("BACK"));
-            printf("%s ", lang("CHOICE"));
+            printf("1 - %s\n", config("FIND_OBJECTS"));
+            printf("2 - %s\n", config("CONVERT_GRAYSCALE"));
+            printf("3 - %s\n", config("FLIP_VERTICAL"));
+            printf("4 - %s\n", config("QUANT"));
+            printf("5 - %s\n", config("SAVE_IMAGE"));
+            printf("0 - %s\n", config("BACK"));
+            printf("%s ", config("CHOICE"));
 
             choix = read_int();
 
             switch (choix) {
                 case 1:
+                    int seuil = atoi(config("SEUIL_DIFF_CANAUX"));
+                    int aire_min = atoi(config("AIRE_MIN_OBJET"));
+
+                    if (!seuil) seuil = 70;
+                    if (!aire_min) aire_min = 300;
+
                     printf("Détection d'objets en cours...\n");
                     log_msg("Utilisateur : détection d'objets");
 
                     Objet objets[MAX_OBJETS];
-                    Image mask = image_masque_objets(img, 70);
-                    int nb_objets = image_trouver_objets(mask, objets, 300);
+                    Image mask = image_masque_objets(img, seuil);
+                    int nb_objets = image_trouver_objets(mask, objets, aire_min);
 
-                    printf("Nombre d'objets trouves: %d\n", nb_objets);
-
-                    for (int i = 0; i < nb_objets; i++) {
-                        Point centre = objet_trouver_centre(objets[i]);
-                        Pixel coul = image_trouver_couleur(img, mask, objets[i]);
-                        image_dessiner_boite_englobante(img, objets[i], coul);
-                        printf("Objet %d : Centre X=%d, Centre Y=%d, aire=%d Couleur=%s \n",
-                               i + 1,
-                               centre.x,
-                               centre.y,
-                               objets[i].aire,
-                               image_pixel_to_nom(coul));
-                    }
+                    objet_afficher(img, mask, objets, nb_objets);
 
                     free(mask);
 
@@ -294,7 +288,7 @@ void menu_image() {
 
                     img = image_binarisation(img);
 
-                    printf("%s\n", lang("CONVERTED"));
+                    printf("%s\n", config("CONVERTED"));
 
                     break;
 
@@ -304,7 +298,7 @@ void menu_image() {
 
                     img = image_miroir(img);
 
-                    printf("%s\n", lang("CONVERTED"));
+                    printf("%s\n", config("CONVERTED"));
 
                     break;
 
@@ -318,7 +312,7 @@ void menu_image() {
 
                     img = image_quantification(img, q);
 
-                    printf("%s\n", lang("CONVERTED"));
+                    printf("%s\n", config("CONVERTED"));
 
                     break;
 
@@ -329,7 +323,6 @@ void menu_image() {
                     char commande_creer[512];
                     char commande_ouvrir[512];
 
-                    printf("Sauvegarde de l'image en cours...\n");
                     log_msg("Utilisateur : sauvegarde d'image");
 
                     printf("Entrez le chemin du fichier image à sauvegarder (sans extension): ");
@@ -356,15 +349,15 @@ void menu_image() {
 
                     system(commande_creer);
                     if (system(commande_ouvrir) == 0) {
-                        printf("%s\n", lang("IMAGE_SAVE_SUCCESS"));
+                        printf("%s\n", config("IMAGE_SAVE_SUCCESS"));
                     } else {
-                        printf("%s\n", lang("IMAGE_SAVE_FAIL"));
+                        printf("%s\n", config("IMAGE_SAVE_FAIL"));
                     }
 
                     break;
 
                 case 0:
-                    printf("%s\n", lang("BACK_CHOSEN"));
+                    printf("%s\n", config("BACK_CHOSEN"));
                     sleep(2);
                     image_chargee = 0;
                     free(img);
@@ -372,7 +365,7 @@ void menu_image() {
                     break;
 
                 default:
-                    printf("%s\n", lang("INVALID"));
+                    printf("%s\n", config("INVALID"));
                     break;
             }
         }
