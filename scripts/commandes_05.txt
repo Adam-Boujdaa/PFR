@@ -1,0 +1,27 @@
+# ========================================
+# TEST 05 - COMMANDE RESET (O)
+# Démo de la téléportation à l'origine
+# ========================================
+
+# Mouvement 1
+A,-,3,m
+T,G,90,deg
+A,-,2,m
+
+# RESET - retour à (0,0) orientation 0°
+O,-,-,-
+
+# Mouvement 2
+A,-,2,m
+T,D,45,deg
+A,-,3,m
+
+# RESET
+O,-,-,-
+
+# Mouvement 3
+T,G,180,deg
+A,-,4,m
+
+# RESET final
+O,-,-,-
