@@ -223,13 +223,31 @@ def calculer_position_future(distance, recule=False):
     return futur_x, futur_y
 
 def valider_deplacement(distance, recule=False):
+
+    # Calculer la position finale
     futur_x, futur_y = calculer_position_future(distance, recule)
-    obstacle = verifier_collision(futur_x, futur_y)
     
-    if obstacle:
-        return False, obstacle, (futur_x, futur_y)
-    else:
-        return True, None, (futur_x, futur_y)
+    # Échantillonner la trajectoire
+    # On vérifie tous les 0.1m (ou moins si distance < 0.1m)
+    pas = 0.1  # 10 cm
+    nb_points = max(int(distance / pas), 1)
+    
+    # Pour chaque point intermédiaire
+    for i in range(nb_points + 1):  # +1 pour inclure le point final
+        # Calculer la distance parcourue à ce point
+        distance_partielle = (i / nb_points) * distance
+        
+        # Calculer la position à ce point
+        x_test, y_test = calculer_position_future(distance_partielle, recule)
+        
+        # Vérifier s'il y a collision à ce point
+        obstacle = verifier_collision(x_test, y_test)
+        if obstacle:
+            # Retourner la position où l'obstacle a été détecté
+            return False, obstacle, (x_test, y_test)
+    
+    # Aucun obstacle sur toute la trajectoire
+    return True, None, (futur_x, futur_y)
 
 def contourner_obstacle(obstacle, distance_voulue):
     log_message("Tentative de contournement")
