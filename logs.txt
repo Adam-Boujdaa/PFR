@@ -1,8 +1,0 @@
-[Sun Jan 25 14:18:32 2026] Utilisateur : menu image choisi
-[Sun Jan 25 14:18:43 2026] Utilisateur : chargement d'image : images/IMG_5404.txt
-[Sun Jan 25 14:18:46 2026] Utilisateur : rotation
-[Sun Jan 25 14:18:50 2026] Utilisateur : sauvegarde d'image
-[Sun Jan 25 14:20:56 2026] Utilisateur : menu image choisi
-[Sun Jan 25 14:21:04 2026] Utilisateur : chargement d'image : images/IMG_5404.txt
-[Sun Jan 25 14:21:12 2026] Utilisateur : rotation
-[Sun Jan 25 14:21:15 2026] Utilisateur : sauvegarde d'image

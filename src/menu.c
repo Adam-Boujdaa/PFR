@@ -252,7 +252,7 @@ void menu_image() {
             // Menu image une fois l'image chargée
             printf("\n=== %s ===\n", chemin_img);
             printf("1 - %s\n", config("FIND_OBJECTS"));
-            printf("2 - %s\n", config("CONVERT_GRAYSCALE"));
+            printf("2 - %s\n", config("CONVERT_NB"));
             printf("3 - %s\n", config("FLIP_VERTICAL"));
             printf("4 - %s\n", config("QUANT"));
             printf("5 - %s\n", config("ROTATE"));
@@ -283,7 +283,7 @@ void menu_image() {
 
                     break;
 
-                case 2: // CONVERSION NIVEAUX DE GRIS
+                case 2: // CONVERSION NOIR ET BLANC
                     printf("Binarisation en cours...\n");
                     log_msg("Utilisateur : binarisation");
 
