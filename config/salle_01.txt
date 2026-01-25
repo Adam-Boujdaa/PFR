@@ -1,8 +1,3 @@
-# ========================================
-# SALLE 01 - NIVEAU FACILE
-# Démo des mouvements de base
-# ========================================
-
 LONGUEUR=16
 LARGEUR=12
 
