@@ -1,0 +1,18 @@
+# ========================================
+# TEST 03 - CONTOURNEMENT D'OBSTACLES
+# Le robot doit contourner automatiquement
+# ========================================
+
+# Avance vers l'obstacle central
+A,-,5,m
+
+# Tourne et avance
+T,D,45,deg
+A,-,3,m
+
+# Retour origine
+O,-,-,-
+
+# Nouvel essai - autre direction
+T,G,30,deg
+A,-,6,m
