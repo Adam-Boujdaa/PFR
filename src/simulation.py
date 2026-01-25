@@ -228,7 +228,6 @@ def valider_deplacement(distance, recule=False):
     futur_x, futur_y = calculer_position_future(distance, recule)
     
     # Échantillonner la trajectoire
-    # On vérifie tous les 0.1m (ou moins si distance < 0.1m)
     pas = 0.1  # 10 cm
     nb_points = max(int(distance / pas), 1)
     
