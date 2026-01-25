@@ -134,7 +134,7 @@ void menu_utilisateur() {
 
     while (choix != 0) {
         printf("\n=== %s ===\n", config("USER_MENU"));
-        printf("1 - %s\n", config("TEXT_CMD"));
+        printf("1 - %s\n", config("VOICE_CMD"));
         printf("2 - %s\n", config("SIMULATION"));
         printf("3 - %s\n", config("IMAGE"));
         printf("0 - %s\n", config("BACK"));
@@ -397,9 +397,10 @@ void menu_commande_vocale() {
         charger_dictionnaire_en();
     }
 
-    printf("%s\n", config("CMD_PROMPT_VOC"));
+    printf("%s\n", config("CMD_PROMPT"));
 
     traitement_mode_vocal();
-    //menu_utilisateur();
+    sleep(5);
+    menu_utilisateur();
 
 }

@@ -43,3 +43,4 @@ image_processing_test.ipynb
 venv_pour_tts/
 __pycache__/
 *.pyc
+.venv

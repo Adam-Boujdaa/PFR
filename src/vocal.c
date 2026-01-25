@@ -13,7 +13,6 @@
 #include "parseur.h"
 
 // À LIRE DANS LE FICHIER CONFIG PLUS TARD
-Langue langue = FR;
 char MODE = 'T';
 
 static Dico act[4];
@@ -88,7 +87,7 @@ void charger_dictionnaire_en() {
     charger_dico(&units[5], "word_dictionnary/lexique_en/unites/pouces.txt", 'i', 0);
 }
 
-int main_test() {
+int main_voc(Langue langue) {
     // Initialisation des liaisons à vide => à implémenter plus tard
     liaisons[0].nb_syn = 0;
     liaisons_inv[0].nb_syn = 0;
@@ -110,7 +109,7 @@ int main_test() {
     // Boucle principale
     // MODE TEXTUEL
     if (MODE == 'T') {
-        traitement_mode_textuel();
+        traitement_mode_textuel(langue);
     }
 
     // MODE VOCAL
@@ -216,7 +215,7 @@ void traitement_mode_vocal() {
     free_liste(liste);
 }
 
-void traitement_mode_textuel() {
+void traitement_mode_textuel(Langue langue) {
     ListeCommandes* liste = init_liste();
     char buffer[MAX_LIGNE];
 
