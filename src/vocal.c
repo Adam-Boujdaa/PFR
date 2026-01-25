@@ -1,203 +1,156 @@
-// AUTEUR : ADAM BOUJDAA
-// DATE CREATION : Janvier 2026
-// fichier principal de traitement texte
-
 #include "vocal.h"
-
+#include "config.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#include "config.h"
 #include "dictionnaire.h"
 #include "parseur.h"
 #include "intercom.h"
 
-// À LIRE DANS LE FICHIER CONFIG PLUS TARD
+// MODE texte ou vocal
 char MODE = 'T';
 
+// Dictionnaires
 static Dico act[4];
 static Dico dir[2];
 static Dico macros[3];
-static Dico nb[10];  // 10 fichiers de nombres mtn
+static Dico nb[10];  
 static Dico units[6];
 static Dico liaisons[1];
 static Dico liaisons_inv[1];
 
-void charger_dictionnaire_fr() {
-    // Actions
-    charger_dico(&act[0], "word_dictionnary/lexique_fr/actions/elementaires/avancer.txt", 'A', 1);
-    charger_dico(&act[1], "word_dictionnary/lexique_fr/actions/elementaires/reculer.txt", 'R', 1);
-    charger_dico(&act[2], "word_dictionnary/lexique_fr/actions/elementaires/tourner.txt", 'T', 0);
-    charger_dico(&act[3], "word_dictionnary/lexique_fr/actions/elementaires/stop.txt", 'S', 0);
+/* fonction unique pour charger dictionnaires selon la langue */
+void charger_dictionnaire(Langue langue) {
+    const char* prefix = (langue == FR) ? "FR" : "EN";
+    char path[200];
+
+    // Actions élémentaires
+    sprintf(path, "PATH_%s_AVANCER", prefix);
+    charger_dico(&act[0], config(path), 'A', 1);
+
+    sprintf(path, "PATH_%s_RECULER", prefix);
+    charger_dico(&act[1], config(path), 'R', 1);
+
+    sprintf(path, "PATH_%s_TOURNER", prefix);
+    charger_dico(&act[2], config(path), 'T', 0);
+
+    sprintf(path, "PATH_%s_STOP", prefix);
+    charger_dico(&act[3], config(path), 'S', 0);
 
     // Directions
-    charger_dico(&dir[0], "word_dictionnary/lexique_fr/actions/elementaires/gauche.txt", 'G', 90);
-    charger_dico(&dir[1], "word_dictionnary/lexique_fr/actions/elementaires/droite.txt", 'D', -90);
+    sprintf(path, "PATH_%s_GAUCHE", prefix);
+    charger_dico(&dir[0], config(path), 'G', 90);
+
+    sprintf(path, "PATH_%s_DROITE", prefix);
+    charger_dico(&dir[1], config(path), 'D', -90);
 
     // Macros
-    charger_dico(&macros[0], "word_dictionnary/lexique_fr/actions/macros/carre.txt", 'C', 0);
-    charger_dico(&macros[1], "word_dictionnary/lexique_fr/actions/macros/zigzag.txt", 'Z', 0);
-    charger_dico(&macros[2], "word_dictionnary/lexique_fr/actions/macros/demi_tour.txt", 'U', 0);
+    sprintf(path, "PATH_%s_CARRE", prefix);
+    charger_dico(&macros[0], config(path), 'C', 0);
+
+    sprintf(path, "PATH_%s_ZIGZAG", prefix);
+    charger_dico(&macros[1], config(path), 'Z', 0);
+
+    sprintf(path, "PATH_%s_DEMI_TOUR", prefix);
+    charger_dico(&macros[2], config(path), 'U', 0);
 
     // Nombres
-    char path_nb[100];
+    char path_nb[200];
     for (int i = 1; i <= 10; i++) {
-        sprintf(path_nb, "word_dictionnary/lexique_fr/nombres/%d.txt", i);  // sprintf fais la concaténation envoyée dans path_nb
+        sprintf(path_nb, config("PATH_%s_NB_FMT", prefix), i);
         charger_dico(&nb[i - 1], path_nb, 'N', i);
     }
 
     // Unités
-    charger_dico(&units[0], "word_dictionnary/lexique_fr/unites/metres.txt", 'm', 0);
-    charger_dico(&units[1], "word_dictionnary/lexique_fr/unites/centimetres.txt", 'c', 0);
-    charger_dico(&units[2], "word_dictionnary/lexique_fr/unites/decimetres.txt", 'l', 0);
-    charger_dico(&units[3], "word_dictionnary/lexique_fr/unites/degres.txt", 'd', 0);
-    charger_dico(&units[4], "word_dictionnary/lexique_fr/unites/pieds.txt", 'f', 0);
-    charger_dico(&units[5], "word_dictionnary/lexique_fr/unites/pouces.txt", 'i', 0);
+    sprintf(path, "PATH_%s_METRES", prefix);
+    charger_dico(&units[0], config(path), 'm', 0);
+    sprintf(path, "PATH_%s_CM", prefix);
+    charger_dico(&units[1], config(path), 'c', 0);
+    sprintf(path, "PATH_%s_DM", prefix);
+    charger_dico(&units[2], config(path), 'l', 0);
+    sprintf(path, "PATH_%s_DEGRES", prefix);
+    charger_dico(&units[3], config(path), 'd', 0);
+    sprintf(path, "PATH_%s_PIEDS", prefix);
+    charger_dico(&units[4], config(path), 'f', 0);
+    sprintf(path, "PATH_%s_POUCES", prefix);
+    charger_dico(&units[5], config(path), 'i', 0);
 }
 
-void charger_dictionnaire_en() {
-    // Actions
-    charger_dico(&act[0], "word_dictionnary/lexique_en/actions/elementaires/avancer.txt", 'A', 1);
-    charger_dico(&act[1], "word_dictionnary/lexique_en/actions/elementaires/reculer.txt", 'R', 1);
-    charger_dico(&act[2], "word_dictionnary/lexique_en/actions/elementaires/tourner.txt", 'T', 0);
-    charger_dico(&act[3], "word_dictionnary/lexique_en/actions/elementaires/stop.txt", 'S', 0);
-
-    // Directions
-    charger_dico(&dir[0], "word_dictionnary/lexique_en/actions/elementaires/gauche.txt", 'G', 90);
-    charger_dico(&dir[1], "word_dictionnary/lexique_en/actions/elementaires/droite.txt", 'D', -90);
-
-    // Macros
-    charger_dico(&macros[0], "word_dictionnary/lexique_en/actions/macros/carre.txt", 'C', 0);
-    charger_dico(&macros[1], "word_dictionnary/lexique_en/actions/macros/zigzag.txt", 'Z', 0);
-    charger_dico(&macros[2], "word_dictionnary/lexique_en/actions/macros/demi_tour.txt", 'U', 0);
-
-    // Nombres
-    char path_nb[100];
-    for (int i = 1; i <= 10; i++) {
-        sprintf(path_nb, "word_dictionnary/lexique_en/nombres/%d.txt", i);
-        charger_dico(&nb[i - 1], path_nb, 'N', i);
-    }
-
-    // Unités
-    charger_dico(&units[0], "word_dictionnary/lexique_en/unites/metres.txt", 'm', 0);
-    charger_dico(&units[1], "word_dictionnary/lexique_en/unites/centimetres.txt", 'c', 0);
-    charger_dico(&units[2], "word_dictionnary/lexique_en/unites/decimetres.txt", 'l', 0);  /// arbitraire juste pour garder en char au lieu de char* (trop de segmentaqtion faults sinon et long à faire dans le temps imaprti)
-    charger_dico(&units[3], "word_dictionnary/lexique_en/unites/degres.txt", 'd', 0);
-    charger_dico(&units[4], "word_dictionnary/lexique_en/unites/pieds.txt", 'f', 0);
-    charger_dico(&units[5], "word_dictionnary/lexique_en/unites/pouces.txt", 'i', 0);
-}
-
+// Fonction principale de vocal
 int main_voc(Langue langue) {
-    // Initialisation des liaisons à vide => à implémenter plus tard
     liaisons[0].nb_syn = 0;
     liaisons_inv[0].nb_syn = 0;
 
-    if (langue == FR) {
-        charger_dictionnaire_fr();
-    } else {
-        charger_dictionnaire_en();
-    }
+    // Charge dictionnaires via config
+    charger_dictionnaire(langue);
 
-    // Init pour le parsing
+    // Prompt initial
+    printf("%s\n", config(langue == FR ? "MSG_READY_FR" : "MSG_READY_EN"));
 
-    if (langue == FR)
-        printf("Prêt à lire vos commandes, écrire exit pour sortir\n");
-    else {
-        printf("Ready to read your commands, type exit to quit\n");
-    }
-
-    // Boucle principale
-    // MODE TEXTUEL
-    if (MODE == 'T') {
+    if (MODE == 'T')
         traitement_mode_textuel(langue);
-    }
-
-    // MODE VOCAL
-    else if (MODE == 'V') {
+    else if (MODE == 'V')
         traitement_mode_vocal();
-    }
 
     return 0;
 }
 
+// Mode vocal
 void traitement_mode_vocal() {
     ListeCommandes* liste = init_liste();
     char buffer[MAX_LIGNE];
-
     liaisons[0].nb_syn = 0;
     liaisons_inv[0].nb_syn = 0;
 
     while (1) {
-        // Appel du script Python ds le venv directement
-        int retour = system("python3 src/module_tts.py");
-
-        if (retour != 0) {
-            printf("Erreur lors de l'execution du module vocal\n");
+        if (system(config("CMD_PY_TTS")) != 0) {
+            printf("%s\n", config("ERR_TTS"));
             break;
         }
 
         printf("%s\n", config("VOC_ACTIVE"));
 
-        // une fois le script exécuté, on lit le fichier généré par Python
-        FILE* f_vocal = fopen("output/pre_traitement/commande.txt", "r");
-
+        FILE* f_vocal = fopen(config("FILE_CMD_VOCAL"), "r");
         if (f_vocal != NULL) {
-            if (fgets(buffer, MAX_LIGNE, f_vocal) != NULL) {  // lis une ligne et retourne NULL si erreur ou fin de fichier => si y'a des lignes on boucle
-                buffer[strcspn(buffer, "\n")] = 0;            // Nettoie en enlevant le \n
-                printf(">>> Transcription reçue : \"%s\"\n", buffer);
+            if (fgets(buffer, MAX_LIGNE, f_vocal) != NULL) {
+                buffer[strcspn(buffer, "\n")] = 0;
 
-                // Si c'est exit on quitte, sinon on traite
-                if (strcmp(buffer, "exit") == 0) {
+                if (strcmp(buffer, config("CMD_EXIT")) == 0) {
                     fclose(f_vocal);
-                    printf("Vous avez dit 'exit'...\n");
+                    printf("%s\n", config("MSG_EXIT"));
                     break;
                 }
 
-                // meme logique que pour le mode texte
                 liste->nb_commandes = 0;
-                traiter_cmd(buffer, macros, 3, liaisons, 1, liaisons_inv, 1, act, 4, dir, 2, nb, 10, units, 6, liste);
+                traiter_cmd(buffer, macros, 3, liaisons, 1, liaisons_inv, 1,
+                            act, 4, dir, 2, nb, 10, units, 6, liste);
                 debug_afficherliste(liste);
-                ecrire_commandes(liste, "output/post_traitement/commande.txt");
+                ecrire_commandes(liste, config("FILE_CMD_POST"));
 
-                // PARTIE CONFIRMATION POUR LES COMMANDES LONGUES
-                // popen pour lire le retour d'une commande shell
+                // Confirmation commandes longues
                 FILE* fp = popen("wc -l < output/post_traitement/commande.txt", "r");
-                if (fp != NULL) {  // on vérifie que le terminal s'est bien ouvert
+                if (fp) {
                     char result[16];
-                    fgets(result, sizeof(result), fp);  // lit la sortie de la commande{
-                    int nb_lignes = atoi(result);       // convertir en int
-
-                    // si il y a plus de 30 lignes, on demande confirmation
+                    fgets(result, sizeof(result), fp);
+                    int nb_lignes = atoi(result);
                     if (nb_lignes > 30) {
-                        printf("\nWarning, long command detected (%d elementary instructions) !\n", nb_lignes);
+                        printf("%s\n", config("WARN_LONG_CMD"));
+                        system(config("CMD_PY_CONFIRM"));
+                        printf("%s\n", config("MSG_SPEAK"));
+                        system(config("CMD_PY_TTS"));
 
-                        // on lance la lecture audio de la commande en la traduisant via python
-                        system("python3 src/module_confirm.py");
-
-                        // écouter la confirmation vocale
-                        printf("\n>>> PARLEZ MAINTENANT (Dites 'OUI' ou 'NON')...\n");
-                        system("python3 src/module_tts.py");
-
-                        // FINIR ICI !!!!!
-
-                        // on vérifie la réponse dans le fichier généré par le TTS
                         FILE* fp_grep = popen("grep -i \"oui\" output/speech_to_text/commande.txt", "r");
                         int confirmation = 0;
-
                         char test_buffer[128];
-                        if (fgets(test_buffer, sizeof(test_buffer), fp_grep) != NULL) {
+                        if (fgets(test_buffer, sizeof(test_buffer), fp_grep)) {
                             confirmation = 1;
                         }
                         pclose(fp_grep);
 
-                        if (confirmation) {
-                            printf(">>> CONFIRMATION VOCALE REÇUE. Exécution en cours...\n");
-                        } else {
-                            printf(">>> ANNULATION (Vous avez dit : '%s').\n", test_buffer);
-                            printf(">>> La commande a été effacée.\n");
-
-                            // On vide le fichier de commande pour ne pas l'envoyer à la simu
+                        if (confirmation)
+                            printf("%s\n", config("CONFIRM_OK"));
+                        else {
+                            printf("%s\n", config("CONFIRM_KO"));
                             FILE* f_annul = fopen("output/post_traitement/commande.txt", "w");
                             if (f_annul) fclose(f_annul);
                         }
@@ -206,43 +159,37 @@ void traitement_mode_vocal() {
                 }
             }
             fclose(f_vocal);
-            /// on efface le fichier pour ne pas traiter 2x la mm commande :
-            f_vocal = fopen("output/pre_traitement/commande.txt", "w");  // écrase le contenu avec rien = le vider
-            fclose(f_vocal);
+
+            // On vide le fichier pré-traitement
+            f_vocal = fopen(config("FILE_CMD_VOCAL"), "w");
+            if (f_vocal) fclose(f_vocal);
         } else {
-            printf("Erreur : Impossible de lire le fichier de commande vocale.\n");
+            printf("%s\n", config("ERR_READ_CMD"));
         }
     }
     free_liste(liste);
 }
 
+// Mode textuel
 void traitement_mode_textuel(Langue langue) {
     ListeCommandes* liste = init_liste();
     char buffer[MAX_LIGNE];
-
     liaisons[0].nb_syn = 0;
     liaisons_inv[0].nb_syn = 0;
 
     while (1) {
-        if (langue == FR)
-            printf("\nENTRER COMMANDE (maximum 200 actions individuelles)\nÉcrire \"exit\" pour quitter\n>>> ");
-        else {
-            printf("\nENTER COMMAND (maximum 200 individual actions) >> ");
-        }
-
+        printf("%s", config(langue == FR ? "PROMPT_CMD_FR" : "PROMPT_CMD_EN"));
         if (fgets(buffer, MAX_LIGNE, stdin) == NULL) break;
+        buffer[strcspn(buffer, "\n")] = 0;
 
-        buffer[strcspn(buffer, "\n")] = 0;  // nettoyer le \n
-        if (strcmp(buffer, "exit") == 0) {
-            break;
-        }  // si le mot est exit on quitte
+        if (strcmp(buffer, config("CMD_EXIT")) == 0) break;
 
-        liste->nb_commandes = 0;  // Reset manuel
-
-        traiter_cmd(buffer, macros, 3, liaisons, 1, liaisons_inv, 1, act, 4, dir, 2, nb, 10, units, 6, liste);
-
+        liste->nb_commandes = 0;
+        traiter_cmd(buffer, macros, 3, liaisons, 1, liaisons_inv, 1,
+                    act, 4, dir, 2, nb, 10, units, 6, liste);
         debug_afficherliste(liste);
-        ecrire_commandes(liste, "output/commande.txt");
+        ecrire_commandes(liste, config("FILE_CMD_POST"));
+
         char bufffer_commande[1024];
         commmandes_str(liste, bufffer_commande, 1024);
         envoyer_commande(bufffer_commande);
