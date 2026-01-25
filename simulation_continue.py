@@ -320,10 +320,6 @@ def valider_deplacement(distance, recule=False):
 # CONTOURNEMENT D'OBSTACLE
 
 def contourner_obstacle(obstacle, distance_voulue):
-    """
-    Tente de contourner un obstacle par la gauche
-    La distance de décalage est adaptée selon la taille de l'obstacle
-    """
     log_message("Tentative de contournement")
     print("\nContournement en cours...")
     
@@ -570,10 +566,6 @@ def analyser_commande(ligne_commande):
 # MODE CONTINU
 
 def mode_continu():
-    """
-    Permet de rester en mode continu, en attente de commandes
-    """
-    print("\n=== MODE CONTINU ACTIVÉ ===")
     print("En attente de commandes du module C")
     print("États possibles : EXECUTE, QUIT")
     log_message("Mode continu démarré")
