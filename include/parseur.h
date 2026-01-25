@@ -53,5 +53,6 @@ void traiter_cmd(char *phrase,
     ListeCommandes *liste); //liste des commandes à remplir
 
 void ecrire_commandes(ListeCommandes *l, const char* fichier);
+void commmandes_str(ListeCommandes *l, char *buffer, size_t buffer_size);
 
 #endif

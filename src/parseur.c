@@ -9,8 +9,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "../include/parseur.h"
-#include "../include/dictionnaire.h"
+#include "parseur.h"
+#include "dictionnaire.h"
 
 
 // Initialise la liste de commandes
@@ -237,4 +237,29 @@ void ecrire_commandes(ListeCommandes *l, const char* fichier) {
     
     fclose(f);
     printf("Commandes exportees vers %s\n", fichier);
+}
+
+void commmandes_str(ListeCommandes *l, char *buffer, size_t buffer_size) {
+    buffer[0] = '\0'; 
+    
+    size_t offset = 0;
+
+    for (int i = 0; i < l->nb_commandes; i++) {
+        char act = l->cmnds[i].action;
+        char dir = l->cmnds[i].direction;
+        float val = l->cmnds[i].valeur;
+        char unit = l->cmnds[i].unite;
+
+        char dir_str = (dir == 0) ? '-' : dir;
+
+        if (offset >= buffer_size) break; 
+
+        int ecrit = snprintf(buffer + offset, buffer_size - offset, 
+                               "%c,%c,%.2f,%c\n", act, dir_str, val, unit);
+
+        // Advance the offset for the next loop
+        if (ecrit > 0) {
+            offset += ecrit;
+        }
+    }
 }

@@ -10,6 +10,7 @@ void menu_utilisateur();
 void menu_admin();
 void menu_image();
 void menu_commande_vocale();
+void menu_commande_textulle();
 
 #endif
 

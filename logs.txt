@@ -10,3 +10,13 @@
 [Sun Jan 25 17:50:40 2026] Utilisateur : commande textuelle
 [Sun Jan 25 17:52:11 2026] Utilisateur : commande textuelle
 [Sun Jan 25 17:52:58 2026] Utilisateur : commande textuelle
+[Sun Jan 25 18:00:43 2026] Utilisateur : simulation
+[Sun Jan 25 18:03:06 2026] Utilisateur : commande textuelle
+[Sun Jan 25 18:40:03 2026] Utilisateur : commande textuelle
+[Sun Jan 25 19:01:20 2026] Utilisateur : commande textuelle
+[Sun Jan 25 19:03:46 2026] Utilisateur : commande textuelle
+[Sun Jan 25 19:14:09 2026] Utilisateur : commande textuelle
+[Sun Jan 25 19:15:25 2026] Utilisateur : commande textuelle
+[Sun Jan 25 19:17:46 2026] Utilisateur : commande textuelle
+[Sun Jan 25 19:45:07 2026] Utilisateur : commande textuelle
+[Sun Jan 25 19:53:02 2026] Utilisateur : commande textuelle

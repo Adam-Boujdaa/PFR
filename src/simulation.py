@@ -5,6 +5,10 @@ import turtle as tl
 import math
 from datetime import datetime
 
+fichier_config = "/home/ash/Documents/PFR/config/simulation.conf"
+fichier_salle = "/home/ash/Documents/PFR/config/salle_test.conf"
+fichier_commandes = "/home/ash/Documents/PFR/output/commande.txt"
+
 # Configuration
 config = {}
 
@@ -17,7 +21,7 @@ etat_robot = {
 
 # Environnement
 environnement = {
-    'echelle': 100,  # 1 mètre = 100 pixels
+    'echelle': 100,  # 1 mètre = 1 pixel
     'longueur': 8,   # en mètres
     'largeur': 6,    # en mètres
     'obstacles': []
@@ -308,18 +312,12 @@ def avancer(distance):
         print("    1. Contourner l'obstacle")
         print("    2. Annuler le déplacement")
         
-        choix = input("\n  Votre choix (1 ou 2) : ").strip()
-        
-        if choix == "1":
-            if contourner_obstacle(obstacle, distance):
-                return True
-            else:
-                print("Déplacement impossible")
-                log_message(f"Échec : obstacle non contournable")
-                return False
+
+        if contourner_obstacle(obstacle, distance):
+            return True
         else:
-            print("Déplacement annulé")
-            log_message(f"Déplacement annulé par l'utilisateur")
+            print("Déplacement impossible")
+            log_message(f"Échec : obstacle non contournable")
             return False
     
     avancer_direct(distance)
@@ -350,9 +348,9 @@ def analyser_commande(ligne_commande):
         return True
 
     parties = commande.split(',')
-    if len(parties) != 3:
+    if len(parties) != 4:
         print(f"Format invalide : {commande}")
-        print("   Format attendu : ACTION,DIRECTION,VALEUR")
+        print("   Format attendu : ACTION,DIRECTION,VALEUR,UNITE")
         return False
     
     action = parties[0].strip()
@@ -363,6 +361,18 @@ def analyser_commande(ligne_commande):
     except ValueError:
         print(f"Valeur invalide : {parties[2]}")
         return False
+    
+    unite = parties[3].strip()
+
+    unite_to_mult = {
+        'm': 1,
+        'c' : 0.01,
+        'l': 0.1,
+        'i': 0.025,
+        'f': 0.31
+    }
+    
+    valeur *= unite_to_mult.get(unite, 1)
     
     if action == "A":  # Avancer
         if direction == "-":
@@ -447,6 +457,31 @@ def executer_fichier_commandes(fichier_commandes):
         print(f"Erreur lors de l'exécution : {e}")
         return False
 
+    except FileNotFoundError:
+        print(f"Fichier {fichier_commandes} introuvable")
+        return False
+    except Exception as e:
+        print(f"Erreur lors de l'exécution : {e}")
+        return False
+
+import socket
+
+def executer_commandes_reseau():
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    
+    server_address = ('localhost', 1234)
+    sock.bind(server_address)
+    
+    print(f"Listening on {server_address[0]}:{server_address[1]}...")
+
+    while True:
+        data, address = sock.recvfrom(1024)
+        
+        if data:
+            commande = data.decode('utf-8').strip()
+            print(f"Reçu commande: {commande}")
+    
+
 def initialiser_log(nom_fichier="simulation_log.txt"):
     """
     Initialise le fichier de log avec horodatage
@@ -484,10 +519,6 @@ def fermer_log():
 def main():
     print("SIMULATION ROBOT PFR1")
     
-    fichier_config = "/home/ash/Documents/PFR/config/simulation.conf"
-    fichier_salle = "/home/ash/Documents/PFR/config/salle_test.conf"
-    fichier_commandes = "/home/ash/Documents/PFR/scripts/commands_test.txt"
-    
     initialiser_log("simulation_log.txt")
     
     initialiser_environnement(fichier_config)
@@ -502,8 +533,7 @@ def main():
     fenetre.tracer(1)  # Activer le tracé du robot
 
     print("\n Démarrage de l'exécution des commandes...\n")
-    executer_fichier_commandes(fichier_commandes)
-
+    executer_commandes_reseau()
     print(f"\n Position finale : ({etat_robot['x']:.2f}, {etat_robot['y']:.2f})")
     print(f"Orientation finale : {etat_robot['orientation']:.1f}°")
 

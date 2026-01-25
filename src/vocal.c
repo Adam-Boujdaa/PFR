@@ -11,6 +11,7 @@
 #include "config.h"
 #include "dictionnaire.h"
 #include "parseur.h"
+#include "intercom.h"
 
 // À LIRE DANS LE FICHIER CONFIG PLUS TARD
 char MODE = 'T';
@@ -224,19 +225,17 @@ void traitement_mode_textuel(Langue langue) {
 
     while (1) {
         if (langue == FR)
-            printf("\nENTRER COMMANDE (maximum 200 actions individuelles)\nÉcrire \"vocal\" pour passer au mode vocal ou \"exit\" pour quitter\n>>> ");
+            printf("\nENTRER COMMANDE (maximum 200 actions individuelles)\nÉcrire \"exit\" pour quitter\n>>> ");
         else {
             printf("\nENTER COMMAND (maximum 200 individual actions) >> ");
         }
 
         if (fgets(buffer, MAX_LIGNE, stdin) == NULL) break;
 
-        buffer[strcspn(buffer, "\n")] = 0;   // nettoyer le \n
-        if (strcmp(buffer, "vocal") == 0) {  // pour pouvoir switch de mode
-            MODE = 'V';
-            continue;  // retourner à l'origine du while
-        }
-        if (strcmp(buffer, "exit") == 0) break;  // si le mot est exit on quitte
+        buffer[strcspn(buffer, "\n")] = 0;  // nettoyer le \n
+        if (strcmp(buffer, "exit") == 0) {
+            break;
+        }  // si le mot est exit on quitte
 
         liste->nb_commandes = 0;  // Reset manuel
 
@@ -244,6 +243,9 @@ void traitement_mode_textuel(Langue langue) {
 
         debug_afficherliste(liste);
         ecrire_commandes(liste, "output/commande.txt");
+        char bufffer_commande[1024];
+        commmandes_str(liste, bufffer_commande, 1024);
+        envoyer_commande(bufffer_commande);
     }
     free_liste(liste);
 }

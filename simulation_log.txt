@@ -1,0 +1,338 @@
+
+============================================================
+SESSION DÉMARRÉE : 2026-01-25 18:03:53
+============================================================
+[18:03:53] Configuration chargée avec succès
+[18:03:54] Environnement graphique initialisé
+[18:03:54] Salle chargée : 8.0x6.0m avec 2 obstacle(s)
+[18:03:54] 2 obstacle(s) affiché(s)
+[18:03:54] Début exécution : 6 commande(s)
+[18:03:54] Avance 2.0m → (2.00, 0.00)
+[18:03:55] Rotation droite : 90.0° | Orientation : 270.0°
+[18:03:55] Avance 1.5m → (2.00, -1.50)
+[18:03:56] Rotation gauche : 90° | Orientation : 0.0°
+[18:03:56] Avance 1.0m → (3.00, -1.50)
+[18:03:56] Rotation gauche : 45.0° | Orientation : 45.0°
+[18:03:56] Recule 0.5m → (2.65, -1.85)
+[18:03:56] Exécution terminée
+
+ SESSION TERMINÉE : 2026-01-25 18:03:56
+============================================================
+
+============================================================
+SESSION DÉMARRÉE : 2026-01-25 18:05:37
+============================================================
+[18:05:37] Configuration chargée avec succès
+[18:05:38] Environnement graphique initialisé
+[18:05:38] Salle chargée : 8.0x6.0m avec 2 obstacle(s)
+[18:05:38] 2 obstacle(s) affiché(s)
+[18:05:38] Début exécution : 1 commande(s)
+[18:05:38] Arrêt à la commande 1/1
+[18:05:38] Exécution terminée
+
+ SESSION TERMINÉE : 2026-01-25 18:05:38
+============================================================
+
+============================================================
+SESSION DÉMARRÉE : 2026-01-25 18:06:35
+============================================================
+[18:06:35] Configuration chargée avec succès
+[18:06:35] Environnement graphique initialisé
+[18:06:35] Salle chargée : 8.0x6.0m avec 2 obstacle(s)
+[18:06:35] 2 obstacle(s) affiché(s)
+[18:06:35] Début exécution : 1 commande(s)
+[18:06:35] Arrêt à la commande 1/1
+[18:06:35] Exécution terminée
+
+ SESSION TERMINÉE : 2026-01-25 18:06:35
+============================================================
+
+============================================================
+SESSION DÉMARRÉE : 2026-01-25 18:16:15
+============================================================
+[18:16:15] Configuration chargée avec succès
+[18:16:15] Environnement graphique initialisé
+[18:16:15] Salle chargée : 8.0x6.0m avec 2 obstacle(s)
+[18:16:15] 2 obstacle(s) affiché(s)
+[18:16:15] Début exécution : 1 commande(s)
+
+ SESSION TERMINÉE : 2026-01-25 18:16:23
+============================================================
+
+============================================================
+SESSION DÉMARRÉE : 2026-01-25 18:17:03
+============================================================
+[18:17:03] Configuration chargée avec succès
+[18:17:03] Environnement graphique initialisé
+[18:17:03] Salle chargée : 8.0x6.0m avec 2 obstacle(s)
+[18:17:03] 2 obstacle(s) affiché(s)
+[18:17:03] Début exécution : 1 commande(s)
+
+ SESSION TERMINÉE : 2026-01-25 18:17:12
+============================================================
+
+============================================================
+SESSION DÉMARRÉE : 2026-01-25 18:17:43
+============================================================
+[18:17:43] Configuration chargée avec succès
+[18:17:43] Environnement graphique initialisé
+[18:17:43] Salle chargée : 8.0x6.0m avec 2 obstacle(s)
+[18:17:43] 2 obstacle(s) affiché(s)
+[18:17:43] Début exécution : 1 commande(s)
+
+ SESSION TERMINÉE : 2026-01-25 18:17:50
+============================================================
+
+============================================================
+SESSION DÉMARRÉE : 2026-01-25 18:18:28
+============================================================
+[18:18:28] Configuration chargée avec succès
+[18:18:28] Environnement graphique initialisé
+[18:18:28] Salle chargée : 8.0x6.0m avec 2 obstacle(s)
+[18:18:28] 2 obstacle(s) affiché(s)
+[18:18:28] Début exécution : 1 commande(s)
+[18:18:32] Avance 10.0m → (10.00, 0.00)
+[18:18:32] Exécution terminée
+
+ SESSION TERMINÉE : 2026-01-25 18:18:32
+============================================================
+
+============================================================
+SESSION DÉMARRÉE : 2026-01-25 18:21:30
+============================================================
+[18:21:30] Configuration chargée avec succès
+[18:21:30] Environnement graphique initialisé
+[18:21:30] Salle chargée : 8.0x6.0m avec 2 obstacle(s)
+[18:21:30] 2 obstacle(s) affiché(s)
+[18:21:30] Début exécution : 1 commande(s)
+[18:21:33] Avance 10.0m → (10.00, 0.00)
+[18:21:33] Exécution terminée
+
+ SESSION TERMINÉE : 2026-01-25 18:21:33
+============================================================
+
+============================================================
+SESSION DÉMARRÉE : 2026-01-25 18:22:20
+============================================================
+[18:22:20] Configuration chargée avec succès
+[18:22:20] Environnement graphique initialisé
+[18:22:20] Salle chargée : 8.0x6.0m avec 2 obstacle(s)
+[18:22:20] 2 obstacle(s) affiché(s)
+[18:22:20] Début exécution : 1 commande(s)
+[18:22:35] Tentative de contournement
+[18:22:35] Rotation gauche : 45° | Orientation : 45.0°
+[18:22:36] Rotation droite : 45° | Orientation : 0.0°
+[18:22:36] Contournement réussi
+[18:22:36] Exécution terminée
+
+ SESSION TERMINÉE : 2026-01-25 18:22:36
+============================================================
+
+============================================================
+SESSION DÉMARRÉE : 2026-01-25 18:30:41
+============================================================
+[18:30:41] Configuration chargée avec succès
+[18:30:41] Environnement graphique initialisé
+[18:30:41] Salle chargée : 8.0x6.0m avec 2 obstacle(s)
+[18:30:41] 2 obstacle(s) affiché(s)
+[18:30:41] Début exécution : 1 commande(s)
+[18:30:41] Tentative de contournement
+[18:30:41] Rotation gauche : 45° | Orientation : 45.0°
+[18:30:42] Rotation droite : 45° | Orientation : 0.0°
+[18:30:42] Contournement réussi
+[18:30:42] Exécution terminée
+
+ SESSION TERMINÉE : 2026-01-25 18:30:42
+============================================================
+
+============================================================
+SESSION DÉMARRÉE : 2026-01-25 18:40:13
+============================================================
+[18:40:13] Configuration chargée avec succès
+[18:40:14] Environnement graphique initialisé
+[18:40:14] Salle chargée : 8.0x6.0m avec 2 obstacle(s)
+[18:40:14] 2 obstacle(s) affiché(s)
+[18:40:25] Avance 10.0m → (10.00, 0.00)
+
+============================================================
+SESSION DÉMARRÉE : 2026-01-25 18:41:31
+============================================================
+[18:41:31] Configuration chargée avec succès
+[18:41:31] Environnement graphique initialisé
+[18:41:31] Salle chargée : 8.0x6.0m avec 2 obstacle(s)
+[18:41:31] 2 obstacle(s) affiché(s)
+[18:41:34] Recule 10.0m → (-10.00, 0.00)
+
+ SESSION TERMINÉE : 2026-01-25 18:41:34
+============================================================
+
+============================================================
+SESSION DÉMARRÉE : 2026-01-25 18:42:04
+============================================================
+[18:42:04] Configuration chargée avec succès
+[18:42:04] Environnement graphique initialisé
+[18:42:04] Salle chargée : 8.0x6.0m avec 2 obstacle(s)
+[18:42:04] 2 obstacle(s) affiché(s)
+[18:42:08] Recule 10.0m → (-10.00, 0.00)
+
+ SESSION TERMINÉE : 2026-01-25 18:42:08
+============================================================
+
+============================================================
+SESSION DÉMARRÉE : 2026-01-25 18:43:25
+============================================================
+[18:43:25] Configuration chargée avec succès
+[18:43:25] Environnement graphique initialisé
+[18:43:25] Salle chargée : 8.0x6.0m avec 2 obstacle(s)
+[18:43:25] 2 obstacle(s) affiché(s)
+[18:43:29] Recule 10.0m → (-10.00, 0.00)
+
+ SESSION TERMINÉE : 2026-01-25 18:43:29
+============================================================
+
+============================================================
+SESSION DÉMARRÉE : 2026-01-25 18:44:45
+============================================================
+[18:44:45] Configuration chargée avec succès
+[18:44:45] Environnement graphique initialisé
+[18:44:45] Salle chargée : 8.0x6.0m avec 2 obstacle(s)
+[18:44:45] 2 obstacle(s) affiché(s)
+[18:44:45] Recule 0.1m → (-0.10, 0.00)
+
+ SESSION TERMINÉE : 2026-01-25 18:44:45
+============================================================
+
+============================================================
+SESSION DÉMARRÉE : 2026-01-25 18:46:23
+============================================================
+[18:46:23] Configuration chargée avec succès
+[18:46:23] Environnement graphique initialisé
+[18:46:23] Salle chargée : 8.0x6.0m avec 2 obstacle(s)
+[18:46:23] 2 obstacle(s) affiché(s)
+[18:46:24] Rotation droite : -90.0° | Orientation : 90.0°
+
+============================================================
+SESSION DÉMARRÉE : 2026-01-25 19:03:26
+============================================================
+[19:03:26] Configuration chargée avec succès
+[19:03:26] Environnement graphique initialisé
+[19:03:26] Salle chargée : 8.0x6.0m avec 2 obstacle(s)
+[19:03:26] 2 obstacle(s) affiché(s)
+[19:03:53] Avance 10.0m → (10.00, 0.00)
+
+============================================================
+SESSION DÉMARRÉE : 2026-01-25 19:04:33
+============================================================
+[19:04:33] Configuration chargée avec succès
+[19:04:33] Environnement graphique initialisé
+[19:04:33] Salle chargée : 8.0x6.0m avec 2 obstacle(s)
+[19:04:33] 2 obstacle(s) affiché(s)
+[19:04:37] Recule 10.0m → (-10.00, 0.00)
+
+============================================================
+SESSION DÉMARRÉE : 2026-01-25 19:07:10
+============================================================
+[19:07:10] Configuration chargée avec succès
+[19:07:10] Environnement graphique initialisé
+[19:07:10] Salle chargée : 8.0x6.0m avec 2 obstacle(s)
+[19:07:10] 2 obstacle(s) affiché(s)
+[19:07:13] Recule 10.0m → (-10.00, 0.00)
+
+ SESSION TERMINÉE : 2026-01-25 19:07:13
+============================================================
+
+============================================================
+SESSION DÉMARRÉE : 2026-01-25 19:08:18
+============================================================
+[19:08:18] Configuration chargée avec succès
+[19:08:18] Environnement graphique initialisé
+[19:08:18] Salle chargée : 8.0x6.0m avec 2 obstacle(s)
+[19:08:18] 2 obstacle(s) affiché(s)
+[19:08:18] Tentative de contournement
+[19:08:18] Rotation gauche : 45° | Orientation : 45.0°
+[19:08:19] Rotation droite : 45° | Orientation : 0.0°
+[19:08:19] Contournement réussi
+
+============================================================
+SESSION DÉMARRÉE : 2026-01-25 19:08:48
+============================================================
+[19:08:48] Configuration chargée avec succès
+[19:08:48] Environnement graphique initialisé
+[19:08:48] Salle chargée : 8.0x6.0m avec 2 obstacle(s)
+[19:08:48] 2 obstacle(s) affiché(s)
+[19:08:48] Tentative de contournement
+[19:08:48] Rotation gauche : 45° | Orientation : 45.0°
+[19:08:49] Rotation droite : 45° | Orientation : 0.0°
+[19:08:50] Contournement réussi
+
+============================================================
+SESSION DÉMARRÉE : 2026-01-25 19:14:15
+============================================================
+[19:14:15] Configuration chargée avec succès
+[19:14:15] Environnement graphique initialisé
+[19:14:15] Salle chargée : 8.0x6.0m avec 2 obstacle(s)
+[19:14:15] 2 obstacle(s) affiché(s)
+
+============================================================
+SESSION DÉMARRÉE : 2026-01-25 19:15:10
+============================================================
+[19:15:10] Configuration chargée avec succès
+[19:15:10] Environnement graphique initialisé
+[19:15:10] Salle chargée : 8.0x6.0m avec 2 obstacle(s)
+[19:15:10] 2 obstacle(s) affiché(s)
+[19:15:33] Avance 10.0m → (10.00, 0.00)
+
+============================================================
+SESSION DÉMARRÉE : 2026-01-25 19:17:27
+============================================================
+[19:17:27] Configuration chargée avec succès
+[19:17:27] Environnement graphique initialisé
+[19:17:27] Salle chargée : 8.0x6.0m avec 2 obstacle(s)
+[19:17:27] 2 obstacle(s) affiché(s)
+[19:17:31] Recule 10.0m → (-10.00, 0.00)
+[19:17:34] Recule 10.0m → (-20.00, 0.00)
+[19:17:38] Recule 10.0m → (-30.00, 0.00)
+[19:17:41] Recule 10.0m → (-40.00, 0.00)
+[19:17:45] Recule 10.0m → (-50.00, 0.00)
+[19:17:48] Recule 10.0m → (-60.00, 0.00)
+
+ SESSION TERMINÉE : 2026-01-25 19:17:48
+============================================================
+
+============================================================
+SESSION DÉMARRÉE : 2026-01-25 19:18:07
+============================================================
+[19:18:07] Configuration chargée avec succès
+[19:18:07] Environnement graphique initialisé
+[19:18:07] Salle chargée : 8.0x6.0m avec 2 obstacle(s)
+[19:18:07] 2 obstacle(s) affiché(s)
+
+ SESSION TERMINÉE : 2026-01-25 19:18:07
+============================================================
+
+============================================================
+SESSION DÉMARRÉE : 2026-01-25 19:18:25
+============================================================
+[19:18:25] Configuration chargée avec succès
+[19:18:25] Environnement graphique initialisé
+[19:18:25] Salle chargée : 8.0x6.0m avec 2 obstacle(s)
+[19:18:25] 2 obstacle(s) affiché(s)
+
+ SESSION TERMINÉE : 2026-01-25 19:18:25
+============================================================
+
+============================================================
+SESSION DÉMARRÉE : 2026-01-25 19:53:21
+============================================================
+[19:53:21] Configuration chargée avec succès
+[19:53:21] Environnement graphique initialisé
+[19:53:21] Salle chargée : 8.0x6.0m avec 2 obstacle(s)
+[19:53:21] 2 obstacle(s) affiché(s)
+
+============================================================
+SESSION DÉMARRÉE : 2026-01-25 19:53:41
+============================================================
+[19:53:41] Configuration chargée avec succès
+[19:53:42] Environnement graphique initialisé
+[19:53:42] Salle chargée : 8.0x6.0m avec 2 obstacle(s)
+[19:53:42] 2 obstacle(s) affiché(s)

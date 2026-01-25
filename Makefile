@@ -7,8 +7,8 @@ INC = include
 OBJ = obj
 TEST = test
 
-main.out: $(OBJ)/main.o $(OBJ)/menu.o $(OBJ)/config.o $(OBJ)/log.o $(OBJ)/module_image.o $(OBJ)/pile.o $(OBJ)/vocal.o $(OBJ)/dictionnaire.o $(OBJ)/parseur.o
-	$(CC) $(CFLAGS) -o main.out $(OBJ)/main.o $(OBJ)/menu.o $(OBJ)/config.o $(OBJ)/log.o $(OBJ)/module_image.o $(OBJ)/pile.o $(OBJ)/vocal.o $(OBJ)/dictionnaire.o $(OBJ)/parseur.o -lm
+main.out: $(OBJ)/main.o $(OBJ)/menu.o $(OBJ)/config.o $(OBJ)/log.o $(OBJ)/module_image.o $(OBJ)/pile.o $(OBJ)/vocal.o $(OBJ)/dictionnaire.o $(OBJ)/parseur.o $(OBJ)/intercom.o
+	$(CC) $(CFLAGS) -o main.out $(OBJ)/main.o $(OBJ)/menu.o $(OBJ)/config.o $(OBJ)/log.o $(OBJ)/module_image.o $(OBJ)/pile.o $(OBJ)/vocal.o $(OBJ)/dictionnaire.o $(OBJ)/parseur.o $(OBJ)/intercom.o -lm
 
 parseur.out : $(OBJ)/vocal.o $(OBJ)/dictionnaire.o $(OBJ)/parseur.o
 	$(CC) $(CFLAGS) -o parseur.out $(OBJ)/vocal.o $(OBJ)/dictionnaire.o $(OBJ)/parseur.o
@@ -53,6 +53,8 @@ $(OBJ)/parseur.o : $(SRC)/parseur.c $(INC)/parseur.h
 $(OBJ)/dictionnaire.o : $(SRC)/dictionnaire.c $(INC)/dictionnaire.h
 	$(CC) $(CFLAGS) -c $(SRC)/dictionnaire.c -o $(OBJ)/dictionnaire.o
 
+$(OBJ)/intercom.o : $(SRC)/intercom.c $(INC)/intercom.h
+	$(CC) $(CFLAGS) -c $(SRC)/intercom.c -o $(OBJ)/intercom.o
 
 # Création de l'environnement virtuel Python et installation des dépendances
 venv:

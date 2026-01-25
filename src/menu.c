@@ -15,7 +15,7 @@
 #define FICHIER_MDP "config/.mdp_admin"
 #define NETTOYER() printf("\033[2J\033[H")
 
-Langue langue_ = FR;
+Langue langue = FR;
 
 /* lecture simple d'un entier */
 int read_int() {
@@ -83,10 +83,10 @@ void choisir_langue() {
 
     if (choix == 0) {
         charger_config("config/lang_fr.conf");
-        langue_ = FR;
+        langue = FR;
     } else {
         charger_config("config/lang_en.conf");
-        langue_ = EN;
+        langue = EN;
     }
 }
 
@@ -135,7 +135,7 @@ void menu_utilisateur() {
     while (choix != 0) {
         printf("\n=== %s ===\n", config("USER_MENU"));
         printf("1 - %s\n", config("VOICE_CMD"));
-        printf("2 - %s\n", config("SIMULATION"));
+        printf("2 - %s\n", config("TEXT_CMD"));
         printf("3 - %s\n", config("IMAGE"));
         printf("0 - %s\n", config("BACK"));
         printf("%s ", config("CHOICE"));
@@ -145,12 +145,13 @@ void menu_utilisateur() {
         switch (choix) {
             case 1:
                 printf("%s\n", config("TEXT_CMD_CHOSEN"));
-                log_msg("Utilisateur : commande textuelle");
+                log_msg("Utilisateur : commande vocale");
                 menu_commande_vocale();
                 break;
             case 2:
                 printf("%s\n", config("SIMULATION_CHOSEN"));
-                log_msg("Utilisateur : simulation");
+                log_msg("Utilisateur : commande textuelle");
+                menu_commande_textulle();
                 break;
             case 3:
                 printf("%s\n", config("IMAGE_CHOSEN"));
@@ -391,7 +392,7 @@ void menu_image() {
 }
 
 void menu_commande_vocale() {
-    if (langue_ == FR) {
+    if (langue == FR) {
         charger_dictionnaire_fr();
     } else {
         charger_dictionnaire_en();
@@ -400,6 +401,21 @@ void menu_commande_vocale() {
     printf("%s\n", config("CMD_PROMPT"));
 
     traitement_mode_vocal();
+    sleep(5);
+    menu_utilisateur();
+
+}
+
+void menu_commande_textulle() {
+    if (langue == FR) {
+        charger_dictionnaire_fr();
+    } else {
+        charger_dictionnaire_en();
+    }
+
+    printf("%s\n", config("CMD_PROMPT"));
+
+    traitement_mode_textuel(langue);
     sleep(5);
     menu_utilisateur();
 
