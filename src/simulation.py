@@ -104,6 +104,10 @@ def charger_salle(fichier_salle):
             for ligne in f:
                 ligne = ligne.strip()
                 
+                # Ignorer lignes vides et commentaires
+                if not ligne or ligne.startswith('#'):
+                    continue
+                
                 if ligne.startswith('LONGUEUR='):
                     environnement['longueur'] = float(ligne.split('=')[1])
                 
@@ -223,7 +227,10 @@ def calculer_position_future(distance, recule=False):
     return futur_x, futur_y
 
 def valider_deplacement(distance, recule=False):
-
+    """
+    Vérifie s'il y a un obstacle sur TOUTE la trajectoire
+    Échantillonne tous les 0.1m pour détecter les obstacles
+    """
     # Calculer la position finale
     futur_x, futur_y = calculer_position_future(distance, recule)
     
@@ -251,18 +258,33 @@ def valider_deplacement(distance, recule=False):
 def contourner_obstacle(obstacle, distance_voulue):
     log_message("Tentative de contournement")
     print("\nContournement en cours...")
+    
+    # Calcul de la distance de décalage selon le type et la taille de l'obstacle
+    if obstacle['type'] == 'rectangle':
+        # Largeur du rectangle + marge de sécurité de 0.5m
+        decalage = obstacle['param1'] + 0.5
+    elif obstacle['type'] == 'cercle':
+        # Diamètre du cercle + marge de sécurité de 0.5m
+        decalage = (obstacle['param1'] * 2) + 0.5
+    else:
+        # Fallback si type inconnu
+        decalage = 1.5
+    
+    print(f"Décalage calculé : {decalage:.2f}m pour obstacle de type {obstacle['type']}")
+    log_message(f"Décalage de contournement : {decalage:.2f}m")
 
     tourner_gauche(45)
     
-    # Vérifie si on peut avancer latéralement
-    if not valider_deplacement(1.5)[0]:
+    # Vérifie si on peut se décaler latéralement
+    if not valider_deplacement(decalage)[0]:
         print("Contournement impossible (obstacle sur la gauche)")
         tourner_droite(45)  # Revenir à l'orientation initiale
         return False
     
-    avancer_direct(1.5)
+    avancer_direct(decalage)
     tourner_droite(45)
 
+    # Vérifie si on peut continuer la trajectoire voulue
     if valider_deplacement(distance_voulue)[0]:
         avancer_direct(distance_voulue)
         print("Contournement réussi")
@@ -319,6 +341,40 @@ def tourner_droite(angle):
     fenetre.update()
     log_message(f"Rotation droite : {angle}° | Orientation : {etat_robot['orientation']:.1f}°")
 
+
+def retour_origine():
+    """
+    Remet le robot à l'origine (0, 0) avec orientation 0°
+    Commande : O,-,-,-
+    """
+    global etat_robot
+    
+    # Sauvegarder pour le log
+    ancienne_x = etat_robot['x']
+    ancienne_y = etat_robot['y']
+    ancienne_orientation = etat_robot['orientation']
+    
+    # Reset position et orientation
+    etat_robot['x'] = 0.0
+    etat_robot['y'] = 0.0
+    etat_robot['orientation'] = 0.0
+    
+    # Déplacer visuellement
+    robot.penup()
+    robot.goto(0, 0)
+    robot.setheading(0)
+    robot.pendown()
+    
+    fenetre.update()
+    
+    print(f"Retour à l'origine (0, 0)")
+    print(f"  Depuis : ({ancienne_x:.2f}, {ancienne_y:.2f}) | {ancienne_orientation:.1f}°")
+    
+    log_message(f"Reset → (0.0, 0.0) | 0.0°")
+    
+    return True
+
+
 def avancer(distance):
     valide, obstacle, (futur_x, futur_y) = valider_deplacement(distance)
     
@@ -373,6 +429,10 @@ def analyser_commande(ligne_commande):
     action = parties[0].strip()
     direction = parties[1].strip()
     
+    # Commande O (retour origine) - ne nécessite pas de conversion
+    if action == "O":
+        return retour_origine()
+    
     try:
         valeur = float(parties[2].strip())
     except ValueError:
@@ -395,13 +455,33 @@ def analyser_commande(ligne_commande):
         if direction == "-":
             return avancer(valeur)
         elif direction == "D":
+            # Sauvegarder l'orientation au cas où ça échoue
+            orientation_initiale = etat_robot['orientation']
             tourner_droite(90)
             print(f"Tourne droite 90° → Orientation {etat_robot['orientation']:.1f}°")
-            return avancer(valeur)
+            success = avancer(valeur)
+            if not success:
+                # Annuler la rotation si l'avancement a échoué
+                etat_robot['orientation'] = orientation_initiale
+                robot.setheading(orientation_initiale)
+                fenetre.update()
+                print(f"Rotation annulée, retour à {orientation_initiale:.1f}°")
+                log_message(f"Rotation annulée, retour à {orientation_initiale:.1f}°")
+            return success
         elif direction == "G":
+            # Sauvegarder l'orientation au cas où ça échoue
+            orientation_initiale = etat_robot['orientation']
             tourner_gauche(90)
             print(f"Tourne gauche 90° → Orientation {etat_robot['orientation']:.1f}°")
-            return avancer(valeur)
+            success = avancer(valeur)
+            if not success:
+                # Annuler la rotation si l'avancement a échoué
+                etat_robot['orientation'] = orientation_initiale
+                robot.setheading(orientation_initiale)
+                fenetre.update()
+                print(f"Rotation annulée, retour à {orientation_initiale:.1f}°")
+                log_message(f"Rotation annulée, retour à {orientation_initiale:.1f}°")
+            return success
         else:
             print(f"Direction inconnue : {direction}")
             return False
@@ -410,13 +490,33 @@ def analyser_commande(ligne_commande):
         if direction == "-":
             return reculer(valeur)
         elif direction == "D":
+            # Sauvegarder l'orientation au cas où ça échoue
+            orientation_initiale = etat_robot['orientation']
             tourner_droite(90)
             print(f"Tourne droite 90° : Orientation {etat_robot['orientation']:.1f}°")
-            return reculer(valeur)
+            success = reculer(valeur)
+            if not success:
+                # Annuler la rotation si le recul a échoué
+                etat_robot['orientation'] = orientation_initiale
+                robot.setheading(orientation_initiale)
+                fenetre.update()
+                print(f"Rotation annulée, retour à {orientation_initiale:.1f}°")
+                log_message(f"Rotation annulée, retour à {orientation_initiale:.1f}°")
+            return success
         elif direction == "G":
+            # Sauvegarder l'orientation au cas où ça échoue
+            orientation_initiale = etat_robot['orientation']
             tourner_gauche(90)
             print(f"Tourne gauche 90° : Orientation {etat_robot['orientation']:.1f}°")
-            return reculer(valeur)
+            success = reculer(valeur)
+            if not success:
+                # Annuler la rotation si le recul a échoué
+                etat_robot['orientation'] = orientation_initiale
+                robot.setheading(orientation_initiale)
+                fenetre.update()
+                print(f"Rotation annulée, retour à {orientation_initiale:.1f}°")
+                log_message(f"Rotation annulée, retour à {orientation_initiale:.1f}°")
+            return success
         else:
             print(f"Direction inconnue : {direction}")
             return False
@@ -436,7 +536,7 @@ def analyser_commande(ligne_commande):
     
     else:
         print(f"Action inconnue : {action}")
-        print("   Actions valides : A (avancer), R (reculer), T (tourner)")
+        print("   Actions valides : A (avancer), R (reculer), T (tourner), O (origine)")
         return False
 
 def executer_fichier_commandes(fichier_commandes):
@@ -474,13 +574,6 @@ def executer_fichier_commandes(fichier_commandes):
         print(f"Erreur lors de l'exécution : {e}")
         return False
 
-    except FileNotFoundError:
-        print(f"Fichier {fichier_commandes} introuvable")
-        return False
-    except Exception as e:
-        print(f"Erreur lors de l'exécution : {e}")
-        return False
-
 import socket
 
 def executer_commandes_reseau():
@@ -497,12 +590,10 @@ def executer_commandes_reseau():
         if data:
             commande = data.decode('utf-8').strip()
             print(f"Reçu commande: {commande}")
+            analyser_commande(commande)
     
 
 def initialiser_log(nom_fichier="simulation_log.txt"):
-    """
-    Initialise le fichier de log avec horodatage
-    """
     global fichier_log
     
     try:
