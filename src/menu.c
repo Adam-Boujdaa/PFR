@@ -255,7 +255,8 @@ void menu_image() {
             printf("2 - %s\n", config("CONVERT_GRAYSCALE"));
             printf("3 - %s\n", config("FLIP_VERTICAL"));
             printf("4 - %s\n", config("QUANT"));
-            printf("5 - %s\n", config("SAVE_IMAGE"));
+            printf("5 - %s\n", config("ROTATE"));
+            printf("6 - %s\n", config("SAVE_IMAGE"));
             printf("0 - %s\n", config("BACK"));
             printf("%s ", config("CHOICE"));
 
@@ -307,7 +308,7 @@ void menu_image() {
                     log_msg("Utilisateur : quantification");
 
                     int q;
-                    printf("Entrez le niveau de quantification (puissance de 2 entre 1 et 255) : ");
+                    printf("Entrez le niveau de quantification (puissance de 2 entre 1 et 255) > ");
                     q = read_int();
 
                     img = image_quantification(img, q);
@@ -316,7 +317,17 @@ void menu_image() {
 
                     break;
 
-                case 5:  // SAUVEGARDE IMAGE
+                case 5:  // ROTATION IMAGE
+                    printf("Rotation en cours...\n");
+                    log_msg("Utilisateur : rotation");
+
+                    img = image_tourner(img);
+
+                    printf("%s\n", config("CONVERTED"));
+
+                    break;
+
+                case 6:  // SAUVEGARDE IMAGE
                     char chemin_sauve[200];
                     char chemin_txt[236];
                     char chemin_jpg[236];
@@ -331,7 +342,7 @@ void menu_image() {
                     sprintf(chemin_txt, "%s.txt", chemin_sauve);
                     sprintf(chemin_jpg, "%s.jpg", chemin_sauve);
 
-                    sprintf(commande_creer, "python3 creer_image.py %s %s", chemin_txt, chemin_jpg);
+                    sprintf(commande_creer, "python3 ./src/creer_image.py %s %s", chemin_txt, chemin_jpg);
                     sprintf(commande_ouvrir, "xdg-open %s", chemin_jpg);
 
                     FILE* out = fopen(chemin_txt, "w");

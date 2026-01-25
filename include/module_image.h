@@ -27,6 +27,7 @@ Image image_quantification(Image img, int q);
 Image image_lire(FILE *f);
 Image image_miroir(Image img);
 Image image_binarisation(Image img);
+Image image_tourner(Image img);
 Image image_masque_objets(Image img, int seuil);
 int image_trouver_objets(Image img, Objet* tab_objets, int aire_min);
 Pixel image_trouver_couleur(Image img, Image mask, Objet obj);

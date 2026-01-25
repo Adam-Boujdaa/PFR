@@ -142,6 +142,17 @@ Image image_binarisation(Image img) {
     return img_bin;
 }
 
+Image image_tourner(Image img) {
+    Image img_rot = image_init(img->largeur, img->hauteur, img->canaux);
+
+    for (int y = 0; y < img->hauteur; y++) {
+        for (int x = 0; x < img->largeur; x++) {
+            img_rot->data[x][img->hauteur - 1 - y] = img->data[y][x];
+        }
+    }
+    return img_rot;
+}
+
 Image image_masque_objets(Image img, int seuil) {
     Image mask = image_init(img->hauteur, img->largeur, 1);
     int mn, mx;
@@ -313,7 +324,7 @@ const char* image_pixel_to_nom(Pixel coul) {
 void objet_afficher(Image img, Image mask, Objet* objets, int nb_objets) {
     for (int i = 0; i < nb_objets; i++) {
         Pixel coul = image_trouver_couleur(img, mask, objets[i]);
-        char *est_balle = objet_est_balle(objets[i]) ? "Oui" : "Non";
+        char* est_balle = objet_est_balle(objets[i]) ? "Oui" : "Non";
         image_dessiner_boite_englobante(img, objets[i], coul);
         printf("\033[1;4mObjet %d :\033[0m\n\tCentre : X=%d Y=%d, rayon=%d, aire=%d, Couleur=%s, Balle?=%s\n",
                i + 1,
@@ -328,8 +339,8 @@ void objet_afficher(Image img, Image mask, Objet* objets, int nb_objets) {
 
 int objet_est_balle(Objet obj) {
     int aire_boite_eng = (obj.max_x - obj.min_x + 1) * (obj.max_y - obj.min_y + 1);
-    float rapport = (float)obj.aire / (float)aire_boite_eng ;
-    //printf("[DEBUG] Rapport aire boite englobante / aire objet : %.3f\n", rapport);
+    float rapport = (float)obj.aire / (float)aire_boite_eng;
+    // printf("[DEBUG] Rapport aire boite englobante / aire objet : %.3f\n", rapport);
     if (fabs(rapport - 0.785) < 0.02) {
         return 1;
     } else {
