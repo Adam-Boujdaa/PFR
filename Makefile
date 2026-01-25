@@ -7,17 +7,14 @@ INC = include
 OBJ = obj
 TEST = test
 
-main.out: $(OBJ)/main.o $(OBJ)/menu.o $(OBJ)/config.o $(OBJ)/log.o $(OBJ)/module_image.o $(OBJ)/pile.o
-	$(CC) $(CFLAGS) -o main.out $(OBJ)/main.o $(OBJ)/menu.o $(OBJ)/config.o $(OBJ)/log.o $(OBJ)/module_image.o $(OBJ)/pile.o -lm
+main.out: $(OBJ)/main.o $(OBJ)/menu.o $(OBJ)/config.o $(OBJ)/log.o $(OBJ)/module_image.o $(OBJ)/pile.o $(OBJ)/vocal.o $(OBJ)/dictionnaire.o $(OBJ)/parseur.o
+	$(CC) $(CFLAGS) -o main.out $(OBJ)/main.o $(OBJ)/menu.o $(OBJ)/config.o $(OBJ)/log.o $(OBJ)/module_image.o $(OBJ)/pile.o $(OBJ)/vocal.o $(OBJ)/dictionnaire.o $(OBJ)/parseur.o -lm
 
-lanceur.out : lanceur.c
-	$(CC) $(CFLAGS) -o lanceur.out $(SRC)/lanceur.c
+parseur.out : $(OBJ)/vocal.o $(OBJ)/dictionnaire.o $(OBJ)/parseur.o
+	$(CC) $(CFLAGS) -o parseur.out $(OBJ)/vocal.o $(OBJ)/dictionnaire.o $(OBJ)/parseur.o
 
-Parseur.out : $(OBJ)/vocal.o $(OBJ)/dictionnaire.o
-	$(CC) $(CFLAGS) -o Parseur.out $(OBJ)/vocal.o $(OBJ)/dictionnaire.o
-
-TestDico.out : $(OBJ)/test_dictionnaire.o $(OBJ)/dictionnaire.o
-	$(CC) $(CFLAGS) -o TestDico.out $(OBJ)/test_dictionnaire.o $(OBJ)/dictionnaire.o
+test_dico.out : $(OBJ)/test_dictionnaire.o $(OBJ)/dictionnaire.o
+	$(CC) $(CFLAGS) -o test_dico.out $(OBJ)/test_dictionnaire.o $(OBJ)/dictionnaire.o
 
 test_image.out: $(OBJ)/test_image.o $(OBJ)/module_image.o $(OBJ)/pile.o
 	$(CC) $(CFLAGS) -o test_image.out $(OBJ)/test_image.o $(OBJ)/module_image.o $(OBJ)/pile.o -lm
@@ -50,12 +47,15 @@ $(OBJ)/vocal.o : $(SRC)/vocal.c $(INC)/dictionnaire.h
 $(OBJ)/test_dictionnaire.o : $(TEST)/test_dictionnaire.c $(INC)/dictionnaire.h
 	$(CC) $(CFLAGS) -c $(TEST)/test_dictionnaire.c -o $(OBJ)/test_dictionnaire.o
 
+$(OBJ)/parseur.o : $(SRC)/parseur.c $(INC)/parseur.h
+	$(CC) $(CFLAGS) -c $(SRC)/parseur.c -o $(OBJ)/parseur.o
+
 $(OBJ)/dictionnaire.o : $(SRC)/dictionnaire.c $(INC)/dictionnaire.h
 	$(CC) $(CFLAGS) -c $(SRC)/dictionnaire.c -o $(OBJ)/dictionnaire.o
 
+
 # Création de l'environnement virtuel Python et installation des dépendances
-env:
-	mkdir -p $(OBJ)
+venv:
 	python3 -m venv .venv
 	source .venv/bin/activate
 	pip install SpeechRecognition PyAudio gTTS

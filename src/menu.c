@@ -1,21 +1,24 @@
+#include "menu.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
-#include "menu.h"
 #include "config.h"
 #include "log.h"
 #include "module_image.h"
+#include "vocal.h"
 
 #define MAX_OBJETS 10
 #define MAX_MDP 256
 #define FICHIER_MDP "config/.mdp_admin"
 #define NETTOYER() printf("\033[2J\033[H")
 
+Langue langue_ = FR;
+
 /* lecture simple d'un entier */
-int read_int()
-{
+int read_int() {
     int n;
 
     if (scanf("%d", &n) == 1)
@@ -78,10 +81,13 @@ void choisir_langue() {
         choix = read_int();
     }
 
-    if (choix == 0)
+    if (choix == 0) {
         charger_config("config/lang_fr.conf");
-    else
+        langue_ = FR;
+    } else {
         charger_config("config/lang_en.conf");
+        langue_ = EN;
+    }
 }
 
 /* menu principal */
@@ -140,6 +146,7 @@ void menu_utilisateur() {
             case 1:
                 printf("%s\n", config("TEXT_CMD_CHOSEN"));
                 log_msg("Utilisateur : commande textuelle");
+                menu_commande_vocale();
                 break;
             case 2:
                 printf("%s\n", config("SIMULATION_CHOSEN"));
@@ -283,7 +290,7 @@ void menu_image() {
 
                     break;
 
-                case 2: // CONVERSION NOIR ET BLANC
+                case 2:  // CONVERSION NOIR ET BLANC
                     printf("Binarisation en cours...\n");
                     log_msg("Utilisateur : binarisation");
 
@@ -293,7 +300,7 @@ void menu_image() {
 
                     break;
 
-                case 3: // RETOURNEMENT VERTICAL
+                case 3:  // RETOURNEMENT VERTICAL
                     printf("Retournement vertical en cours...\n");
                     log_msg("Utilisateur : retournement vertical");
 
@@ -381,4 +388,18 @@ void menu_image() {
             }
         }
     }
+}
+
+void menu_commande_vocale() {
+    if (langue_ == FR) {
+        charger_dictionnaire_fr();
+    } else {
+        charger_dictionnaire_en();
+    }
+
+    printf("%s\n", config("CMD_PROMPT_VOC"));
+
+    traitement_mode_vocal();
+    //menu_utilisateur();
+
 }

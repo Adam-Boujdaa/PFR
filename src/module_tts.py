@@ -1,44 +1,70 @@
 #Auteur : Adam BOUJDAA
-#Date : Décembre 2025
-# Description : Ce module permet de transcrire en français (ou anglais) les commandes vocales pour les renvoyer à la partie traitement de texte
+#Date : Janvier 2026
+# Description : Module TTS - Reconnaissance vocale en Python
 
 import speech_recognition as sr
-import pyaudio
-from gtts import gTTS
 import os
+import sys  # <--- INDISPENSABLE pour que le silencieux fonctionne !
+from contextlib import contextmanager
 
-LANGUAGE = "fr-FR"  #en-EN pour anglais
+# --- SILENCIEUX NUCLÉAIRE (Anti-erreurs ALSA/JACK) ---
+@contextmanager
+def ignore_stderr():
+    try:
+        devnull = os.open(os.devnull, os.O_WRONLY)
+        old_stderr = os.dup(2)
+        sys.stderr.flush()
+        os.dup2(devnull, 2)
+        try:
+            yield
+        finally:
+            os.dup2(old_stderr, 2)
+            os.close(old_stderr)
+            os.close(devnull)
+    except Exception:
+        yield 
+
+# --- MAIN ---
+
+LANGUAGE = "fr-FR"
 r = sr.Recognizer()
-micro = sr.Microphone()
 
-while True:
-    with micro as source:
-        print("Donnez votre commande vocale")
-        try :  #sert pour les exceptions après
-            audio_data = r.listen(source)
-            print("Fini d'écouter, traitement en cours...")
-            transcription = r.recognize_google(audio_data, language=LANGUAGE)
-            print("Vous avez dit: ", transcription)
+# On englobe tout pour ne pas avoir de textes rouges
+with ignore_stderr():
+    try:
+        micro = sr.Microphone()
+        with micro as source:
+            print("Speech Recognition active. Parlez maintenant. \nRemarque : dites 'exit' pour quitter, ou 'clavier' pour passer au mode clavier.")
 
-            commande = open("commande.txt", "w")  #dans la 2ème paire de guillemets, a=append, w=overwwrite
-            historique = open("historique.txt", "a")
+            r.adjust_for_ambient_noise(source, duration=0.5)
+            
+            try: #sert pr les exceptions après (comme en java)
+                audio_data = r.listen(source, timeout=5)
+                print("Listening finished, interpreting your command...")
+                
+                transcription = r.recognize_google(audio_data, language=LANGUAGE)
+                print(f"You've said : {transcription}")
 
-            # PLUS TARD APRÈS INTÉGRATION DU MODULE DE SIMULATION :
-            # f = open("../module_simulation/commande.txt", "w") # plus tard aussi
-            # f = open("../module_simulation/historique.txt", "a") #dans la 2ème paire de guillemets, a=append,, w=overwwrite
+                # Chemins alignés avec ton main.c
+                path_cmd = "output/pre_traitement/commande.txt"
+                path_hist = "output/pre_traitement/historique.txt"
 
-            if transcription.lower() != "exit":  #pour ne pas écrire exit ds les files de commande et historique
-                commande.write(transcription + "\n")
-                historique.write(transcription + "\n")
+                os.makedirs(os.path.dirname(path_cmd), exist_ok=True)
 
-            commande.close()
-            historique.close()
+                # Ecriture
+                with open(path_cmd, "w") as f: #w = overwrite
+                    f.write(transcription)
+                
+                with open(path_hist, "a") as f: #a = append
+                    f.write(transcription + "\n")
+                    
+            #gestion des erreurs
+            except sr.WaitTimeoutError:
+                print("Aucun son détecté.")
+            except sr.UnknownValueError:
+                print("Pas compris. Parlez plus fort.")
+            except sr.RequestError:
+                print("Erreur de connexion internet.")
 
-            if transcription.lower() == "exit":
-                break
-
-        #GESTION D'ERREURS DE SPEECH RECOGNITION :
-        except sr.UnknownValueError:  # Si Google ne comprend pas (bruit, marmonnement), on ne fait rien
-            print("Pas compris, parlez plus fort / clairement.")
-        except sr.RequestError:  # Si internet coupe
-            print("Erreur de connexion Google.")
+    except Exception as e:
+        print(f"Erreur critique Python : {e}")

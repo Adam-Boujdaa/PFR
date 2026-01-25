@@ -1,0 +1,10 @@
+turn
+rotate
+rotation
+spin
+pivot
+steer
+veer
+orient
+orientation
+swerve

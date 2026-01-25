@@ -1,0 +1,12 @@
+reset
+restart
+reboot
+zero
+origin
+start
+home
+clear
+clean
+init
+initialize
+wipe

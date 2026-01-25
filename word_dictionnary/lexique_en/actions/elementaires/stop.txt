@@ -1,0 +1,11 @@
+stop
+halt
+pause
+cease
+end
+finish
+wait
+weight
+freeze
+terminate
+kill
