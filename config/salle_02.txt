@@ -1,0 +1,10 @@
+LONGUEUR=16
+LARGEUR=12
+
+# Mur vertical au centre
+OBSTACLE=rectangle,3,3,0.3,4
+
+# Obstacles dispersés
+OBSTACLE=cercle,2,4,0.8
+OBSTACLE=rectangle,-1.5,1.5,1,0.5
+OBSTACLE=cercle,5.5,1,0.6
