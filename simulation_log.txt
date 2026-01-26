@@ -1,0 +1,40 @@
+
+============================================================
+SESSION DÉMARRÉE : 2026-01-26 10:40:30
+============================================================
+[10:40:30] Configuration chargée avec succès
+[10:40:31] Environnement graphique initialisé
+[10:40:31] Salle chargée : 16.0x12.0m avec 2 obstacle(s)
+[10:40:31] 2 obstacle(s) affiché(s)
+
+============================================================
+SESSION DÉMARRÉE : 2026-01-26 10:40:54
+============================================================
+[10:40:54] Configuration chargée avec succès
+[10:40:54] Environnement graphique initialisé
+[10:40:54] Salle chargée : 16.0x12.0m avec 2 obstacle(s)
+[10:40:54] 2 obstacle(s) affiché(s)
+
+============================================================
+SESSION DÉMARRÉE : 2026-01-26 10:41:53
+============================================================
+[10:41:53] Configuration chargée avec succès
+[10:41:53] Environnement graphique initialisé
+[10:41:53] Salle chargée : 16.0x12.0m avec 2 obstacle(s)
+[10:41:53] 2 obstacle(s) affiché(s)
+
+============================================================
+SESSION DÉMARRÉE : 2026-01-26 10:45:09
+============================================================
+[10:45:09] Configuration chargée avec succès
+[10:45:09] Environnement graphique initialisé
+[10:45:09] Salle chargée : 16.0x12.0m avec 2 obstacle(s)
+[10:45:09] 2 obstacle(s) affiché(s)
+
+============================================================
+SESSION DÉMARRÉE : 2026-01-26 10:46:41
+============================================================
+[10:46:41] Configuration chargée avec succès
+[10:46:41] Environnement graphique initialisé
+[10:46:41] Salle chargée : 16.0x12.0m avec 2 obstacle(s)
+[10:46:41] 2 obstacle(s) affiché(s)

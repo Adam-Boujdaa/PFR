@@ -1,0 +1,3 @@
+avancer de
+reculer de 5
+exit

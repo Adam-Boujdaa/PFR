@@ -13,8 +13,6 @@
 #include "parseur.h"
 #include "intercom.h"
 
-// À LIRE DANS LE FICHIER CONFIG PLUS TARD
-char MODE = 'T';
 
 static Dico act[4];
 static Dico dir[2];
@@ -88,38 +86,6 @@ void charger_dictionnaire_en() {
     charger_dico(&units[5], "word_dictionnary/lexique_en/unites/pouces.txt", 'i', 0);
 }
 
-int main_voc(Langue langue) {
-    // Initialisation des liaisons à vide => à implémenter plus tard
-    liaisons[0].nb_syn = 0;
-    liaisons_inv[0].nb_syn = 0;
-
-    if (langue == FR) {
-        charger_dictionnaire_fr();
-    } else {
-        charger_dictionnaire_en();
-    }
-
-    // Init pour le parsing
-
-    if (langue == FR)
-        printf("Prêt à lire vos commandes, écrire exit pour sortir\n");
-    else {
-        printf("Ready to read your commands, type exit to quit\n");
-    }
-
-    // Boucle principale
-    // MODE TEXTUEL
-    if (MODE == 'T') {
-        traitement_mode_textuel(langue);
-    }
-
-    // MODE VOCAL
-    else if (MODE == 'V') {
-        traitement_mode_vocal();
-    }
-
-    return 0;
-}
 
 void traitement_mode_vocal() {
     ListeCommandes* liste = init_liste();
@@ -159,7 +125,9 @@ void traitement_mode_vocal() {
                 traiter_cmd(buffer, macros, 3, liaisons, 1, liaisons_inv, 1, act, 4, dir, 2, nb, 10, units, 6, liste);
                 debug_afficherliste(liste);
                 ecrire_commandes(liste, "output/post_traitement/commande.txt");
-
+                char bufffer_commande[1024];
+                commmandes_str(liste, bufffer_commande, 1024);
+                envoyer_commande(bufffer_commande);
                 // PARTIE CONFIRMATION POUR LES COMMANDES LONGUES
                 // popen pour lire le retour d'une commande shell
                 FILE* fp = popen("wc -l < output/post_traitement/commande.txt", "r");

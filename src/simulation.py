@@ -627,8 +627,8 @@ def main():
     fermer_log()
     
     print("\n" + "="*60)
-    input("Appuyez sur Entrée pour fermer la fenêtre...")
-    fenetre.bye()
+    tl.exitonclick()
+    #fenetre.bye()
 
 if __name__ == "__main__":
     main()

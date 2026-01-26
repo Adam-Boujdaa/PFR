@@ -404,7 +404,7 @@ void menu_commande_vocale() {
     printf("%s\n", config("CMD_PROMPT"));
 
     traitement_mode_vocal();
-    sleep(5);
+    sleep(2);
     menu_utilisateur();
 
 }
@@ -422,7 +422,7 @@ void menu_commande_textulle() {
     printf("%s\n", config("CMD_PROMPT"));
 
     traitement_mode_textuel(langue);
-    sleep(5);
+    sleep(2);
     menu_utilisateur();
 
 }
