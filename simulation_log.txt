@@ -38,3 +38,44 @@ SESSION DÉMARRÉE : 2026-01-26 10:46:41
 [10:46:41] Environnement graphique initialisé
 [10:46:41] Salle chargée : 16.0x12.0m avec 2 obstacle(s)
 [10:46:41] 2 obstacle(s) affiché(s)
+
+============================================================
+SESSION DÉMARRÉE : 2026-01-26 11:10:53
+============================================================
+[11:10:53] Configuration chargée avec succès
+[11:10:53] Environnement graphique initialisé
+[11:10:53] Salle chargée : 16.0x12.0m avec 2 obstacle(s)
+[11:10:53] 2 obstacle(s) affiché(s)
+[11:10:53] Murs de la salle affichés : 16.0x12.0m
+
+============================================================
+SESSION DÉMARRÉE : 2026-01-26 11:11:30
+============================================================
+[11:11:30] Configuration chargée avec succès
+[11:11:30] Environnement graphique initialisé
+[11:11:30] Salle chargée : 16.0x12.0m avec 2 obstacle(s)
+[11:11:30] 2 obstacle(s) affiché(s)
+[11:11:30] Murs de la salle affichés : 16.0x12.0m
+[11:11:42] Début exécution : 1 commande(s)
+[11:11:42] Tentative de contournement
+[11:11:42] Rotation gauche : 45° | Orientation : 45.0°
+[11:11:43] Rotation droite : 45° | Orientation : 0.0°
+[11:11:43] Contournement réussi
+
+============================================================
+SESSION DÉMARRÉE : 2026-01-26 11:16:17
+============================================================
+[11:16:17] Configuration chargée avec succès
+[11:16:17] Environnement graphique initialisé
+[11:16:17] Salle chargée : 16.0x12.0m avec 2 obstacle(s)
+[11:16:17] 2 obstacle(s) affiché(s)
+[11:16:17] Murs de la salle affichés : 16.0x12.0m
+
+============================================================
+SESSION DÉMARRÉE : 2026-01-26 11:16:27
+============================================================
+[11:16:27] Configuration chargée avec succès
+[11:16:27] Environnement graphique initialisé
+[11:16:27] Salle chargée : 16.0x12.0m avec 2 obstacle(s)
+[11:16:27] 2 obstacle(s) affiché(s)
+[11:16:27] Murs de la salle affichés : 16.0x12.0m

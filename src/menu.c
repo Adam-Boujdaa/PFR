@@ -9,6 +9,7 @@
 #include "log.h"
 #include "module_image.h"
 #include "vocal.h"
+#include "intercom.h"
 
 #define MAX_OBJETS 10
 #define MAX_MDP 256
@@ -404,6 +405,7 @@ void menu_commande_vocale() {
     printf("%s\n", config("CMD_PROMPT"));
 
     traitement_mode_vocal();
+    envoyer_commande("exit");
     sleep(2);
     menu_utilisateur();
 
@@ -422,6 +424,7 @@ void menu_commande_textulle() {
     printf("%s\n", config("CMD_PROMPT"));
 
     traitement_mode_textuel(langue);
+    envoyer_commande("exit");
     sleep(2);
     menu_utilisateur();
 

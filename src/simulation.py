@@ -207,7 +207,7 @@ def afficher_murs():
     dessinateur.penup()
     
     # Aller au coin inférieur gauche
-    dessinateur.goto(0, 0)
+    dessinateur.goto(-longueur//2, largeur//2)
     dessinateur.pendown()
     dessinateur.color('black')
     dessinateur.width(3)
@@ -597,6 +597,9 @@ def executer_commandes_reseau():
 
         if data:
             commande = data.decode('utf-8').strip()
+            if commande == "exit":
+                fenetre.bye()
+                exit()
             print(f"Reçu commande: {commande}")
             commandes = commande.split("\n")
 
@@ -615,6 +618,7 @@ def main():
         return
     
     afficher_obstacles()
+    #afficher_murs()
     
     fenetre.tracer(1)  # Activer le tracé du robot
 
@@ -627,8 +631,6 @@ def main():
     fermer_log()
     
     print("\n" + "="*60)
-    tl.exitonclick()
-    #fenetre.bye()
 
 if __name__ == "__main__":
     main()
