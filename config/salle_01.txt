@@ -1,8 +1,4 @@
+# SALLE VIDE POUR TEST COMMANDES BASES
+
 LONGUEUR=16
 LARGEUR=12
-
-# Obstacle simple au centre
-OBSTACLE=rectangle,2,2,1,1
-
-# Petit obstacle à droite
-OBSTACLE=cercle,6,2,0.5
