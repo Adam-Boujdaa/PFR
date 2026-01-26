@@ -1,6 +1,6 @@
 # ========================================
 # TEST 02 - AVANCE AVEC DIRECTIONS
-# Démo des commandes A,D et A,G
+# Démo commande inconnue
 # ========================================
 
 # Avance droit
@@ -12,8 +12,5 @@ A,D,2,m
 # Avance à gauche
 A,G,2,m
 
-# Avance droit
-A,-,2,m
-
-# Reset pour recommencer
-O,-,-,-
+# Fausse commande
+Z,D,4,m
