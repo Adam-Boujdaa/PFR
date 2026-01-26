@@ -193,6 +193,36 @@ def afficher_obstacles():
     log_message(f"{len(environnement['obstacles'])} obstacle(s) affiché(s)")
     print(f" {len(environnement['obstacles'])} obstacle(s) affiché(s)")
 
+def afficher_murs():
+    """
+    Trace les murs de la salle (bordures)
+    """
+    echelle = environnement['echelle']
+    longueur = environnement['longueur']
+    largeur = environnement['largeur']
+    
+    dessinateur = tl.Turtle()
+    dessinateur.hideturtle()
+    dessinateur.speed(0)
+    dessinateur.penup()
+    
+    # Aller au coin inférieur gauche
+    dessinateur.goto(0, 0)
+    dessinateur.pendown()
+    dessinateur.color('black')
+    dessinateur.width(3)
+    
+    # Tracer le rectangle de la salle
+    for _ in range(2):
+        dessinateur.forward(longueur * echelle)
+        dessinateur.left(90)
+        dessinateur.forward(largeur * echelle)
+        dessinateur.left(90)
+    
+    fenetre.update()
+    log_message(f"Murs de la salle affichés : {longueur}x{largeur}m")
+    print(f"Murs de la salle tracés")
+
 def point_dans_obstacle(x, y, obstacle):
     if obstacle['type'] == 'rectangle':
         demi_largeur = obstacle['param1'] / 2
