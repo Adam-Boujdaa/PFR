@@ -392,6 +392,9 @@ void menu_image() {
 }
 
 void menu_commande_vocale() {
+    system("python3 src/simulation.py > /dev/null 2>&1 &");
+
+
     if (langue == FR) {
         charger_dictionnaire_fr();
     } else {
@@ -407,6 +410,9 @@ void menu_commande_vocale() {
 }
 
 void menu_commande_textulle() {
+    system("python3 src/simulation.py > /dev/null 2>&1 &");
+
+
     if (langue == FR) {
         charger_dictionnaire_fr();
     } else {

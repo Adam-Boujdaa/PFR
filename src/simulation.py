@@ -4,10 +4,11 @@ PFR1 - Module de simulation robot
 import turtle as tl
 import math
 from datetime import datetime
+import socket
 
-fichier_config = "/home/ash/Documents/PFR/config/simulation.conf"
-fichier_salle = "/home/ash/Documents/PFR/config/salle_test.conf"
-fichier_commandes = "/home/ash/Documents/PFR/output/commande.txt"
+fichier_config = "config/simulation.conf"
+fichier_salle = "config/salle_test.conf"
+fichier_commandes = "config/commandes_test.txt"
 
 # Configuration
 config = {}
@@ -103,6 +104,10 @@ def charger_salle(fichier_salle):
         with open(fichier_salle, 'r', encoding='utf-8') as f:
             for ligne in f:
                 ligne = ligne.strip()
+
+                # Ignorer lignes vides et commentaires
+                if not ligne or ligne.startswith('#'):
+                    continue
                 
                 if ligne.startswith('LONGUEUR='):
                     environnement['longueur'] = float(ligne.split('=')[1])
@@ -223,27 +228,54 @@ def calculer_position_future(distance, recule=False):
     return futur_x, futur_y
 
 def valider_deplacement(distance, recule=False):
+
+    # Calculer la position finale
     futur_x, futur_y = calculer_position_future(distance, recule)
-    obstacle = verifier_collision(futur_x, futur_y)
     
-    if obstacle:
-        return False, obstacle, (futur_x, futur_y)
-    else:
-        return True, None, (futur_x, futur_y)
+    # Échantillonner la trajectoire
+    pas = 0.1  # 10 cm
+    nb_points = max(int(distance / pas), 1)
+    
+    # Pour chaque point intermédiaire
+    for i in range(nb_points + 1):  # +1 pour inclure le point final
+        # Calculer la distance parcourue à ce point
+        distance_partielle = (i / nb_points) * distance
+        
+        # Calculer la position à ce point
+        x_test, y_test = calculer_position_future(distance_partielle, recule)
+        
+        # Vérifier s'il y a collision à ce point
+        obstacle = verifier_collision(x_test, y_test)
+        if obstacle:
+            # Retourner la position où l'obstacle a été détecté
+            return False, obstacle, (x_test, y_test)
+    
+    # Aucun obstacle sur toute la trajectoire
+    return True, None, (futur_x, futur_y)
 
 def contourner_obstacle(obstacle, distance_voulue):
     log_message("Tentative de contournement")
     print("\nContournement en cours...")
+    
+    # Calcul distance adaptée selon taille obstacle
+    if obstacle['type'] == 'rectangle':
+        decalage = obstacle['param1'] + 0.5
+    elif obstacle['type'] == 'cercle':
+        decalage = (obstacle['param1'] * 2) + 0.5
+    else:
+        decalage = 1.5
+    
+    print(f"Décalage : {decalage:.2f}m pour {obstacle['type']}")
 
     tourner_gauche(45)
     
     # Vérifie si on peut avancer latéralement
-    if not valider_deplacement(1.5)[0]:
+    if not valider_deplacement(decalage)[0]:
         print("Contournement impossible (obstacle sur la gauche)")
         tourner_droite(45)  # Revenir à l'orientation initiale
         return False
     
-    avancer_direct(1.5)
+    avancer_direct(decalage)
     tourner_droite(45)
 
     if valider_deplacement(distance_voulue)[0]:
@@ -325,6 +357,29 @@ def avancer(distance):
     log_message(f"Avance {distance}m → ({etat_robot['x']:.2f}, {etat_robot['y']:.2f})")
     return True
 
+def retour_origine():
+    """Remet le robot à (0, 0) orientation 0° - Commande O,-,-,-"""
+    global etat_robot
+    
+    ancienne_x = etat_robot['x']
+    ancienne_y = etat_robot['y']
+    ancienne_orientation = etat_robot['orientation']
+    
+    etat_robot['x'] = 0.0
+    etat_robot['y'] = 0.0
+    etat_robot['orientation'] = 0.0
+    
+    robot.penup()
+    robot.goto(0, 0)
+    robot.setheading(0)
+    robot.pendown()
+    fenetre.update()
+    
+    print(f"Retour à l'origine (0, 0)")
+    print(f"  Depuis : ({ancienne_x:.2f}, {ancienne_y:.2f}) | {ancienne_orientation:.1f}°")
+    log_message(f"Reset → (0.0, 0.0) | 0.0°")
+    
+    return True
 
 def reculer(distance):
     valide, obstacle, (futur_x, futur_y) = valider_deplacement(distance, recule=True)
@@ -355,7 +410,11 @@ def analyser_commande(ligne_commande):
     
     action = parties[0].strip()
     direction = parties[1].strip()
-    
+
+    # Commande O (retour origine)
+    if action == "O":
+        return retour_origine()
+
     try:
         valeur = float(parties[2].strip())
     except ValueError:
@@ -419,34 +478,36 @@ def analyser_commande(ligne_commande):
     
     else:
         print(f"Action inconnue : {action}")
-        print("   Actions valides : A (avancer), R (reculer), T (tourner)")
+        print("   Actions valides : A (avancer), R (reculer), T (tourner), O (origine)")
         return False
+
+def executer_commandes(commandes):
+    print("\n" + "="*60)
+    print(f"  EXÉCUTION DE {len(commandes)} COMMANDE(S)")
+    print("="*60 + "\n")
+    
+    log_message(f"Début exécution : {len(commandes)} commande(s)")
+    
+    for i, commande in enumerate(commandes, 1):
+        print(f"[{i}/{len(commandes)}] {commande}")
+        
+        if not analyser_commande(commande):
+            print(f"\n Erreur à la commande {i}, arrêt de l'exécution\n")
+            log_message(f"Arrêt à la commande {i}/{len(commandes)}")
+            break
+        
+        print()  # Ligne vide entre les commandes
+    
+    print("="*60)
+    print("  FIN DE L'EXÉCUTION")
+    print("="*60)
+
 
 def executer_fichier_commandes(fichier_commandes):
     try:
         with open(fichier_commandes, 'r', encoding='utf-8') as f:
             commandes = [ligne.strip() for ligne in f if ligne.strip()]
-        
-        print("\n" + "="*60)
-        print(f"  EXÉCUTION DE {len(commandes)} COMMANDE(S)")
-        print("="*60 + "\n")
-        
-        log_message(f"Début exécution : {len(commandes)} commande(s)")
-        
-        for i, commande in enumerate(commandes, 1):
-            print(f"[{i}/{len(commandes)}] {commande}")
-            
-            if not analyser_commande(commande):
-                print(f"\n Erreur à la commande {i}, arrêt de l'exécution\n")
-                log_message(f"Arrêt à la commande {i}/{len(commandes)}")
-                break
-            
-            print()  # Ligne vide entre les commandes
-        
-        print("="*60)
-        print("  FIN DE L'EXÉCUTION")
-        print("="*60)
-        
+            executer_commandes(commandes)
         log_message("Exécution terminée")
         return True
     
@@ -457,30 +518,6 @@ def executer_fichier_commandes(fichier_commandes):
         print(f"Erreur lors de l'exécution : {e}")
         return False
 
-    except FileNotFoundError:
-        print(f"Fichier {fichier_commandes} introuvable")
-        return False
-    except Exception as e:
-        print(f"Erreur lors de l'exécution : {e}")
-        return False
-
-import socket
-
-def executer_commandes_reseau():
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    
-    server_address = ('localhost', 1234)
-    sock.bind(server_address)
-    
-    print(f"Listening on {server_address[0]}:{server_address[1]}...")
-
-    while True:
-        data, address = sock.recvfrom(1024)
-        
-        if data:
-            commande = data.decode('utf-8').strip()
-            print(f"Reçu commande: {commande}")
-    
 
 def initialiser_log(nom_fichier="simulation_log.txt"):
     """
@@ -516,6 +553,26 @@ def fermer_log():
         fichier_log.write(f"{'='*60}\n")
         fichier_log.close()
 
+
+def executer_commandes_reseau():
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+    adresse_serveur = ('localhost', 1234)
+    sock.bind(adresse_serveur)
+
+    print(f"Listening on {adresse_serveur[0]}:{adresse_serveur[1]}...")
+
+    while True:
+        data, addresse = sock.recvfrom(1024)
+
+        if data:
+            commande = data.decode('utf-8').strip()
+            print(f"Reçu commande: {commande}")
+            commandes = commande.split("\n")
+
+            executer_commandes(commandes)
+
+
 def main():
     print("SIMULATION ROBOT PFR1")
     
@@ -527,13 +584,13 @@ def main():
         print("Impossible de continuer sans fichier de salle")
         return
     
-
     afficher_obstacles()
-
+    
     fenetre.tracer(1)  # Activer le tracé du robot
 
     print("\n Démarrage de l'exécution des commandes...\n")
     executer_commandes_reseau()
+    
     print(f"\n Position finale : ({etat_robot['x']:.2f}, {etat_robot['y']:.2f})")
     print(f"Orientation finale : {etat_robot['orientation']:.1f}°")
 
