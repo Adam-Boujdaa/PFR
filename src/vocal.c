@@ -10,9 +10,8 @@
 
 #include "config.h"
 #include "dictionnaire.h"
-#include "parseur.h"
 #include "intercom.h"
-
+#include "parseur.h"
 
 static Dico act[4];
 static Dico dir[2];
@@ -86,7 +85,6 @@ void charger_dictionnaire_en() {
     charger_dico(&units[5], "word_dictionnary/lexique_en/unites/pouces.txt", 'i', 0);
 }
 
-
 void traitement_mode_vocal() {
     ListeCommandes* liste = init_liste();
     char buffer[MAX_LIGNE];
@@ -99,7 +97,7 @@ void traitement_mode_vocal() {
         int retour = system("python3 src/module_tts.py");
 
         if (retour != 0) {
-            printf("Erreur lors de l'execution du module vocal\n");
+            printf("%s\n", config("VOC_ERR"));
             break;
         }
 
@@ -111,12 +109,12 @@ void traitement_mode_vocal() {
         if (f_vocal != NULL) {
             if (fgets(buffer, MAX_LIGNE, f_vocal) != NULL) {  // lis une ligne et retourne NULL si erreur ou fin de fichier => si y'a des lignes on boucle
                 buffer[strcspn(buffer, "\n")] = 0;            // Nettoie en enlevant le \n
-                printf(">>> Transcription reçue : \"%s\"\n", buffer);
+                printf("%s '%s'\n", config("TRANSCRIPT"), buffer);
 
                 // Si c'est exit on quitte, sinon on traite
                 if (strcmp(buffer, "exit") == 0) {
                     fclose(f_vocal);
-                    printf("Vous avez dit 'exit'...\n");
+                    printf("%s...\n", config("BACK_CHOSEN"));
                     break;
                 }
 
@@ -192,10 +190,14 @@ void traitement_mode_textuel(Langue langue) {
     liaisons_inv[0].nb_syn = 0;
 
     while (1) {
-        if (langue == FR)
-            printf("\nENTRER COMMANDE (maximum 200 actions individuelles)\nÉcrire \"exit\" pour quitter\n>>> ");
-        else {
-            printf("\nENTER COMMAND (maximum 200 individual actions) >> ");
+        if (langue == FR) {
+            printf("SAISIR COMMANDE (maximum 200 actions individuelles)\n");
+            printf("Ecrire 'exit' pour quitter\n");
+            printf("> ");
+        } else {
+            printf("ENTER COMMAND (maximum 200 individual actions)\n");
+            printf("Type 'exit' to quit\n");
+            printf("> ");
         }
 
         if (fgets(buffer, MAX_LIGNE, stdin) == NULL) break;

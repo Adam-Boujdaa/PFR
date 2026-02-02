@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -Iinclude
+CFLAGS = -Iinclude
 
 # Répertoires
 SRC = src
@@ -58,9 +58,9 @@ $(OBJ)/intercom.o : $(SRC)/intercom.c $(INC)/intercom.h
 
 # Création de l'environnement virtuel Python et installation des dépendances
 venv:
-	python3 -m venv .venv
-	source .venv/bin/activate
-	pip install SpeechRecognition PyAudio gTTS
+	python3 -m venv .venv && \
+	source .venv/bin/activate && \
+	pip install SpeechRecognition PyAudio gTTS pillow
 
 
 

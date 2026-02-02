@@ -1,3 +1,31 @@
 avancer de
 reculer de 5
 exit
+clavier
+avance de 2
+recul de 3 m
+tourner à gauche
+avance de 1 m
+emmène-moi sur
+30 instructions alimentaires
+sauf que c'était très long parce qu'il rassemblait pas les
+Ave
+j'ai pas compris l'histoire des 30 commandes pourquoi
+pour pouvoir redemander la confirmation à l'utilisateur à part le nombre
+à partir de 30
+s'engager dans une longue
+il y a pas l'opération inverse c'est-à-dire si j'ai ça puis ça puis ça puis ça au final je synthétise c'est zig
+avancer de
+reculer de 2
+faire un carré
+reculer de
+exit
+avancer de
+exit
+avancer de
+reculer de 2 M
+faire un carré
+faire un zigzag
+tourner à gauche
+avancer de
+exit

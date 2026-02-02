@@ -340,7 +340,6 @@ void objet_afficher(Image img, Image mask, Objet* objets, int nb_objets) {
 int objet_est_balle(Objet obj) {
     int aire_boite_eng = (obj.max_x - obj.min_x + 1) * (obj.max_y - obj.min_y + 1);
     float rapport = (float)obj.aire / (float)aire_boite_eng;
-    // printf("[DEBUG] Rapport aire boite englobante / aire objet : %.3f\n", rapport);
     if (fabs(rapport - 0.785) < 0.02) {
         return 1;
     } else {
