@@ -1,9 +1,7 @@
 /* ============================================================
    Fichier  : main.c
    Projet   : PFR1 – Projet Fil Rouge
-   Module   : Point d'entrée / Programme principal
    Auteur   : CHENTIR Hakim
-   Version  : v2.0
    ------------------------------------------------------------
                         DESCRIPTION
    ------------------------------------------------------------
@@ -13,9 +11,9 @@
    ------------------------------------------------------------
                         RÔLE DU MODULE
    ------------------------------------------------------------
-   * démarrer l'application
-   * initialiser la langue de l'interface
-   * lancer le menu principal de navigation
+   démarrer l'application
+   initialiser la langue de l'interface
+   lancer le menu principal de navigation
    ============================================================ */
 
 #include "menu.h"
