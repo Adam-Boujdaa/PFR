@@ -1,3 +1,15 @@
+/* ============================================================
+   Fichier  : module_image.c
+   Projet   : PFR1 – Projet Fil Rouge
+   Auteur   : SAHLI Aziz
+   ------------------------------------------------------------
+                        DESCRIPTION
+   ------------------------------------------------------------
+   Ce module permet la manipulation des images : on peut binariser,
+   touner, quantifier, et trouver les objets.
+   ============================================================ */
+
+
 #include "module_image.h"
 
 #include <math.h>
@@ -30,6 +42,7 @@ static int min3(int a, int b, int c) {
     return min;
 }
 
+// Initialiser la structure image
 Image image_init(int hauteur, int largeur, int canaux) {
     Image img = (Image)malloc(sizeof(s_Image));
     img->hauteur = hauteur;
@@ -43,6 +56,7 @@ Image image_init(int hauteur, int largeur, int canaux) {
     return img;
 }
 
+// Savoir si le niveau de gris est valide, uttile pour la quantification
 int image_niv_gris_valide(int niv_gris) {
     if (niv_gris < 1 || niv_gris > 255)
         return -1;
@@ -52,6 +66,7 @@ int image_niv_gris_valide(int niv_gris) {
         return 1;
 }
 
+// Enregistrer l'image dans un fichier .txt
 int image_enregistrer(FILE* f, Image img) {
     fprintf(f, "%d %d %d\n", img->hauteur, img->largeur, img->canaux);
 
@@ -71,6 +86,7 @@ int image_enregistrer(FILE* f, Image img) {
     return 1;
 }
 
+// Quantifier l'image : réduire l'espace de couleurs
 Image image_quantification(Image img, int q) {
     Image quant = image_init(img->hauteur, img->largeur, img->canaux);
     int seuil, valide = image_niv_gris_valide(q);
@@ -89,6 +105,7 @@ Image image_quantification(Image img, int q) {
     return quant;
 }
 
+// Lecture de l'image à partir d'un fichier .txt
 Image image_lire(FILE* f) {
     int ligne, colonne, canaux;
 
@@ -112,6 +129,7 @@ Image image_lire(FILE* f) {
     return img;
 }
 
+// Retourner l'image horizontalement
 Image image_miroir(Image img) {
     Image img_miroir = image_init(img->hauteur, img->largeur, img->canaux);
 
@@ -123,6 +141,7 @@ Image image_miroir(Image img) {
     return img_miroir;
 }
 
+// Binariser l'image : remettre en noir et blanc
 Image image_binarisation(Image img) {
     Image img_bin = image_init(img->hauteur, img->largeur, img->canaux);
     int bin;
@@ -142,6 +161,7 @@ Image image_binarisation(Image img) {
     return img_bin;
 }
 
+// Touner l'image 90 degrés dans le sens horaire
 Image image_tourner(Image img) {
     Image img_rot = image_init(img->largeur, img->hauteur, img->canaux);
 
@@ -153,6 +173,8 @@ Image image_tourner(Image img) {
     return img_rot;
 }
 
+// Faire la binarisation de l'image de manière à prendre en compte le fond non uniforme
+// On considère les pixels qui ont un pic de +seuil dans l'un des canaux comme un pixel de l'objet
 Image image_masque_objets(Image img, int seuil) {
     Image mask = image_init(img->hauteur, img->largeur, 1);
     int mn, mx;
@@ -169,12 +191,14 @@ Image image_masque_objets(Image img, int seuil) {
     return mask;
 }
 
+// Trouver les objets et stocker les informations dans le struct Objet
+// fait un parcours des pixels blancs (objets) et regroupe les pixels faisant partie d'un même objet
 int image_trouver_objets(Image img, Objet* tab_objets, int aire_min) {
     Image labels = image_init(img->hauteur, img->largeur, 1);
     int object_courant = 1;
     int n_objets = 0;
 
-    // voisins
+    // les directions des pixels voisins (connectivité 8)
     int dx[8] = {-1, 0, 1, -1, 1, -1, 0, 1};
     int dy[8] = {-1, -1, -1, 0, 0, 1, 1, 1};
 
@@ -231,6 +255,7 @@ int image_trouver_objets(Image img, Objet* tab_objets, int aire_min) {
     return n_objets;
 }
 
+// Calculer la couleur moyenne d'un objet donné
 Pixel image_trouver_couleur(Image img, Image mask, Objet obj) {
     img = image_quantification(img, 16);
     int somme_r = 0, somme_g = 0, somme_b = 0;
@@ -255,6 +280,7 @@ Pixel image_trouver_couleur(Image img, Image mask, Objet obj) {
     return coul_moyenne;
 }
 
+// Dessiner la boite englobante sur l'objet donné en paramètre
 void image_dessiner_boite_englobante(Image img, Objet obj, Pixel couleur_bordure) {
     for (int y = 0; y < img->hauteur; y++) {
         for (int x = 0; x < img->largeur; x++) {
@@ -266,6 +292,7 @@ void image_dessiner_boite_englobante(Image img, Objet obj, Pixel couleur_bordure
     }
 }
 
+// Retourne une nouvelle image contenat uniquement l'objet donné en paramètre
 Image image_segmenter_objet(Image img, Objet obj) {
     int hauteur, largeur;
 
@@ -282,6 +309,7 @@ Image image_segmenter_objet(Image img, Objet obj) {
     return seg;
 }
 
+// Convertit la valeur RVB de l'objet à une couleur nommée
 const char* image_pixel_to_nom(Pixel coul) {
     typedef struct {
         const char* nom;
@@ -291,6 +319,8 @@ const char* image_pixel_to_nom(Pixel coul) {
     } CouleurNom;
 
     const CouleurNom COULEURS[] = {
+        // Les caractères bizarres sont des séquences qui permettent de
+        // colorier le texte dans le terminal
         {"\x1B[31mRouge\x1B[0m", 255, 0, 0},
         {"\x1B[32mVert\x1B[0m", 0, 255, 0},
         {"\x1B[34mBleu\x1B[0m", 0, 0, 255},
@@ -321,6 +351,8 @@ const char* image_pixel_to_nom(Pixel coul) {
     return nom_couleur;
 }
 
+
+// Afficher les informations des objets dans le terminal
 void objet_afficher(Image img, Image mask, Objet* objets, int nb_objets) {
     for (int i = 0; i < nb_objets; i++) {
         Pixel coul = image_trouver_couleur(img, mask, objets[i]);
@@ -337,6 +369,7 @@ void objet_afficher(Image img, Image mask, Objet* objets, int nb_objets) {
     }
 }
 
+// Reconnaaitre si l'objet est une balle ou non
 int objet_est_balle(Objet obj) {
     int aire_boite_eng = (obj.max_x - obj.min_x + 1) * (obj.max_y - obj.min_y + 1);
     float rapport = (float)obj.aire / (float)aire_boite_eng;
