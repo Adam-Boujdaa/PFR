@@ -1,3 +1,22 @@
+/* ============================================================
+   Fichier  : config.c
+   Projet   : PFR1 – Projet Fil Rouge
+   Auteur   : CHENTIR Hakim
+   ------------------------------------------------------------
+                        DESCRIPTION
+   ------------------------------------------------------------
+   Ce fichier gère le système de traduction de l'application.
+   Il charge les fichiers de langue (.txt) et permet d'obtenir
+   les traductions des clés en fonction de la langue choisie.
+   ------------------------------------------------------------
+                        RÔLE DU MODULE
+   ------------------------------------------------------------
+   charger les fichiers de configuration linguistique
+   stocker les paires clé/valeur en mémoire
+   fournir les traductions via la fonction config()
+   permettre le changement de langue de l'interface
+   ============================================================ */
+
 #include "config.h"
 
 #include <stdio.h>
