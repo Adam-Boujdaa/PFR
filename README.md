@@ -74,7 +74,6 @@ PFR/
 ├── src
 │   ├── config.c
 │   ├── creer_image.py
-│   ├── demo_tres_primitive.txt
 │   ├── dictionnaire.c
 │   ├── intercom.c
 │   ├── log.c
