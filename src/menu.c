@@ -1,9 +1,7 @@
 /* ============================================================
    Fichier  : menu.c
    Projet   : PFR1 – Projet Fil Rouge
-   Module   : Menu / Interface utilisateur
    Auteur   : CHENTIR Hakim
-   Version  : v2.0
    ------------------------------------------------------------
                         DESCRIPTION
    ------------------------------------------------------------
@@ -14,11 +12,11 @@
    ------------------------------------------------------------
                         RÔLE DU MODULE
    ------------------------------------------------------------
-   * afficher le menu principal et les sous-menus
-   * gérer la sélection de langue (FR/EN)
-   * contrôler l'accès administrateur par mot de passe
-   * rediriger vers les modules appropriés selon le choix
-   * enregistrer les actions dans les logs
+   afficher le menu principal et les sous-menus
+   gérer la sélection de langue (FR/EN)
+   contrôler l'accès administrateur par mot de passe
+   rediriger vers les modules appropriés selon le choix
+   enregistrer les actions dans les logs
    ============================================================ */
 
 
