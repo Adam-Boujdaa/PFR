@@ -1,3 +1,25 @@
+/* ============================================================
+   Fichier  : menu.c
+   Projet   : PFR1 – Projet Fil Rouge
+   Auteur   : CHENTIR Hakim
+   ------------------------------------------------------------
+                        DESCRIPTION
+   ------------------------------------------------------------
+   Ce fichier gère l'ensemble des menus de l'application.
+   Il propose une interface en mode console permettant de
+   naviguer entre les différents modules (utilisateur, admin,
+   image, commandes vocales/textuelles).
+   ------------------------------------------------------------
+                        RÔLE DU MODULE
+   ------------------------------------------------------------
+   afficher le menu principal et les sous-menus
+   gérer la sélection de langue (FR/EN)
+   contrôler l'accès administrateur par mot de passe
+   rediriger vers les modules appropriés selon le choix
+   enregistrer les actions dans les logs
+   ============================================================ */
+
+
 #include "menu.h"
 
 #include <stdio.h>
