@@ -11,9 +11,9 @@
    ------------------------------------------------------------
                         RÔLE DU MODULE
    ------------------------------------------------------------
-   * mémoriser les actions de l'utilisateur
-   * aider à comprendre le fonctionnement du programme
-   * permettre à l'administrateur de consulter l'historique
+   mémoriser les actions de l'utilisateur
+   aider à comprendre le fonctionnement du programme
+   permettre à l'administrateur de consulter l'historique
    ============================================================ */
 
 #include <stdio.h>
