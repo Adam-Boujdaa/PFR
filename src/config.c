@@ -1,9 +1,7 @@
 /* ============================================================
    Fichier  : config.c
    Projet   : PFR1 – Projet Fil Rouge
-   Module   : Configuration / Internationalisation
    Auteur   : CHENTIR Hakim
-   Version  : v2.0
    ------------------------------------------------------------
                         DESCRIPTION
    ------------------------------------------------------------
