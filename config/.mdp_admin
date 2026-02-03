@@ -1,1 +1,15 @@
+/* ============================================================
+   Fichier  : mdp_admin
+   Projet   : PFR1 – Projet Fil Rouge
+   Module   : Configuration
+   Auteur   : CHENTIR Hakim
+   Version  : v1.0
+   ------------------------------------------------------------
+                        DESCRIPTION
+   ------------------------------------------------------------
+   Ce fichier contient le mot de passe administrateur.
+   Il est lu par le module menu pour contrôler l'accès
+   aux fonctionnalités d'administration.
+   ============================================================ */
+
 admin123
