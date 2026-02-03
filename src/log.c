@@ -1,3 +1,27 @@
+/*
+============================================================
+Fichier  : log.c
+Projet   : PFR1 – Projet Fil Rouge
+Module   : Menu / Interface
+
+Auteur   : CHENTIR Hakim
+Version  : v2.0
+------------------------------------------------------------
+                        DESCRIPTION
+------------------------------------------------------------
+Ce fichier gère les logs de l’application.
+Chaque action importante est enregistrée dans le fichier
+"logs.txt" avec la date et l’heure.
+------------------------------------------------------------
+                        RÔLE DU MODULE
+------------------------------------------------------------
+ mémoriser les actions de l’utilisateur
+ aider à comprendre le fonctionnement du programme
+ permettre à l’administrateur de consulter l’historique
+ * ============================================================
+ */
+
+
 #include <stdio.h>
 #include <time.h>
 #include "log.h"
