@@ -1,9 +1,7 @@
 /* ============================================================
    Fichier  : log.c
    Projet   : PFR1 – Projet Fil Rouge
-   Module   : Menu / Interface
    Auteur   : CHENTIR Hakim
-   Version  : v2.0
    ------------------------------------------------------------
                         DESCRIPTION
    ------------------------------------------------------------
