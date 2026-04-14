@@ -6,6 +6,14 @@ from fastapi.staticfiles import StaticFiles
 
 import port_serie
 
+# Distances de sécurité (cm)
+SEUIL_AVANT = 20
+SEUIL_LATERAL = 15
+
+dist_av = 999
+dist_dr = 999
+dist_ga = 999
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     yield
@@ -30,15 +38,16 @@ async def websocket_endpoint(websocket: WebSocket):
 
 async def _push_sensors(websocket: WebSocket):
     """Envoie distances ultrason au client ~5Hz"""
+    global dist_av, dist_dr, dist_ga
     try:
         while True:
             av, dr, ga = port_serie.lire_distances()
-            await websocket.send_text(json.dumps({
-                "type": "telemetry",
-                "avant": av,
-                "droite": dr,
-                "gauche": ga
-            }))
+
+            if av is not None :
+                dist_av = av
+                dist_dr = dr
+                dist_ga = ga
+            await websocket.send_text(json.dumps({"type": "telemetry", "avant": av, "droite": dr, "gauche": ga}))
             await asyncio.sleep(0.2)
     except:
         pass
@@ -50,6 +59,17 @@ def _handle(msg: dict):
     if cmd == "move":
         x = msg.get("x", 0)
         y = msg.get("y", 0)
+        
+        # Sécurité anti-collision
+        if y > 0 and dist_av < SEUIL_AVANT:
+            port_serie.stop()
+            return
+        if x < 0 and dist_ga < SEUIL_LATERAL:
+            port_serie.stop()
+            return
+        if x > 0 and dist_dr < SEUIL_LATERAL:
+            port_serie.stop()
+            return
         
         if y > 0:
             port_serie.avancer()
@@ -66,6 +86,18 @@ def _handle(msg: dict):
     # Actions autonomes
     elif cmd == "action":
         name = msg.get("name", "")
+        
+        # Même sécurité
+        if name == "AVANCER" and dist_av < SEUIL_AVANT:
+            port_serie.stop()
+            return
+        if name == "TOURNER_G" and dist_ga < SEUIL_LATERAL:
+            port_serie.stop()
+            return
+        if name == "TOURNER_D" and dist_dr < SEUIL_LATERAL:
+            port_serie.stop()
+            return
+        
         if name == "AVANCER":
             port_serie.avancer()
         elif name == "RECULER":
@@ -74,6 +106,5 @@ def _handle(msg: dict):
             port_serie.tourner_gauche()
         elif name == "TOURNER_D":
             port_serie.tourner_droite()
-        # CONTOURNER_G/D → à implémenter plus tard
-
+            
 app.mount("/", StaticFiles(directory="../web", html=True), name="static")
