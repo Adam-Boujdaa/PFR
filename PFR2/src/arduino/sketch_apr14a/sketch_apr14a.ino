@@ -7,7 +7,7 @@
 
 // C-DROITE
 #define TRIG_DR 44
-#define ECHO_DR 346
+#define ECHO_DR 46
 
 // C-GAUCHE
 #define TRIG_GA 34
