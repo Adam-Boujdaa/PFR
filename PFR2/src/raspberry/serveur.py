@@ -37,7 +37,6 @@ async def websocket_endpoint(websocket: WebSocket):
         port_serie.stop()
 
 async def _push_sensors(websocket: WebSocket):
-    """Envoie distances ultrason au client ~5Hz"""
     global dist_av, dist_dr, dist_ga
     try:
         while True:

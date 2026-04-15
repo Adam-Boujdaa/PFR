@@ -6,8 +6,8 @@
 #define ECHO_AV 24
 
 // C-DROITE
-#define TRIG_DR 28
-#define ECHO_DR 30
+#define TRIG_DR 44
+#define ECHO_DR 346
 
 // C-GAUCHE
 #define TRIG_GA 34
