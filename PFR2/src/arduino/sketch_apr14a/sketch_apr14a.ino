@@ -102,16 +102,63 @@ void setup(){
 }
 
 // --- LOOP/COMMUNICATION ---
-void loop(){
+void loop() {
   if (Serial.available()) {
     String cmd = Serial.readStringUntil('\n');
     cmd.trim();
+    
+    if (cmd.length() == 0) return;
 
-    if (cmd == "STOP")            { stop(); }
-    else if (cmd == "AVANCER")    { avancer(vitesse); }
-    else if (cmd == "RECULER")    { reculer(vitesse); }
-    else if (cmd == "TOURNER_D")  { tournerDroite(vitesse); }
-    else if (cmd == "TOURNER_G")  { tournerGauche(vitesse); }
-    else if (cmd == "DISTANCE")   { envoyerDistances(); }
+    // ── Real-time web control (On garde ton ancien code au cas où) ────────
+    if (cmd.startsWith("SET:")) {
+      int sep = cmd.indexOf(':', 4);
+      if (sep != -1) {
+        int left = cmd.substring(4, sep).toInt();
+        int right = cmd.substring(sep + 1).toInt();
+        setMotors(left, right);
+      }
+    }
+    
+    // ── NOUVEAU PARSEUR MATÉRIEL (Comprend : A,-,1.00,m) ──────────────────
+    // On vérifie qu'on a bien au moins 7 caractères (ex: "S,-,0,-")
+    else if (cmd.length() >= 7 && cmd.indexOf(',') != -1) {
+      char act = cmd.charAt(0);   // 'A', 'R', 'T', 'S'
+      char dir = cmd.charAt(2);   // '-', 'G', 'D'
+      
+      // On cherche la dernière virgule pour isoler la valeur
+      int lastComma = cmd.lastIndexOf(',');
+      float val = 0;
+      char unit = '-';
+      
+      if (lastComma > 4) {
+        val = cmd.substring(4, lastComma).toFloat(); // Extrait "1.00"
+        unit = cmd.charAt(cmd.length() - 1);         // Extrait "m" ou "c"
+      }
+
+      // --- Conversion des unités (Le Cerveau envoie des mètres, l'Arduino veut des cm)
+      if (unit == 'm') {
+        val = val * 100.0; // 1 mètre = 100 cm
+      }
+      
+      // --- Exécution des moteurs
+      if (act == 'A') {
+        avancer(vitesse, (int)val);
+      } 
+      else if (act == 'R') {
+        reculer(vitesse, (int)val);
+      } 
+      else if (act == 'T') {
+        bool sensGauche = (dir == 'G');
+        tourner(sensGauche, vitesse, (int)val);
+      } 
+      else if (act == 'S') {
+        stop();
+      }
+    }
+    
+    // Au cas où le Cerveau envoie juste "S" ou "STOP"
+    else if (cmd == "S" || cmd == "STOP") {
+      stop();
+    }
   }
 }
