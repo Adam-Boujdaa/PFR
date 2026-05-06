@@ -40,17 +40,21 @@ def faire_rond():
 
 def faire_zigzag(nb_zigzags=3):
     for i in range(nb_zigzags):
+        
         port_serie.tourner_gauche()
-        time.sleep(DUREE_90_DEG)
+        time.sleep(DUREE_90_DEG / 2)  # 45°
         port_serie.avancer()
         time.sleep(DUREE_AVANCE)
         port_serie.stop()
-
+        
         port_serie.tourner_droite()
-        time.sleep(DUREE_90_DEG)
+        time.sleep(DUREE_90_DEG)  # 90°
         port_serie.avancer()
         time.sleep(DUREE_AVANCE)
         port_serie.stop()
+    # revient droit
+    port_serie.tourner_gauche()
+    time.sleep(DUREE_90_DEG / 2)
     port_serie.stop()
 
 def demi_tour():
