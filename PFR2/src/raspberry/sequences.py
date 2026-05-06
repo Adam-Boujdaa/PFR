@@ -1,37 +1,32 @@
 """
 Séquences de mouvements
 """
-
 import time
 import port_serie
-
-# Durée à ajuster
-DUREE_90_DEG = 1.0
-DUREE_360_DEG = 4.0
-DUREE_AVANCE = 1.0
+from raspberry.config import duree_pour_distance, duree_pour_angle
 
 # SÉQUENCES
 def tour_sur_soi(sens="droite"):
     if sens == "droite":
         port_serie.tourner_droite()
-    else :
+    else:
         port_serie.tourner_gauche()
-    time.sleep(DUREE_360_DEG)
+    time.sleep(duree_pour_angle(360))
     port_serie.stop()
 
-def faire_carre():
-    for i in range(4):
+def faire_carre(cote_cm=50):
+    for _ in range(4):
         port_serie.avancer()
-        time.sleep(DUREE_AVANCE)
+        time.sleep(duree_pour_distance(cote_cm))
         port_serie.stop()
         time.sleep(0.2)
         port_serie.tourner_droite()
-        time.sleep(DUREE_90_DEG)
+        time.sleep(duree_pour_angle(90))
         port_serie.stop()
         time.sleep(0.2)
 
 def faire_rond():
-    for i in range(16):
+    for _ in range(16):
         port_serie.avancer()
         time.sleep(0.3)
         port_serie.tourner_droite()
@@ -39,25 +34,40 @@ def faire_rond():
     port_serie.stop()
 
 def faire_zigzag(nb_zigzags=3):
-    for i in range(nb_zigzags):
-        
+    for _ in range(nb_zigzags):
         port_serie.tourner_gauche()
-        time.sleep(DUREE_90_DEG / 2)  # 45°
+        time.sleep(duree_pour_angle(45))
         port_serie.avancer()
-        time.sleep(DUREE_AVANCE)
+        time.sleep(duree_pour_distance(30))
         port_serie.stop()
-        
         port_serie.tourner_droite()
-        time.sleep(DUREE_90_DEG)  # 90°
+        time.sleep(duree_pour_angle(90))
         port_serie.avancer()
-        time.sleep(DUREE_AVANCE)
+        time.sleep(duree_pour_distance(30))
         port_serie.stop()
-    # revient droit
     port_serie.tourner_gauche()
-    time.sleep(DUREE_90_DEG / 2)
+    time.sleep(duree_pour_angle(45))
     port_serie.stop()
 
 def demi_tour():
     port_serie.tourner_droite()
-    time.sleep(DUREE_360_DEG/2)
+    time.sleep(duree_pour_angle(180))
+    port_serie.stop()
+
+def avancer_de(cm):
+    port_serie.avancer()
+    time.sleep(duree_pour_distance(cm))
+    port_serie.stop()
+
+def reculer_de(cm):
+    port_serie.reculer()
+    time.sleep(duree_pour_distance(cm))
+    port_serie.stop()
+
+def tourner_de(deg, sens="droite"):
+    if sens == "droite":
+        port_serie.tourner_droite()
+    else:
+        port_serie.tourner_gauche()
+    time.sleep(duree_pour_angle(deg))
     port_serie.stop()

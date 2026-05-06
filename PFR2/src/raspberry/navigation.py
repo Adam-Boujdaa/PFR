@@ -1,11 +1,6 @@
 import asyncio
 import port_serie
-
-# Paramètres
-SEUIL_AVANT = 20
-SEUIL_LATERAL = 20
-DIST_MUR = 25   
-TOLERANCE_MUR = 5
+from config import SEUIL_AVANT, SEUIL_LATERAL, DIST_MUR, TOLERANCE_MUR
 
 # Exploration
 def exploration(get_dist):
