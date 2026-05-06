@@ -5,7 +5,8 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.staticfiles import StaticFiles
 import port_serie
 import navigation
-from config_deplacement import SEUIL_AVANT, SEUIL_LATERAL
+import sequences
+from config import SEUIL_AVANT, SEUIL_LATERAL
 
 dist_av = 999
 dist_dr = 999
@@ -96,6 +97,20 @@ async def _handle(msg: dict, websocket: WebSocket):
         elif name == "TOURNER_G": port_serie.tourner_gauche()
         elif name == "TOURNER_D": port_serie.tourner_droite()
     
+    elif cmd == "sequence":
+        name = msg.get("name", "")
+        nav_arreter()
+        seq_map = {
+            "tour_droite":  lambda: sequences.tour_sur_soi("droite"),
+            "tour_gauche":  lambda: sequences.tour_sur_soi("gauche"),
+            "carre":        sequences.faire_carre,
+            "rond":         sequences.faire_rond,
+            "zigzag":       sequences.faire_zigzag,
+            "demi_tour":    sequences.demi_tour,
+        }
+        if name in seq_map:
+            asyncio.create_task(asyncio.to_thread(seq_map[name]))
+
     elif cmd == "auto":
         mode = msg.get("mode", "")
         nav_arreter()

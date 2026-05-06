@@ -1,1 +1,165 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PFR — Robot Control</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
+  <header>
+    <div class="logo">
+      <div class="logo-mark">PF</div>
+      <h1>Robot Control</h1>
+    </div>
+    <div class="header-meta">
+      <span class="badge">PFR2</span>
+      <span class="status disconnected" id="status">
+        <span class="status-dot"></span>
+        <span class="status-label">Déconnecté</span>
+      </span>
+    </div>
+  </header>
+
+  <aside class="sidebar">
+
+    <!-- Contrôle manuel -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-label">Contrôle</span>
+      </div>
+      <div class="panel-body">
+        <div class="dpad-wrap">
+          <div class="dpad">
+            <div></div>
+            <button class="dpad-btn" data-cmd="forward"  style="grid-area:up">▲</button>
+            <div></div>
+            <button class="dpad-btn" data-cmd="left"     style="grid-area:left">◀</button>
+            <button class="dpad-btn dpad-stop" data-cmd="stop" style="grid-area:mid">STOP</button>
+            <button class="dpad-btn" data-cmd="right"    style="grid-area:right">▶</button>
+            <div></div>
+            <button class="dpad-btn" data-cmd="backward" style="grid-area:down">▼</button>
+            <div></div>
+          </div>
+          <p class="dpad-meta">Flèches clavier · manette RT/D-pad</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Capteurs ultrasoniques -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-label">Capteurs</span>
+      </div>
+      <div class="panel-body">
+        <span id="distance" style="font-family:var(--mono);font-size:0.75rem;color:var(--text);display:block;line-height:1.7">
+          Av: -- cm &nbsp; Dr: -- cm &nbsp; Ga: -- cm
+        </span>
+      </div>
+    </div>
+
+    <!-- Actions autonomes -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-label">Mode autonome</span>
+      </div>
+      <div class="panel-body">
+        <div class="action-list">
+          <button class="action-btn" data-action="exploration"
+                  onclick="send({cmd:'auto',mode:'exploration'})">
+            <span class="action-icon">🔍</span>Exploration
+          </button>
+          <button class="action-btn" data-action="suivre_mur"
+                  onclick="send({cmd:'auto',mode:'suivre_mur'})">
+            <span class="action-icon">→</span>Suivi de mur
+          </button>
+          <button class="action-btn" data-action="auto_stop"
+                  onclick="send({cmd:'auto',mode:'stop'})">
+            <span class="action-icon">■</span>Arrêter autonome
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Commandes ponctuelles -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-label">Actions</span>
+      </div>
+      <div class="panel-body">
+        <div class="action-list">
+          <button class="action-btn" data-action="AVANCER">
+            <span class="action-icon">▲</span>Avancer
+          </button>
+          <button class="action-btn" data-action="RECULER">
+            <span class="action-icon">▼</span>Reculer
+          </button>
+          <button class="action-btn" data-action="TOURNER_G">
+            <span class="action-icon">↰</span>Tourner gauche
+          </button>
+          <button class="action-btn" data-action="TOURNER_D">
+            <span class="action-icon">↱</span>Tourner droite
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Séquences -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-label">Séquences</span>
+      </div>
+      <div class="panel-body">
+        <div class="action-list">
+          <button class="action-btn" onclick="send({cmd:'sequence',name:'demi_tour'})">
+            <span class="action-icon">↩</span>Demi-tour
+          </button>
+          <button class="action-btn" onclick="send({cmd:'sequence',name:'tour_droite'})">
+            <span class="action-icon">↻</span>Tour sur soi (droite)
+          </button>
+          <button class="action-btn" onclick="send({cmd:'sequence',name:'tour_gauche'})">
+            <span class="action-icon">↺</span>Tour sur soi (gauche)
+          </button>
+          <button class="action-btn" onclick="send({cmd:'sequence',name:'carre'})">
+            <span class="action-icon">⬜</span>Faire un carré
+          </button>
+          <button class="action-btn" onclick="send({cmd:'sequence',name:'rond'})">
+            <span class="action-icon">⭕</span>Faire un rond
+          </button>
+          <button class="action-btn" onclick="send({cmd:'sequence',name:'zigzag'})">
+            <span class="action-icon">〰</span>Zigzag
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </aside>
+
+  <main>
+    <!-- Visualisation sonar -->
+    <div class="feed-panel">
+      <div class="feed-header">
+        <span class="feed-title">Sonar</span>
+        <span class="feed-pill">LIVE</span>
+      </div>
+      <div class="feed-body">
+        <canvas id="lidar-canvas" width="400" height="400"></canvas>
+      </div>
+    </div>
+
+    <!-- Flux caméra (placeholder) -->
+    <div class="feed-panel">
+      <div class="feed-header">
+        <span class="feed-title">Caméra</span>
+        <span class="feed-pill">OFF</span>
+      </div>
+      <div class="feed-body" style="color:var(--muted);font-family:var(--mono);font-size:0.72rem;text-align:center;">
+        Pas de flux caméra
+      </div>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

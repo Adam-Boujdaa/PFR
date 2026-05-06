@@ -20,9 +20,8 @@ function connect() {
   ws.onmessage = ({ data }) => {
     const msg = JSON.parse(data);
     if (msg.type === "telemetry") {
-      if (msg.lidar?.length) drawLidar(msg.lidar);
       document.getElementById("distance").textContent =
-        `Sonar: ${msg.distance_cm ?? "--"}cm`;
+        `Av: ${msg.avant ?? "--"}cm  Dr: ${msg.droite ?? "--"}cm  Ga: ${msg.gauche ?? "--"}cm`;
     }
   };
 }
@@ -33,8 +32,9 @@ function send(obj) {
 
 function setStatus(connected) {
   const el = document.getElementById("status");
-  el.textContent = connected ? "Connected" : "Disconnected";
   el.className = `status ${connected ? "connected" : "disconnected"}`;
+  const label = el.querySelector(".status-label");
+  if (label) label.textContent = connected ? "Connecté" : "Déconnecté";
 }
 
 // ── Controls ──────────────────────────────────────────────────────────────────

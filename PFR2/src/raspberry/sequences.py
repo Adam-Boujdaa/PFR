@@ -3,7 +3,7 @@ Séquences de mouvements
 """
 import time
 import port_serie
-from raspberry.config import duree_pour_distance, duree_pour_angle
+from config import duree_pour_distance, duree_pour_angle
 
 # SÉQUENCES
 def tour_sur_soi(sens="droite"):
