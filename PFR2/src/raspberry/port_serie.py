@@ -3,13 +3,13 @@ FICHIER DE COMMUNICATION RASPBERRY/ARDUINO
 VOIR : https://roboticsbackend.com/raspberry-pi-arduino-serial-communication/
 """
 
-# --- BIBLIOTHÈQUES
+# Bibliothèques
 import serial
 import serial.tools.list_ports
 import time
 
 
-# --- CONNEXION ---
+# Connexion
 def _find_arduino_port():
     for p in serial.tools.list_ports.comports():
         if "ttyACM" in p.device or "Arduino" in (p.description or ""):
@@ -21,12 +21,12 @@ time.sleep(2)  # Attente bootloader Arduino
 print(f"[serial] Connecté sur {ser.port}")
 
 
-# --- ENVOI ---
-def send(cmd):
+# Envoi 
+def send(cmd) :  
     ser.write((cmd + '\n').encode())
 
 
-# --- COMMANDES MOTEURS ---
+# Commandes moteurs
 def avancer():
     send("AVANCER")
 
@@ -43,7 +43,7 @@ def stop():
     send("STOP")
 
 
-# --- CAPTEURS ---
+# Capteurs
 def lire_distances():
     ser.reset_input_buffer()
     send("DISTANCE")
@@ -55,7 +55,7 @@ def lire_distances():
     return None, None, None
 
 
-# --- FERMETURE ---
+# Fermeture
 def close():
     stop()
     ser.close()

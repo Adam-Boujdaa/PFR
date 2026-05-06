@@ -60,20 +60,20 @@ async def _push_sensors(websocket: WebSocket):
 async def _handle(msg: dict, websocket: WebSocket):
     cmd = msg.get("cmd")
 
-    # Contrôle manuel → coupe le mode autonome
+    # Contrôle manuel (coupe le mode autonome)  
     if cmd in ("move", "stop", "action") and navigation.est_actif():
-        navigation.arreter()
+        navigation.arreter() 
         await websocket.send_text(json.dumps({"type": "auto_state", "actif": False}))
 
-    if cmd == "move":
-        x = msg.get("x", 0)
+    if cmd == "move" :
+        x = msg.get("x", 0) 
         y = msg.get("y", 0)
         if y > 0 and dist_av < SEUIL_AVANT:   port_serie.stop(); return
         if x < 0 and dist_ga < SEUIL_LATERAL: port_serie.stop(); return
         if x > 0 and dist_dr < SEUIL_LATERAL: port_serie.stop(); return
         if   y > 0: port_serie.avancer()
         elif y < 0: port_serie.reculer()
-        elif x < 0: port_serie.tourner_gauche()
+        elif x < 0: port_serie.tourner_gauche() 
         elif x > 0: port_serie.tourner_droite()
 
     elif cmd == "stop":
@@ -89,7 +89,7 @@ async def _handle(msg: dict, websocket: WebSocket):
         elif name == "TOURNER_G": port_serie.tourner_gauche()
         elif name == "TOURNER_D": port_serie.tourner_droite()
 
-    elif cmd == "auto_start":
+    elif cmd == "auto_start" :
         navigation.demarrer(lambda: (dist_av, dist_dr, dist_ga))
         await websocket.send_text(json.dumps({"type": "auto_state", "actif": True}))
 

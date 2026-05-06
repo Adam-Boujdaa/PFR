@@ -10,7 +10,7 @@ DUREE_90_DEG = 1.0
 DUREE_360_DEG = 4.0
 DUREE_AVANCE = 1.0
 
-# --- SÉQUENCES ---
+# SÉQUENCES
 def tour_sur_soi(sens="droite"):
     if sens == "droite":
         port_serie.tourner_droite()
